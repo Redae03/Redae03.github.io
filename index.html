@@ -326,7 +326,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
         <div class="proj"><div><h3>Étude économétrique et prévision du cours de Managem</h3><p>306 observations mensuelles de 2000 à 2026 : tests ADF et Phillips-Perron, ARMA(1,1), volatilité GARCH, TARCH et EGARCH, Value-at-Risk, sensibilité au prix de l'or et comparaison avec un réseau de neurones. Encadré par Mme S. Hadiri. <a href="#simulateur-series">Essayer le simulateur</a> · <a href="https://github.com/Redae03/econometrie-managem-arma-garch" target="_blank" rel="noopener">Code sur GitHub</a></p></div><div class="meth">ARMA, GARCH, EGARCH, VaR, MLP</div><div class="yr">2026</div></div>
         <div class="proj"><div><h3>Monte-Carlo et options américaines</h3><p>Simulation de lois et de processus, réduction de variance (variables antithétiques, variable de contrôle) et valorisation d'options américaines par Longstaff-Schwartz, avec application PyQt5. Encadré par Pr. B. El Asri. <a href="#simulateur-lsm">Essayer le simulateur</a> · <a href="https://github.com/Redae03/monte-carlo-longstaff-schwartz" target="_blank" rel="noopener">Code sur GitHub</a></p></div><div class="meth">Monte Carlo, Longstaff-Schwartz, Box-Muller</div><div class="yr">2026</div></div>
         <div class="proj"><div><h3>Prédiction du prix des billets d'avion</h3><p>300 153 billets de vols intérieurs indiens : sélection de variables par corrélation, SelectKBest et importance, puis comparaison de sept modèles de régression. La Random Forest atteint un R² de 0,973 sur le jeu de test. <a href="#simulateur-vols">Essayer le simulateur</a> · <a href="https://github.com/Redae03/prediction-prix-billets-avion" target="_blank" rel="noopener">Code sur GitHub</a></p></div><div class="meth">Random Forest, Gradient Boosting, Flask</div><div class="yr">2025</div></div>
-        <div class="proj"><div><h3>Classification non supervisée</h3><p>Application déclinée en trois interfaces : PyQt5, Streamlit et Flask.</p></div><div class="meth">K-Means, CAH</div><div class="yr"></div></div>
+        <div class="proj"><div><h3>Classification non supervisée</h3><p>K-means implémenté à la main (distances euclidienne et de Manhattan, suivi de la convergence) et classification ascendante hiérarchique, dans une application déclinée en trois interfaces : PyQt5, Streamlit et Flask. Encadré par Pr. B. El Asri. <a href="#simulateur-clustering">Essayer le simulateur</a></p></div><div class="meth">K-Means, CAH</div><div class="yr">2025</div></div>
         <div class="proj"><div><h3>Coop-Tech</h3><p>Application mobile de diagnostic pour coopératives, fonctionnant hors ligne, réalisée en hackathon.</p></div><div class="meth">React Native</div><div class="yr">2025</div></div>
       </div>
     </div>
@@ -887,6 +887,75 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
         </div>
         <figure class="chart"><figcaption>Rendements mensuels réels et prévus</figcaption><canvas id="c-tstest" role="img" aria-label="Rendements mensuels réels et prévisions des modèles sur la période de test"></canvas></figure>
         <p class="sim-note" id="ts-fc-note" style="margin-top:4px"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="simulateur-clustering">
+    <div class="wrap sec">
+      <div class="side">
+        <h2>Simulateur clustering</h2>
+        <p>Projet d'analyse de données (FID 1re année) : K-means implémenté à la main et classification ascendante hiérarchique. Les deux algorithmes sont réécrits ici et tournent dans votre navigateur.</p>
+      </div>
+      <div class="sim">
+        <div class="sim-form">
+          <div class="sim-row">
+            <label class="fld wide"><span>Jeu de données</span>
+              <select id="cl-data">
+                <option value="iris">Iris (150 fleurs, 4 variables)</option>
+                <option value="blobs">Trois groupes gaussiens</option>
+                <option value="moons">Deux croissants</option>
+                <option value="rings">Deux anneaux</option>
+              </select>
+            </label>
+            <div class="fld"><span>Méthode</span>
+              <div class="seg" role="radiogroup" aria-label="Méthode">
+                <label><input type="radio" name="clm" value="km" checked> K-means</label>
+                <label><input type="radio" name="clm" value="cah"> CAH</label>
+              </div>
+            </div>
+            <label class="fld"><span>Nombre de clusters k</span><select id="cl-k"></select></label>
+          </div>
+          <div class="sim-row" id="cl-km-opts">
+            <div class="fld"><span>Distance</span>
+              <div class="seg" role="radiogroup" aria-label="Distance">
+                <label><input type="radio" name="cldist" value="e" checked> Euclidienne</label>
+                <label><input type="radio" name="cldist" value="m"> Manhattan</label>
+              </div>
+            </div>
+            <div class="fld"><span>Initialisation</span>
+              <div class="seg" role="radiogroup" aria-label="Initialisation">
+                <label><input type="radio" name="clinit" value="pp" checked> K-means++</label>
+                <label><input type="radio" name="clinit" value="rand"> Aléatoire</label>
+              </div>
+            </div>
+            <label class="fld"><span>Graine</span><input id="cl-seed" type="number" min="1" max="9999" step="1" value="7" inputmode="numeric"></label>
+          </div>
+          <div class="sim-row" id="cl-cah-opts" style="display:none">
+            <div class="fld"><span>Liaison</span>
+              <div class="seg" role="radiogroup" aria-label="Méthode de liaison">
+                <label><input type="radio" name="cllink" value="ward" checked> Ward</label>
+                <label><input type="radio" name="cllink" value="complete"> Complète</label>
+                <label><input type="radio" name="cllink" value="average"> Moyenne</label>
+                <label><input type="radio" name="cllink" value="single"> Simple</label>
+              </div>
+            </div>
+          </div>
+          <label class="check"><input type="checkbox" id="cl-std" checked> Centrer et réduire les variables avant le clustering</label>
+        </div>
+
+        <dl class="stats" id="cl-stats"></dl>
+        <p class="sim-note" id="cl-note"></p>
+
+        <div class="charts">
+          <figure class="chart"><figcaption id="cl-scat-cap">Clusters</figcaption><canvas id="c-clscat" role="img" aria-label="Nuage de points coloré par cluster"></canvas></figure>
+          <figure class="chart"><figcaption id="cl-right-cap">Convergence</figcaption><canvas id="c-clright" role="img" aria-label="Courbe de convergence de K-means ou dendrogramme de la CAH"></canvas></figure>
+        </div>
+        <div class="sim-row" id="cl-iter-row">
+          <label class="fld wide"><span id="cl-iter-lab">Itération affichée</span><input id="cl-iter" type="range" min="0" max="1" step="1" value="1"></label>
+        </div>
+        <figure class="chart"><figcaption>Choix de k : inertie intra-classe (méthode du coude) et silhouette moyenne</figcaption><canvas id="c-clelbow" role="img" aria-label="Inertie intra-classe et silhouette moyenne en fonction du nombre de clusters"></canvas></figure>
+        <div class="legend"><span><i style="background:var(--navy)"></i>Inertie intra-classe</span><span><i style="background:#b07a2a"></i>Silhouette moyenne (échelle de droite)</span></div>
       </div>
     </div>
   </section>
@@ -2267,6 +2336,172 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
   document.querySelectorAll("#ts-fc-chips input").forEach(function (cb) { cb.addEventListener("change", drawTest); });
   var tm; window.addEventListener("resize", function () { clearTimeout(tm); tm = setTimeout(render, 250); });
   render();
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+  var IRIS = {"X":[[5.1,3.5,1.4,0.2],[4.9,3.0,1.4,0.2],[4.7,3.2,1.3,0.2],[4.6,3.1,1.5,0.2],[5.0,3.6,1.4,0.2],[5.4,3.9,1.7,0.4],[4.6,3.4,1.4,0.3],[5.0,3.4,1.5,0.2],[4.4,2.9,1.4,0.2],[4.9,3.1,1.5,0.1],[5.4,3.7,1.5,0.2],[4.8,3.4,1.6,0.2],[4.8,3.0,1.4,0.1],[4.3,3.0,1.1,0.1],[5.8,4.0,1.2,0.2],[5.7,4.4,1.5,0.4],[5.4,3.9,1.3,0.4],[5.1,3.5,1.4,0.3],[5.7,3.8,1.7,0.3],[5.1,3.8,1.5,0.3],[5.4,3.4,1.7,0.2],[5.1,3.7,1.5,0.4],[4.6,3.6,1.0,0.2],[5.1,3.3,1.7,0.5],[4.8,3.4,1.9,0.2],[5.0,3.0,1.6,0.2],[5.0,3.4,1.6,0.4],[5.2,3.5,1.5,0.2],[5.2,3.4,1.4,0.2],[4.7,3.2,1.6,0.2],[4.8,3.1,1.6,0.2],[5.4,3.4,1.5,0.4],[5.2,4.1,1.5,0.1],[5.5,4.2,1.4,0.2],[4.9,3.1,1.5,0.2],[5.0,3.2,1.2,0.2],[5.5,3.5,1.3,0.2],[4.9,3.6,1.4,0.1],[4.4,3.0,1.3,0.2],[5.1,3.4,1.5,0.2],[5.0,3.5,1.3,0.3],[4.5,2.3,1.3,0.3],[4.4,3.2,1.3,0.2],[5.0,3.5,1.6,0.6],[5.1,3.8,1.9,0.4],[4.8,3.0,1.4,0.3],[5.1,3.8,1.6,0.2],[4.6,3.2,1.4,0.2],[5.3,3.7,1.5,0.2],[5.0,3.3,1.4,0.2],[7.0,3.2,4.7,1.4],[6.4,3.2,4.5,1.5],[6.9,3.1,4.9,1.5],[5.5,2.3,4.0,1.3],[6.5,2.8,4.6,1.5],[5.7,2.8,4.5,1.3],[6.3,3.3,4.7,1.6],[4.9,2.4,3.3,1.0],[6.6,2.9,4.6,1.3],[5.2,2.7,3.9,1.4],[5.0,2.0,3.5,1.0],[5.9,3.0,4.2,1.5],[6.0,2.2,4.0,1.0],[6.1,2.9,4.7,1.4],[5.6,2.9,3.6,1.3],[6.7,3.1,4.4,1.4],[5.6,3.0,4.5,1.5],[5.8,2.7,4.1,1.0],[6.2,2.2,4.5,1.5],[5.6,2.5,3.9,1.1],[5.9,3.2,4.8,1.8],[6.1,2.8,4.0,1.3],[6.3,2.5,4.9,1.5],[6.1,2.8,4.7,1.2],[6.4,2.9,4.3,1.3],[6.6,3.0,4.4,1.4],[6.8,2.8,4.8,1.4],[6.7,3.0,5.0,1.7],[6.0,2.9,4.5,1.5],[5.7,2.6,3.5,1.0],[5.5,2.4,3.8,1.1],[5.5,2.4,3.7,1.0],[5.8,2.7,3.9,1.2],[6.0,2.7,5.1,1.6],[5.4,3.0,4.5,1.5],[6.0,3.4,4.5,1.6],[6.7,3.1,4.7,1.5],[6.3,2.3,4.4,1.3],[5.6,3.0,4.1,1.3],[5.5,2.5,4.0,1.3],[5.5,2.6,4.4,1.2],[6.1,3.0,4.6,1.4],[5.8,2.6,4.0,1.2],[5.0,2.3,3.3,1.0],[5.6,2.7,4.2,1.3],[5.7,3.0,4.2,1.2],[5.7,2.9,4.2,1.3],[6.2,2.9,4.3,1.3],[5.1,2.5,3.0,1.1],[5.7,2.8,4.1,1.3],[6.3,3.3,6.0,2.5],[5.8,2.7,5.1,1.9],[7.1,3.0,5.9,2.1],[6.3,2.9,5.6,1.8],[6.5,3.0,5.8,2.2],[7.6,3.0,6.6,2.1],[4.9,2.5,4.5,1.7],[7.3,2.9,6.3,1.8],[6.7,2.5,5.8,1.8],[7.2,3.6,6.1,2.5],[6.5,3.2,5.1,2.0],[6.4,2.7,5.3,1.9],[6.8,3.0,5.5,2.1],[5.7,2.5,5.0,2.0],[5.8,2.8,5.1,2.4],[6.4,3.2,5.3,2.3],[6.5,3.0,5.5,1.8],[7.7,3.8,6.7,2.2],[7.7,2.6,6.9,2.3],[6.0,2.2,5.0,1.5],[6.9,3.2,5.7,2.3],[5.6,2.8,4.9,2.0],[7.7,2.8,6.7,2.0],[6.3,2.7,4.9,1.8],[6.7,3.3,5.7,2.1],[7.2,3.2,6.0,1.8],[6.2,2.8,4.8,1.8],[6.1,3.0,4.9,1.8],[6.4,2.8,5.6,2.1],[7.2,3.0,5.8,1.6],[7.4,2.8,6.1,1.9],[7.9,3.8,6.4,2.0],[6.4,2.8,5.6,2.2],[6.3,2.8,5.1,1.5],[6.1,2.6,5.6,1.4],[7.7,3.0,6.1,2.3],[6.3,3.4,5.6,2.4],[6.4,3.1,5.5,1.8],[6.0,3.0,4.8,1.8],[6.9,3.1,5.4,2.1],[6.7,3.1,5.6,2.4],[6.9,3.1,5.1,2.3],[5.8,2.7,5.1,1.9],[6.8,3.2,5.9,2.3],[6.7,3.3,5.7,2.5],[6.7,3.0,5.2,2.3],[6.3,2.5,5.0,1.9],[6.5,3.0,5.2,2.0],[6.2,3.4,5.4,2.3],[5.9,3.0,5.1,1.8]],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]}; // jeu Iris (Fisher, 1936) : 4 mesures en cm et espèce
+  var $ = function (id) { return document.getElementById(id); };
+  var fr = function (x, d) { return x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var PAL = ["#0f2a4a", "#b07a2a", "#3d7ea6", "#a33a2a", "#5b8a3c", "#7a5aa6", "#8c8c8c", "#d4a017"];
+  function rng(seed) { var a = seed >>> 0; return function () { a = (a + 0x6D2B79F5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  function gauss(r) { var u, v, s; do { u = 2 * r() - 1; v = 2 * r() - 1; s = u * u + v * v; } while (s >= 1 || s === 0); return u * Math.sqrt(-2 * Math.log(s) / s); }
+  // ---------- Jeux de données (graine fixe) ----------
+  function makeData(name) {
+    if (name === "iris") return { X: IRIS.X.map(function (r) { return r.slice(); }), y: IRIS.y.slice(), names: ["Longueur sépale", "Largeur sépale", "Longueur pétale", "Largeur pétale"] };
+    var r = rng(2025), X = [], y = [], i;
+    if (name === "blobs") { var C = [[0, 0], [4, 1], [1.5, 4]]; for (i = 0; i < 210; i++) { var c = i % 3; X.push([C[c][0] + gauss(r) * 0.9, C[c][1] + gauss(r) * 0.9]); y.push(c); } }
+    if (name === "moons") { for (i = 0; i < 200; i++) { var a = Math.PI * r(), up = i % 2 === 0; X.push(up ? [Math.cos(a) + gauss(r) * 0.08, Math.sin(a) + gauss(r) * 0.08] : [1 - Math.cos(a) + gauss(r) * 0.08, 0.5 - Math.sin(a) + gauss(r) * 0.08]); y.push(up ? 0 : 1); } }
+    if (name === "rings") { for (i = 0; i < 240; i++) { var t = 2 * Math.PI * r(), inner = i % 2 === 0, R = inner ? 1 : 2.6; X.push([R * Math.cos(t) + gauss(r) * 0.12, R * Math.sin(t) + gauss(r) * 0.12]); y.push(inner ? 0 : 1); } }
+    return { X: X, y: y, names: ["x", "y"] };
+  }
+  function standardize(X) { var n = X.length, d = X[0].length, m = [], s = [], j, i; for (j = 0; j < d; j++) { var a = 0; for (i = 0; i < n; i++) a += X[i][j]; m.push(a / n); var v = 0; for (i = 0; i < n; i++) v += (X[i][j] - m[j]) * (X[i][j] - m[j]); s.push(Math.sqrt(v / n) || 1); } return X.map(function (r) { return r.map(function (x, j) { return (x - m[j]) / s[j]; }); }); }
+  // ACP par Jacobi pour l'affichage en 2 dimensions (Iris)
+  function pca2(X) { var n = X.length, d = X[0].length, i, j, k, m = []; for (j = 0; j < d; j++) { var a = 0; for (i = 0; i < n; i++) a += X[i][j]; m.push(a / n); }
+    var A = []; for (j = 0; j < d; j++) { A.push([]); for (k = 0; k < d; k++) { var c = 0; for (i = 0; i < n; i++) c += (X[i][j] - m[j]) * (X[i][k] - m[k]); A[j].push(c / (n - 1)); } }
+    var V = []; for (j = 0; j < d; j++) { V.push([]); for (k = 0; k < d; k++) V[j].push(j === k ? 1 : 0); }
+    for (var sweep = 0; sweep < 60; sweep++) for (var p = 0; p < d; p++) for (var q = p + 1; q < d; q++) { if (Math.abs(A[p][q]) < 1e-14) continue; var th = (A[q][q] - A[p][p]) / (2 * A[p][q]), t = (th >= 0 ? 1 : -1) / (Math.abs(th) + Math.sqrt(th * th + 1)), cs = 1 / Math.sqrt(t * t + 1), sn = t * cs;
+      for (k = 0; k < d; k++) { var akp = A[k][p], akq = A[k][q]; A[k][p] = cs * akp - sn * akq; A[k][q] = sn * akp + cs * akq; } for (k = 0; k < d; k++) { var apk = A[p][k], aqk = A[q][k]; A[p][k] = cs * apk - sn * aqk; A[q][k] = sn * apk + cs * aqk; } for (k = 0; k < d; k++) { var vkp = V[k][p], vkq = V[k][q]; V[k][p] = cs * vkp - sn * vkq; V[k][q] = sn * vkp + cs * vkq; } }
+    var ev = []; for (j = 0; j < d; j++) ev.push([A[j][j], j]); ev.sort(function (a, b) { return b[0] - a[0]; }); var tot = ev.reduce(function (s, e) { return s + e[0]; }, 0);
+    var P = X.map(function (r) { return [0, 1].map(function (c) { var s = 0, col = ev[c][1]; for (var j2 = 0; j2 < d; j2++) s += (r[j2] - m[j2]) * V[j2][col]; return s; }); });
+    return { P: P, share: (ev[0][0] + ev[1][0]) / tot }; }
+  // ---------- K-means (moyennes) ou K-médianes (Manhattan) ----------
+  function dist(a, b, man) { var s = 0; for (var j = 0; j < a.length; j++) { var t = a[j] - b[j]; s += man ? Math.abs(t) : t * t; } return man ? s : Math.sqrt(s); }
+  function sq(a, b) { var s = 0; for (var j = 0; j < a.length; j++) s += (a[j] - b[j]) * (a[j] - b[j]); return s; }
+  function initC(X, k, pp, r) { var n = X.length, C = [], i;
+    if (!pp) { var idx = []; while (idx.length < k) { var c = Math.floor(r() * n); if (idx.indexOf(c) < 0) idx.push(c); } return idx.map(function (i2) { return X[i2].slice(); }); }
+    C.push(X[Math.floor(r() * n)].slice()); var D = X.map(function (x) { return sq(x, C[0]); });
+    while (C.length < k) { var tot = D.reduce(function (a, b) { return a + b; }, 0), u = r() * tot, acc = 0; for (i = 0; i < n; i++) { acc += D[i]; if (acc >= u) break; } C.push(X[Math.min(i, n - 1)].slice()); for (i = 0; i < n; i++) D[i] = Math.min(D[i], sq(X[i], C[C.length - 1])); }
+    return C; }
+  function median(v) { v.sort(function (a, b) { return a - b; }); var h = v.length >> 1; return v.length % 2 ? v[h] : (v[h - 1] + v[h]) / 2; }
+  function kmeans(X, k, man, pp, seed) {
+    var r = rng(seed), C = initC(X, k, pp, r), n = X.length, d = X[0].length, lab = new Array(n).fill(-1), hist = [], i, j, c;
+    for (var it = 0; it < 100; it++) {
+      var changed = false, obj = 0;
+      for (i = 0; i < n; i++) { var best = 0, bd = Infinity; for (c = 0; c < k; c++) { var dd = dist(X[i], C[c], man); if (dd < bd) { bd = dd; best = c; } } if (lab[i] !== best) { changed = true; lab[i] = best; } obj += man ? bd : bd * bd; }
+      hist.push({ C: C.map(function (x) { return x.slice(); }), lab: lab.slice(), obj: obj });
+      if (!changed && it > 0) break;
+      var NC = [];
+      for (c = 0; c < k; c++) { var mem = []; for (i = 0; i < n; i++) if (lab[i] === c) mem.push(X[i]);
+        if (!mem.length) { var far = 0, fd = -1; for (i = 0; i < n; i++) { var di = dist(X[i], C[lab[i]], man); if (di > fd) { fd = di; far = i; } } NC.push(X[far].slice()); continue; } // cluster vide : réinitialisé sur le point le plus éloigné
+        var cen = []; for (j = 0; j < d; j++) { var col = mem.map(function (x) { return x[j]; }); cen.push(man ? median(col) : col.reduce(function (a, b) { return a + b; }, 0) / col.length); } NC.push(cen); }
+      C = NC;
+    }
+    return { lab: lab, hist: hist, iters: hist.length - 1 };
+  }
+  // ---------- CAH : formule de Lance-Williams (hauteurs identiques à scipy.cluster.hierarchy.linkage) ----------
+  function cah(X, method) {
+    var n = X.length, D = [], size = [], active = [], id = [], i, j, merges = [];
+    for (i = 0; i < n; i++) { D.push(new Float64Array(n)); size.push(1); active.push(true); id.push(i); }
+    for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) { D[i][j] = D[j][i] = Math.sqrt(sq(X[i], X[j])); }
+    for (var step = 0; step < n - 1; step++) {
+      var bi = -1, bj = -1, bd = Infinity;
+      for (i = 0; i < n; i++) if (active[i]) for (j = i + 1; j < n; j++) if (active[j] && D[i][j] < bd) { bd = D[i][j]; bi = i; bj = j; }
+      var ni = size[bi], nj = size[bj];
+      for (var k = 0; k < n; k++) { if (!active[k] || k === bi || k === bj) continue; var dik = D[bi][k], djk = D[bj][k], nk = size[k], v;
+        if (method === "single") v = Math.min(dik, djk); else if (method === "complete") v = Math.max(dik, djk); else if (method === "average") v = (ni * dik + nj * djk) / (ni + nj);
+        else v = Math.sqrt(((ni + nk) * dik * dik + (nj + nk) * djk * djk - nk * bd * bd) / (ni + nj + nk));
+        D[bi][k] = D[k][bi] = v; }
+      merges.push([id[bi], id[bj], bd, ni + nj]); id[bi] = n + step; size[bi] = ni + nj; active[bj] = false;
+    }
+    return merges;
+  }
+  function cutTree(merges, n, k) { var par = []; for (var i = 0; i < 2 * n - 1; i++) par.push(i); function f(x) { while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; } return x; }
+    for (var s = 0; s < n - k; s++) { par[f(merges[s][0])] = n + s; par[f(merges[s][1])] = n + s; }
+    var map = {}, lab = [], nx = 0; for (i = 0; i < n; i++) { var r = f(i); if (!(r in map)) map[r] = nx++; lab.push(map[r]); } return lab; }
+  // ---------- Indicateurs ----------
+  function sse(X, lab, k) { var d = X[0].length, cen = [], cnt = [], c, i, j, s = 0; for (c = 0; c < k; c++) { cen.push(new Array(d).fill(0)); cnt.push(0); } for (i = 0; i < X.length; i++) { cnt[lab[i]]++; for (j = 0; j < d; j++) cen[lab[i]][j] += X[i][j]; } for (c = 0; c < k; c++) for (j = 0; j < d; j++) cen[c][j] /= Math.max(1, cnt[c]); for (i = 0; i < X.length; i++) s += sq(X[i], cen[lab[i]]); return s; }
+  function silhouette(Dm, lab, k) { var n = lab.length, tot = 0, cnt = new Array(k).fill(0), i, j; for (i = 0; i < n; i++) cnt[lab[i]]++;
+    for (i = 0; i < n; i++) { if (cnt[lab[i]] < 2) continue; var sum = new Array(k).fill(0); for (j = 0; j < n; j++) if (j !== i) sum[lab[j]] += Dm[i][j]; var a = sum[lab[i]] / (cnt[lab[i]] - 1), b = Infinity; for (var c = 0; c < k; c++) if (c !== lab[i] && cnt[c] > 0) b = Math.min(b, sum[c] / cnt[c]); tot += (b - a) / Math.max(a, b); }
+    return tot / n; }
+  function ari(a, b) { var n = a.length, T = {}, A = {}, Bc = {}, i, s = 0, sa = 0, sb = 0, c2 = function (x) { return x * (x - 1) / 2; };
+    for (i = 0; i < n; i++) { var key = a[i] + "," + b[i]; T[key] = (T[key] || 0) + 1; A[a[i]] = (A[a[i]] || 0) + 1; Bc[b[i]] = (Bc[b[i]] || 0) + 1; }
+    for (var q in T) s += c2(T[q]); for (q in A) sa += c2(A[q]); for (q in Bc) sb += c2(Bc[q]); var e = sa * sb / c2(n); return (s - e) / ((sa + sb) / 2 - e); }
+  // ---------- État et rendu ----------
+  var cache = {};
+  function prep() { var name = $("cl-data").value, std = $("cl-std").checked, key = name + std; if (cache[key]) return cache[key];
+    var D = makeData(name), X = std ? standardize(D.X) : D.X, n = X.length, Dm = [], i, j;
+    for (i = 0; i < n; i++) Dm.push(new Float64Array(n)); for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) Dm[i][j] = Dm[j][i] = Math.sqrt(sq(X[i], X[j]));
+    var view = X[0].length > 2 ? pca2(X) : { P: X, share: 1 };
+    cache[key] = { name: name, X: X, y: D.y, Dm: Dm, view: view, trees: {}, elbow: {} }; return cache[key]; }
+  var ks = $("cl-k"); for (var kk = 2; kk <= 8; kk++) { var o = document.createElement("option"); o.value = kk; o.textContent = kk; if (kk === 3) o.selected = true; ks.appendChild(o); }
+  function opt(n) { return document.querySelector('input[name="' + n + '"]:checked').value; }
+  var last = null;
+  function compute() {
+    var S = prep(), k = +ks.value, meth = opt("clm"), seed = Math.max(1, Math.round(+$("cl-seed").value) || 7), res = { S: S, k: k, meth: meth };
+    $("cl-km-opts").style.display = meth === "km" ? "" : "none"; $("cl-cah-opts").style.display = meth === "cah" ? "" : "none"; $("cl-iter-row").style.display = meth === "km" ? "" : "none";
+    if (meth === "km") { var man = opt("cldist") === "m", km = kmeans(S.X, k, man, opt("clinit") === "pp", seed); res.km = km; res.man = man; res.lab = km.lab;
+      var it = $("cl-iter"); it.max = km.hist.length - 1; it.value = km.hist.length - 1; }
+    else { var link = opt("cllink"); if (!S.trees[link]) S.trees[link] = cah(S.X, link); res.tree = S.trees[link]; res.link = link; res.lab = cutTree(res.tree, S.X.length, k); }
+    // Courbes coude et silhouette (k = 1..8)
+    var ek = meth === "km" ? "km" + opt("cldist") : "cah" + opt("cllink");
+    if (!S.elbow[ek]) { var arr = []; for (var kq = 1; kq <= 8; kq++) { var lb;
+        if (meth === "km") { var best = null; for (var s = 1; s <= 5; s++) { var r = kmeans(S.X, kq, opt("cldist") === "m", true, s * 101); var v = sse(S.X, r.lab, kq); if (!best || v < best.v) best = { v: v, lab: r.lab }; } lb = best.lab; }
+        else lb = cutTree(S.trees[opt("cllink")], S.X.length, kq);
+        arr.push({ k: kq, sse: sse(S.X, lb, kq), sil: kq > 1 ? silhouette(S.Dm, lb, kq) : null }); } S.elbow[ek] = arr; }
+    res.elbow = S.elbow[ek]; last = res; show();
+  }
+  function show() {
+    var R = last, S = R.S, k = R.k, lab = R.lab, centers = null, itv = 0;
+    if (R.meth === "km") { itv = +$("cl-iter").value; var h = R.km.hist[itv]; lab = h.lab; centers = h.C; $("cl-iter-lab").textContent = "Itération affichée : " + itv + " sur " + R.km.iters; }
+    var inert = sse(S.X, lab, k), sil = silhouette(S.Dm, lab, k), a = ari(S.y, lab);
+    $("cl-stats").innerHTML = "<div><dt>Inertie intra-classe</dt><dd>" + fr(inert, 2) + "</dd></div><div><dt>Silhouette moyenne</dt><dd>" + fr(sil, 3) + "</dd></div><div><dt>Accord avec les vraies classes (ARI)</dt><dd>" + fr(a, 3) + "</dd></div><div><dt>" + (R.meth === "km" ? "Itérations jusqu'à convergence" : "Hauteur de coupe") + "</dt><dd>" + (R.meth === "km" ? R.km.iters : fr(cutHeight(R.tree, k), 2)) + "</dd></div>";
+    var note = R.meth === "km" ? (R.man ? "Avec la distance de Manhattan, chaque centre est mis à jour par la médiane (K-médianes) : la moyenne ne minimise pas la somme des distances L1. " : "") + "L'ARI vaut 1 si les clusters reproduisent exactement les vraies classes et environ 0 pour un découpage au hasard."
+      : "Coupe du dendrogramme en " + k + " groupes avec la liaison " + { ward: "de Ward", complete: "complète", average: "moyenne", single: "simple" }[R.link] + ". L'ARI vaut 1 si les clusters reproduisent exactement les vraies classes.";
+    if (S.name === "moons" || S.name === "rings") note += " Sur ces formes non convexes, K-means et la liaison de Ward découpent l'espace en zones compactes ; la liaison simple, qui suit les points de proche en proche, sépare mieux les deux structures.";
+    if (S.name === "iris") note += " L'affichage projette les 4 variables sur les deux premiers axes de l'ACP (" + fr(100 * S.view.share, 0) + " % de la variance).";
+    $("cl-note").textContent = note;
+    $("cl-scat-cap").textContent = S.name === "iris" ? "Clusters dans le plan des deux premières composantes principales" : "Clusters";
+    drawScatter(S, lab, centers);
+    if (R.meth === "km") { $("cl-right-cap").textContent = R.man ? "Convergence : somme des distances de Manhattan" : "Convergence : inertie intra-classe"; drawConv(R.km.hist.map(function (h2) { return h2.obj; }), itv); }
+    else { $("cl-right-cap").textContent = "Dendrogramme (ligne de coupe en pointillés)"; drawDendro(R.tree, S.X.length, k, R.lab); }
+    drawElbow(R.elbow, k);
+  }
+  function cutHeight(tree, k) { var n = tree.length + 1; if (k >= n) return 0; var lo = tree[n - k - 1][2], hi = k > 1 ? tree[n - k][2] : lo; return (lo + hi) / 2; }
+  // ---------- Graphiques ----------
+  var css = getComputedStyle(document.documentElement), col = function (n) { return css.getPropertyValue(n).trim(); };
+  function setup(id) { var cv = $(id), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; var c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h); c.font = "12px " + col("--sans"); return { c: c, w: w, h: h }; }
+  function drawScatter(S, lab, centers) {
+    var g = setup("c-clscat"), c = g.c, P = S.view.P, pad = 16, xs = P.map(function (p) { return p[0]; }), ys = P.map(function (p) { return p[1]; });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys), sc = Math.min((g.w - 2 * pad) / (x1 - x0), (g.h - 2 * pad) / (y1 - y0));
+    var ox = (g.w - sc * (x1 - x0)) / 2, oy = (g.h - sc * (y1 - y0)) / 2, X = function (v) { return ox + (v - x0) * sc; }, Y = function (v) { return g.h - oy - (v - y0) * sc; };
+    P.forEach(function (p, i) { c.fillStyle = PAL[lab[i] % 8]; c.globalAlpha = 0.8; c.beginPath(); c.arc(X(p[0]), Y(p[1]), 3.2, 0, 6.283); c.fill(); }); c.globalAlpha = 1;
+    var PC = S.X[0].length <= 2 ? centers : (centers ? centroidView(S, lab, centers.length) : null);
+    if (PC) PC.forEach(function (p, i) { var x = X(p[0]), y = Y(p[1]); c.strokeStyle = "#ffffff"; c.lineWidth = 4; c.beginPath(); c.moveTo(x - 7, y - 7); c.lineTo(x + 7, y + 7); c.moveTo(x + 7, y - 7); c.lineTo(x - 7, y + 7); c.stroke(); c.strokeStyle = PAL[i % 8]; c.lineWidth = 2.2; c.stroke(); c.lineWidth = 1; });
+  }
+  function centroidView(S, lab, k) { var out = []; for (var c = 0; c < k; c++) { var sx = 0, sy = 0, m = 0; S.view.P.forEach(function (p, i) { if (lab[i] === c) { sx += p[0]; sy += p[1]; m++; } }); out.push(m ? [sx / m, sy / m] : [0, 0]); } return out; }
+  function axes(g, lo, hi, L, Rr, T, B, dec, right) { var c = g.c, span = hi - lo || 1, raw = span / 4, mm = Math.pow(10, Math.floor(Math.log10(raw))), s = [1, 2, 2.5, 5, 10].map(function (f) { return f * mm; }).find(function (f) { return f >= raw; }); lo = Math.floor(lo / s) * s; hi = Math.ceil(hi / s) * s;
+    var Y = function (v) { return T + (hi - v) / (hi - lo) * (g.h - T - B); }; c.fillStyle = right ? "#b07a2a" : col("--muted"); c.textAlign = right ? "left" : "right"; c.textBaseline = "middle"; c.strokeStyle = col("--rule");
+    for (var t = lo; t <= hi + 1e-9; t += s) { var y = Math.round(Y(t)) + .5; if (!right) { c.beginPath(); c.moveTo(L, y); c.lineTo(g.w - Rr, y); c.stroke(); } c.fillText(fr(t, dec), right ? g.w - Rr + 8 : L - 8, y); } return Y; }
+  function drawConv(v, cur) { var g = setup("c-clright"), c = g.c, L = 60, Rr = 14, T = 14, B = 44, lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), Y = axes(g, lo - 0.05 * (hi - lo || 1), hi + 0.05 * (hi - lo || 1), L, Rr, T, B, hi > 100 ? 0 : 1);
+    var X = function (i) { return L + (v.length > 1 ? i / (v.length - 1) : 0.5) * (g.w - L - Rr); };
+    c.strokeStyle = col("--navy"); c.lineWidth = 2; c.beginPath(); v.forEach(function (y, i) { if (i) c.lineTo(X(i), Y(y)); else c.moveTo(X(i), Y(y)); }); c.stroke(); c.lineWidth = 1;
+    v.forEach(function (y, i) { c.fillStyle = i === cur ? "#b07a2a" : col("--navy"); c.beginPath(); c.arc(X(i), Y(y), i === cur ? 5 : 3, 0, 6.283); c.fill(); });
+    c.fillStyle = col("--muted"); c.textAlign = "center"; c.textBaseline = "top"; var st = Math.max(1, Math.ceil(v.length / 10)); for (var i = 0; i < v.length; i += st) c.fillText(String(i), X(i), g.h - B + 8); c.fillText("Itération", L + (g.w - L - Rr) / 2, g.h - 18); }
+  function drawDendro(tree, n, k, lab) {
+    var g = setup("c-clright"), c = g.c, L = 50, Rr = 10, T = 12, B = 14, hmax = tree[n - 2][2], Y = axes(g, 0, hmax * 1.05, L, Rr, T, B, hmax > 10 ? 0 : 1);
+    var kids = {}, i; tree.forEach(function (m, s) { kids[n + s] = [m[0], m[1]]; });
+    var order = [], stack = [2 * n - 2]; while (stack.length) { var x = stack.pop(); if (x < n) order.push(x); else { stack.push(kids[x][1]); stack.push(kids[x][0]); } }
+    var pos = {}, W = g.w - L - Rr; order.forEach(function (leaf, j) { pos[leaf] = L + (j + 0.5) / n * W; });
+    var hgt = {}, colr = {}; for (i = 0; i < n; i++) { hgt[i] = 0; colr[i] = PAL[lab[i] % 8]; }
+    var cut = cutHeight(tree, k);
+    tree.forEach(function (m, s) { var id = n + s, a = m[0], b = m[1], h = m[2]; pos[id] = (pos[a] + pos[b]) / 2; hgt[id] = h; colr[id] = h <= cut && colr[a] === colr[b] ? colr[a] : "#9aa7b8";
+      c.strokeStyle = colr[id]; c.beginPath(); c.moveTo(pos[a], Y(hgt[a])); c.lineTo(pos[a], Y(h)); c.lineTo(pos[b], Y(h)); c.lineTo(pos[b], Y(hgt[b])); c.stroke(); });
+    c.setLineDash([5, 4]); c.strokeStyle = "#a33a2a"; c.beginPath(); c.moveTo(L, Y(cut)); c.lineTo(g.w - Rr, Y(cut)); c.stroke(); c.setLineDash([]);
+  }
+  function drawElbow(arr, k) { var g = setup("c-clelbow"), c = g.c, L = 64, Rr = 54, T = 14, B = 34, v = arr.map(function (a) { return a.sse; }), Y = axes(g, 0, Math.max.apply(null, v), L, Rr, T, B, 0);
+    var sl = arr.filter(function (a) { return a.sil !== null; }).map(function (a) { return a.sil; }), Y2 = axes(g, Math.min(0, Math.min.apply(null, sl)), Math.max(0.8, Math.max.apply(null, sl)), L, Rr, T, B, 1, true);
+    var X = function (q) { return L + (q - 1) / 7 * (g.w - L - Rr); };
+    c.strokeStyle = col("--navy"); c.lineWidth = 2; c.beginPath(); arr.forEach(function (a, i) { if (i) c.lineTo(X(a.k), Y(a.sse)); else c.moveTo(X(a.k), Y(a.sse)); }); c.stroke();
+    c.strokeStyle = "#b07a2a"; c.beginPath(); var st = false; arr.forEach(function (a) { if (a.sil === null) return; if (st) c.lineTo(X(a.k), Y2(a.sil)); else { c.moveTo(X(a.k), Y2(a.sil)); st = true; } }); c.stroke(); c.lineWidth = 1;
+    arr.forEach(function (a) { c.fillStyle = a.k === k ? "#a33a2a" : col("--navy"); c.beginPath(); c.arc(X(a.k), Y(a.sse), a.k === k ? 5 : 3, 0, 6.283); c.fill(); if (a.sil !== null) { c.fillStyle = "#b07a2a"; c.beginPath(); c.arc(X(a.k), Y2(a.sil), a.k === k ? 5 : 3, 0, 6.283); c.fill(); } });
+    c.fillStyle = col("--muted"); c.textAlign = "center"; c.textBaseline = "top"; arr.forEach(function (a) { c.fillText("k = " + a.k, X(a.k), g.h - B + 8); }); }
+  ["cl-data", "cl-k", "cl-std", "cl-seed"].forEach(function (id) { $(id).addEventListener("change", compute); });
+  document.querySelectorAll('#simulateur-clustering input[type="radio"]').forEach(function (r) { r.addEventListener("change", compute); });
+  $("cl-iter").addEventListener("input", show);
+  var tm; window.addEventListener("resize", function () { clearTimeout(tm); tm = setTimeout(show, 250); });
+  compute();
 })();
 </script>
 </body></html>
