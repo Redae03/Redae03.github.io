@@ -395,7 +395,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
     <div class="wrap sec">
       <div class="side">
         <h2>Simulateur EEP</h2>
-        <p>Optimisation moyenne-variance d'un portefeuille de six établissements et entreprises publics, à partir de leur rentabilité des capitaux propres (ROE) sur 2016–2024. Projet réalisé au DEPP.</p>
+        <p>Optimisation moyenne-variance d'un portefeuille de six établissements et entreprises publics, à partir de leur rentabilité des capitaux propres (ROE) sur 2016–2024, hors 2020. Projet réalisé au DEPP.</p>
       </div>
       <div class="sim">
         <div class="sim-form">
@@ -411,7 +411,6 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
               <select id="e-n"><option>2000</option><option selected>10000</option><option>30000</option></select>
             </label>
           </div>
-          <label class="check"><input type="checkbox" id="e-2020"> Inclure l'année 2020 (choc de la pandémie, exclue dans le rapport)</label>
         </div>
 
         <dl class="stats" id="e-stats"></dl>
@@ -435,7 +434,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
         <div>
           <h3 class="sub">Matrice de corrélation des ROE</h3>
           <div class="tbl-wrap"><table class="corr" id="e-corr"></table></div>
-          <p class="sim-note" style="margin-top:10px">Avec 8 observations annuelles par entité (9 avec 2020), ces corrélations et le portefeuille optimal sont très instables : une seule année peut les modifier sensiblement. Le ratio de Sharpe est calculé en échantillon, sur un ROE comptable et non sur un rendement de marché ; c'est un résultat analytique, pas une recommandation de gestion.</p>
+          <p class="sim-note" style="margin-top:10px">Avec 8 observations annuelles par entité (2016–2024, hors 2020), ces corrélations et le portefeuille optimal sont très instables : une seule année peut les modifier sensiblement. Le ratio de Sharpe est calculé en échantillon, sur un ROE comptable et non sur un rendement de marché ; c'est un résultat analytique, pas une recommandation de gestion.</p>
         </div>
       </div>
     </div>
@@ -1369,15 +1368,14 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 </script>
 <script>
 (function () {
-  // ROE annuels (résultat net / capitaux propres). 2016–2024 hors 2020 : tableau 4.2 du rapport ; 2020 : base de l'application.
+  // ROE annuels (résultat net / capitaux propres), 2016–2024 hors 2020 (choc de la pandémie).
   var NAMES = ["OCP", "ADM", "ONDA", "ANP", "Marsa Maroc", "RAM"];
-  var YEARS = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+  var YEARS = [2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024];
   var ROE = [
     [0.0537, -0.0265, 0.0946, 0.0600, 0.2284, 0.2176],
     [0.0631, 0.0087, 0.1035, 0.0346, 0.2311, 0.0062],
     [0.0688, 0.0106, 0.1065, 0.0367, 0.2406, 0.0760],
     [0.0368, 0.0107, 0.1067, 0.0103, 0.2595, -0.0217],
-    [0.0424, -0.0422, -0.6982, 0.0065, 0.1363, -1.7328],
     [0.1894, 0.0194, -0.2725, -0.0020, 0.2895, -0.9321],
     [0.2608, -0.0423, 0.0820, -0.0020, 0.3042, -1.2158],
     [0.1228, 0.0573, 0.2131, 0.0157, 0.2857, 0.5162],
@@ -1389,7 +1387,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 
   $("e-list").innerHTML = NAMES.map(function (n, i) { return '<label><input type="checkbox" id="eep-' + i + '" checked> ' + n + "</label>"; }).join("");
   var boxes = NAMES.map(function (n, i) { return $("eep-" + i); });
-  boxes.concat([$("e-rf"), $("e-cap"), $("e-n"), $("e-2020")]).forEach(function (el) { el.addEventListener("change", render); });
+  boxes.concat([$("e-rf"), $("e-cap"), $("e-n")]).forEach(function (el) { el.addEventListener("change", render); });
 
   // ---------- Statistiques ----------
   function stats(rows, idx) {
@@ -1422,10 +1420,10 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
 
   function render() {
     var idx = [], i; boxes.forEach(function (b, j) { if (b.checked) idx.push(j); });
-    var rf = +$("e-rf").value, cap = +$("e-cap").value, N = +$("e-n").value, with2020 = $("e-2020").checked;
+    var rf = +$("e-rf").value, cap = +$("e-cap").value, N = +$("e-n").value;
     if (idx.length < 2) { $("e-stats").innerHTML = ""; $("e-note").textContent = "Sélectionnez au moins deux entités."; return; }
     if (cap * idx.length < 1 - 1e-9) { $("e-stats").innerHTML = ""; $("e-note").textContent = "Avec ce plafond, les poids ne peuvent pas atteindre 100 % : augmentez le poids maximal ou ajoutez des entités."; return; }
-    var rows = ROE.filter(function (r, k) { return with2020 || YEARS[k] !== 2020; });
+    var rows = ROE;
     var st = stats(rows, idx), mu = st.mu, S = st.S, n = idx.length, L = lmax(S) * 1.05;
     // Frontière efficiente : QP paramétrique pour t de 0 (variance minimale) à grand (rendement maximal)
     var front = [], ts = [0]; for (i = 0; i < 70; i++) ts.push(Math.pow(10, -5 + i * 6 / 69));
@@ -1448,7 +1446,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       "<div><dt>Volatilité minimale</dt><dd>" + pc(mv.s) + "</dd></div>";
     var top = idx.map(function (j, k) { return { n: NAMES[j], w: ob.w[k] }; }).filter(function (q) { return q.w > 0.0005; }).sort(function (a, b) { return b.w - a.w; });
     $("e-note").textContent = "Portefeuille de Sharpe maximal : " + top.map(function (q) { return q.n + " " + pc(q.w, 1); }).join(", ") + ", avec un taux sans risque de " + pc(rf, 0) + (cap < 1 ? " et un poids plafonné à " + pc(cap, 0) : "") + ". " +
-      (rf === 0.03 && cap === 1 && !with2020 && idx.length === 6 ? "Ces paramètres reproduisent le portefeuille du rapport (39,0 % ANP, 60,9 % Marsa Maroc, Sharpe de 6,39). " : "") +
+      (rf === 0.03 && cap === 1 && idx.length === 6 ? "Ces paramètres reproduisent le portefeuille du rapport (39,0 % ANP, 60,9 % Marsa Maroc, Sharpe de 6,39). " : "") +
       "Le meilleur des " + cloud.length.toLocaleString("fr-FR") + " portefeuilles tirés au hasard atteint un Sharpe de " + fr(mcBest[2], 2) + " : l'optimisation numérique fait mieux que la simulation seule.";
 
     $("e-body").innerHTML = idx.map(function (j, k) {
