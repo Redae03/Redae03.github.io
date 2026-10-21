@@ -308,3 +308,9 @@ footer a { color: #dfe6ef; }
 #phares .side p { margin: 0; }
 
 @media (max-width: 900px) { .intro .portrait { max-width: 200px; } }
+
+/* Galerie en colonnes, sans recadrage */
+.gallery-m { column-count: 2; column-gap: 16px; }
+.gallery-m figure { margin: 0 0 16px; break-inside: avoid; }
+.gallery-m img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); }
+.gallery-m figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }

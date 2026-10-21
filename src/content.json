@@ -759,6 +759,63 @@
   "activities": [
     {
       "title": {
+        "fr": "Trésorier de l’AppsClub ENSA Agadir",
+        "en": "Treasurer of AppsClub ENSA Agadir"
+      },
+      "meta": {
+        "fr": "Août 2025 – mai 2026 · bureau du club",
+        "en": "Aug. 2025 – May 2026 · club board"
+      },
+      "text": {
+        "fr": "Membre du bureau de l’AppsClub, le club d’informatique de l’ENSA Agadir, qui compte plus de 150 membres actifs. En charge du budget du club pour l’année 2025/2026.",
+        "en": "Board member of AppsClub, ENSA Agadir’s computer science club with over 150 active members. In charge of the club’s budget for 2025/2026."
+      },
+      "gallery": "masonry",
+      "imgs": [
+        [
+          "ac-tresorier.webp",
+          900,
+          1178,
+          {
+            "fr": "Affiche de présentation de Reda Erraoui, trésorier de l’AppsClub",
+            "en": "AppsClub poster introducing Reda Erraoui as treasurer"
+          }
+        ],
+        [
+          "ac-equipe.webp",
+          900,
+          916,
+          {
+            "fr": "Le bureau de l’AppsClub 2025/2026 devant l’ENSA Agadir",
+            "en": "The 2025/2026 AppsClub board in front of ENSA Agadir"
+          }
+        ],
+        [
+          "ac-stand.webp",
+          574,
+          830,
+          {
+            "fr": "Reda Erraoui au stand de l’AppsClub",
+            "en": "Reda Erraoui at the AppsClub stand"
+          }
+        ],
+        [
+          "ac-forum.webp",
+          809,
+          859,
+          {
+            "fr": "Reda Erraoui au stand de l’AppsClub pendant le forum des clubs",
+            "en": "Reda Erraoui at the AppsClub stand during the clubs fair"
+          }
+        ]
+      ],
+      "caption": {
+        "fr": "Le bureau de l’AppsClub 2025/2026 et le stand du club",
+        "en": "The 2025/2026 AppsClub board and the club stand"
+      }
+    },
+    {
+      "title": {
         "fr": "Financial Day, 5<sup>e</sup> édition",
         "en": "Financial Day, 5th edition"
       },
@@ -798,16 +855,16 @@
     },
     {
       "title": {
-        "fr": "AppsClub ENSA Agadir et Info Days",
-        "en": "AppsClub ENSA Agadir and Info Days"
+        "fr": "Info Days, 1<sup>re</sup> édition",
+        "en": "Info Days, 1st edition"
       },
       "meta": {
-        "fr": "Trésorier (août 2025 – mai 2026) · équipe d’organisation des Info Days 2025",
-        "en": "Treasurer (Aug. 2025 – May 2026) · Info Days 2025 organizing team"
+        "fr": "ENSA Agadir · avril 2025 · équipe d’organisation",
+        "en": "ENSA Agadir · April 2025 · organizing team"
       },
       "text": {
-        "fr": "Première édition des journées de l’informatique de l’ENSA Agadir, avec la South Coding Cup, compétition de programmation organisée par l’AppsClub le 20 avril 2025. Trésorier du club l’année suivante.",
-        "en": "First edition of ENSA Agadir’s computer science days, including the South Coding Cup programming contest organized by AppsClub on 20 April 2025. Club treasurer the following year."
+        "fr": "Première édition des journées de l’informatique de l’ENSA Agadir, organisée par l’AppsClub, avec la South Coding Cup, compétition de programmation du 20 avril 2025.",
+        "en": "First edition of ENSA Agadir’s computer science days, organized by AppsClub, including the South Coding Cup programming contest on 20 April 2025."
       },
       "gallery": "triple",
       "imgs": [

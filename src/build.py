@@ -228,7 +228,7 @@ def index_page(lang):
             cls = ' class="tall"' if a["gallery"] == "triple" and j == 0 else ""
             cap = f"<figcaption>{t(a['caption'], lang)}</figcaption>" if j == len(a["imgs"]) - 1 else ""
             figs.append(f'<figure{cls}><img src="{rel}assets/img/{src}" width="{w}" height="{hgt}" alt="{esc(t(alt, lang))}" loading="lazy" decoding="async">{cap}</figure>')
-        gcls = "gallery" if a["gallery"] == "pair" else "gallery3"
+        gcls = {"pair": "gallery", "triple": "gallery3", "masonry": "gallery-m"}[a["gallery"]]
         p.append(f"""<article class="event"><div class="event-head"><h3>{t(a['title'], lang)}</h3><span>{t(a['meta'], lang)}</span></div><p>{t(a['text'], lang)}</p><div class="{gcls}">{''.join(figs)}</div></article>""")
     p.append("</div></div></section>\n")
 
