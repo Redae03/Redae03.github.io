@@ -132,6 +132,17 @@ def link_row(lang, rel, case=None, sim=None, repo=None, report=False, case_first
     return '<p class="links-row">' + " ".join(out) + "</p>" if out else ""
 
 
+def thumb(lang, rel, sim, cls="thumb"):
+    from pathlib import Path as _P
+    f = _P(__file__).resolve().parent.parent / "assets" / "img" / "apercus" / f"{sim}.webp"
+    if not sim or not f.exists():
+        return ""
+    from PIL import Image
+    w, h = Image.open(f).size
+    alt = "Aperçu du simulateur" if lang == "fr" else "Simulator preview"
+    return f'<a class="{cls}" href="{rel}simulateurs/{sim}.html" aria-label="{alt}"><img src="{rel}assets/img/apercus/{sim}.webp" width="{w}" height="{h}" loading="lazy" decoding="async" alt="{alt}"></a>'
+
+
 def footer(lang):
     return f"""<footer><div class="wrap"><span>Reda Erraoui · {UI[lang]['updated']}</span><span><a href="{SITE['linkedin']}" target="_blank" rel="noopener">LinkedIn</a> · <a href="{SITE['github']}" target="_blank" rel="noopener">GitHub</a></span></div></footer>
 """
@@ -171,6 +182,7 @@ def index_page(lang):
     p.append(f'<section id="phares"><div class="wrap sec"><div class="side"><h2>{u["flagships"]}</h2><p>{u["flagships_side"]}</p></div><div class="cards">')
     for f in C["flagships"]:
         p.append(f"""<article class="card">
+  {thumb(lang, rel, f['sim'], 'thumb card-thumb')}
   <div class="small-caps">{t(f['theme'], lang)}</div>
   <h3><a href="{rel}{'projets' if lang == 'fr' else 'en/projects'}/{f['slug']}.html">{t(f['title'], lang)}</a></h3>
   <p class="ctx">{t(f['context'], lang)}</p>
@@ -184,7 +196,7 @@ def index_page(lang):
     for e in C["experience"]:
         lis = "".join(f"<li>{b}</li>" for b in t(e["bullets"], lang))
         p.append(f"""<article class="entry">
-  <div class="when"><b>{t(e['when'], lang)}</b>{t(e['meta'], lang)}</div>
+  <div class="when"><b>{t(e['when'], lang)}</b>{t(e['meta'], lang)}{thumb(lang, rel, e.get('sim'), 'thumb entry-thumb')}</div>
   <div>
     <h3>{t(e['title'], lang)}</h3>
     <div class="org">{t(e['org'], lang)}</div>
@@ -199,7 +211,7 @@ def index_page(lang):
     hd = u["proj_head"]
     p.append(f'<section id="projets"><div class="wrap sec"><div class="side"><h2>{u["projects"]}</h2><p>{u["projects_side"]}</p></div><div class="projects"><div class="thead small-caps"><span>{hd[0]}</span><span>{hd[1]}</span><span>{hd[2]}</span></div>')
     for pr in C["projects"]:
-        p.append(f"""<div class="proj"><div><h3>{t(pr['title'], lang)}</h3><p>{t(pr['text'], lang)}</p>{link_row(lang, rel, None, pr.get('sim'), pr.get('repo'))}</div><div class="meth">{pr['meth']}</div><div class="yr">{pr['year']}</div></div>""")
+        p.append(f"""<div class="proj"><div class="proj-main">{thumb(lang, rel, pr.get('sim'), 'thumb proj-thumb')}<div><h3>{t(pr['title'], lang)}</h3><p>{t(pr['text'], lang)}</p>{link_row(lang, rel, None, pr.get('sim'), pr.get('repo'))}</div></div><div class="meth">{pr['meth']}</div><div class="yr">{pr['year']}</div></div>""")
     p.append("</div></div></section>\n")
 
     # Formation et certifications
