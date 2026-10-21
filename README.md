@@ -29,3 +29,8 @@ Chaque texte existe en deux versions, `"fr"` et `"en"`.
 ## Statistiques de visite (facultatif)
 
 Créer un compte gratuit sur [GoatCounter](https://www.goatcounter.com), puis indiquer le code choisi dans `site.analytics_goatcounter` de `content.json` et relancer `python src/build.py`. GoatCounter ne dépose pas de cookies.
+
+## Images
+
+- `assets/img/photos/<simulateur>.webp` : photo d'illustration d'un projet (960×540). Elle s'affiche automatiquement dans la carte ou la ligne du projet. Les photos actuelles viennent d'Unsplash (licence Unsplash, usage libre).
+- `assets/img/logos/<nom>.webp` : logo de l'organisme d'un stage (720×405, fond blanc), indiqué par le champ `logo` du stage dans `content.json`.

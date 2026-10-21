@@ -132,15 +132,24 @@ def link_row(lang, rel, case=None, sim=None, repo=None, report=False, case_first
     return '<p class="links-row">' + " ".join(out) + "</p>" if out else ""
 
 
-def thumb(lang, rel, sim, cls="thumb"):
+def thumb(lang, rel, sim, cls="thumb", href=None):
+    """Photo d'illustration du projet (assets/img/photos/<sim>.webp), cliquable."""
     from pathlib import Path as _P
-    f = _P(__file__).resolve().parent.parent / "assets" / "img" / "apercus" / f"{sim}.webp"
-    if not sim or not f.exists():
+    if not sim:
         return ""
-    from PIL import Image
-    w, h = Image.open(f).size
-    alt = "Aperçu du simulateur" if lang == "fr" else "Simulator preview"
-    return f'<a class="{cls}" href="{rel}simulateurs/{sim}.html" aria-label="{alt}"><img src="{rel}assets/img/apercus/{sim}.webp" width="{w}" height="{h}" loading="lazy" decoding="async" alt="{alt}"></a>'
+    f = _P(__file__).resolve().parent.parent / "assets" / "img" / "photos" / f"{sim}.webp"
+    if not f.exists():
+        return ""
+    alt = ""
+    href = href or f"{rel}simulateurs/{sim}.html"
+    return f'<a class="{cls}" href="{href}" tabindex="-1" aria-hidden="true"><img src="{rel}assets/img/photos/{sim}.webp" width="960" height="540" loading="lazy" decoding="async" alt="{alt}"></a>'
+
+
+def logo(lang, rel, name, org):
+    if not name:
+        return ""
+    alt = ("Logo : " if lang == "fr" else "Logo: ") + org
+    return f'<div class="org-logo"><img src="{rel}assets/img/logos/{name}.webp" width="720" height="405" loading="lazy" decoding="async" alt="{alt}"></div>'
 
 
 def footer(lang):
@@ -182,7 +191,7 @@ def index_page(lang):
     p.append(f'<section id="phares"><div class="wrap sec"><div class="side"><h2>{u["flagships"]}</h2><p>{u["flagships_side"]}</p></div><div class="cards">')
     for f in C["flagships"]:
         p.append(f"""<article class="card">
-  {thumb(lang, rel, f['sim'], 'thumb card-thumb')}
+  {thumb(lang, rel, f['sim'], 'thumb card-thumb', rel + ('projets' if lang == 'fr' else 'en/projects') + '/' + f['slug'] + '.html')}
   <div class="small-caps">{t(f['theme'], lang)}</div>
   <h3><a href="{rel}{'projets' if lang == 'fr' else 'en/projects'}/{f['slug']}.html">{t(f['title'], lang)}</a></h3>
   <p class="ctx">{t(f['context'], lang)}</p>
@@ -196,7 +205,7 @@ def index_page(lang):
     for e in C["experience"]:
         lis = "".join(f"<li>{b}</li>" for b in t(e["bullets"], lang))
         p.append(f"""<article class="entry">
-  <div class="when"><b>{t(e['when'], lang)}</b>{t(e['meta'], lang)}{thumb(lang, rel, e.get('sim'), 'thumb entry-thumb')}</div>
+  <div class="when"><b>{t(e['when'], lang)}</b>{t(e['meta'], lang)}{logo(lang, rel, e.get('logo'), t(e['org'], lang).split(' · ')[0])}</div>
   <div>
     <h3>{t(e['title'], lang)}</h3>
     <div class="org">{t(e['org'], lang)}</div>

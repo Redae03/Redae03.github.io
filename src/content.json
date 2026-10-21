@@ -446,7 +446,8 @@
       },
       "case": "ipo-casablanca",
       "sim": "ipo-casablanca",
-      "repo": "performance-post-ipo-casablanca"
+      "repo": "performance-post-ipo-casablanca",
+      "logo": "bourse-casablanca"
     },
     {
       "when": {
@@ -481,7 +482,8 @@
         "fr": "Python, Flask, SQLite, Chart.js",
         "en": "Python, Flask, SQLite, Chart.js"
       },
-      "sim": "portefeuille-eep"
+      "sim": "portefeuille-eep",
+      "logo": "mef"
     },
     {
       "when": {
@@ -514,7 +516,8 @@
         "fr": "Python, scikit-learn, Streamlit",
         "en": "Python, scikit-learn, Streamlit"
       },
-      "sim": "ice-dgi"
+      "sim": "ice-dgi",
+      "logo": "dgi"
     }
   ],
   "projects": [
