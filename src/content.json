@@ -66,8 +66,8 @@
         "en": "American options with Monte Carlo and Longstaff-Schwartz"
       },
       "context": {
-        "fr": "Projet de calcul stochastique · ENSA Agadir · encadré par Pr. B. El Asri · 2026",
-        "en": "Stochastic calculus project · ENSA Agadir · supervised by Prof. B. El Asri · 2026"
+        "fr": "Projet de calcul stochastique · ENSA Agadir · 2026",
+        "en": "Stochastic calculus project · ENSA Agadir · 2026"
       },
       "hook": {
         "fr": "Put américain valorisé à 4,46 contre 4,478 dans l’article de référence ; variance de l’estimateur divisée par 6,8 grâce à une variable de contrôle.",
@@ -175,8 +175,8 @@
         "en": "Volatility and Value-at-Risk of Managem with ARMA–GARCH"
       },
       "context": {
-        "fr": "Projet de séries temporelles · ENSA Agadir · encadré par Mme S. Hadiri · 2026",
-        "en": "Time-series project · ENSA Agadir · supervised by Ms S. Hadiri · 2026"
+        "fr": "Projet de séries temporelles · ENSA Agadir · 2026",
+        "en": "Time-series project · ENSA Agadir · 2026"
       },
       "hook": {
         "fr": "306 mois de cours : volatilité persistante (demi-vie d’environ 6 mois), effet de levier significatif, et une fuite d’information détectée dans la comparaison avec un réseau de neurones.",
