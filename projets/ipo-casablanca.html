@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Performance des introductions en Bourse à Casablanca · Reda Erraoui</title>
+<meta name="description" content="9 introductions de 2020 à 2025 : surperformance de +31,5 % à 6 mois par rapport au MASI, liée au taux de sursouscription (r = 0,77), mais fragile sans la plus grosse opération.">
+<meta name="author" content="Reda Erraoui">
+<meta name="theme-color" content="#0f2a4a">
+<link rel="canonical" href="https://redae03.github.io/projets/ipo-casablanca.html">
+<link rel="alternate" hreflang="fr" href="https://redae03.github.io/projets/ipo-casablanca.html">
+<link rel="alternate" hreflang="en" href="https://redae03.github.io/en/projects/ipo-casablanca.html">
+<link rel="alternate" hreflang="x-default" href="https://redae03.github.io/en/projects/ipo-casablanca.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Performance des introductions en Bourse à Casablanca · Reda Erraoui">
+<meta property="og:description" content="9 introductions de 2020 à 2025 : surperformance de +31,5 % à 6 mois par rapport au MASI, liée au taux de sursouscription (r = 0,77), mais fragile sans la plus grosse opération.">
+<meta property="og:url" content="https://redae03.github.io/projets/ipo-casablanca.html">
+<meta property="og:image" content="https://redae03.github.io/assets/og-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="mark" href="../index.html">Reda Erraoui</a>
+    <nav class="topnav" aria-label="Sections"></nav>
+    <a class="lang" href="../en/projects/ipo-casablanca.html" hreflang="en" lang="en">English</a>
+  </div>
+</div>
+<header class="case-head"><div class="wrap">
+  <a class="back" href="../index.html#phares">← Retour au portfolio</a>
+  <div class="small-caps">Marchés actions</div>
+  <h1>Performance des introductions en Bourse à Casablanca</h1>
+  <p class="ctx">Stage · Bourse de Casablanca, Département Développement Marché · juillet 2026</p>
+  <p class="hook">9 introductions de 2020 à 2025 : surperformance de +31,5 % à 6 mois par rapport au MASI, liée au taux de sursouscription (r = 0,77), mais fragile sans la plus grosse opération.</p>
+  <div class="actions">
+    <a class="btn solid" href="../simulateurs/ipo-casablanca.html">Simuler</a>
+    <a class="btn line" href="https://github.com/Redae03/performance-post-ipo-casablanca" target="_blank" rel="noopener">Code (GitHub)</a>
+    <a class="btn line" href="https://github.com/Redae03/performance-post-ipo-casablanca/blob/main/rapport.pdf" target="_blank" rel="noopener">Rapport (PDF)</a>
+  </div>
+</div></header>
+<main class="case">
+<section><div class="wrap sec"><div class="side"><h2>Question</h2></div><div><p class="lead">Les introductions en Bourse marocaines récentes ont-elles surperformé le marché, et quels facteurs expliquent cette performance ? Une question utile au Département Développement Marché pour accompagner les futurs émetteurs.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Méthode</h2></div><div><ol class="steps"><li>Collecte et nettoyage des cours et des données d’offre des 9 introductions.</li><li>Rendements anormaux BHAR (buy-and-hold) par rapport au MASI à J+1, 1, 3, 6 et 12 mois.</li><li>Test de Wilcoxon sur la médiane, corrélations de Pearson et de Spearman avec la sursouscription et le montant levé.</li><li>Backtest d’une stratégie de participation systématique, modèle Excel en 7 feuilles.</li><li>Suivi en temps réel de l’introduction de T2S Group Holding, de la souscription aux premières séances.</li></ol></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Résultats</h2></div><div><div class="tbl-wrap"><table class="res case-table"><thead><tr><th>BHAR par rapport au MASI</th><th>Moyen</th><th>Médian</th><th>p (Wilcoxon)</th></tr></thead><tbody><tr><td>J+1 (n = 9)</td><td>+6,2 %</td><td>+8,5 %</td><td>0,098</td></tr><tr><td>6 mois (n = 9)</td><td>+31,5 %</td><td>+35,2 %</td><td>0,074</td></tr><tr><td>6 mois, sans SGTM (n = 8)</td><td>+23,2 %</td><td>+23,1 %</td><td>0,148</td></tr><tr><td>12 mois (n = 7)</td><td>+27,7 %</td><td>+46,1 %</td><td>0,156</td></tr></tbody></table></div><p class="note">La surperformance à 6 mois est marginalement significative (p = 0,074) et devient non significative sans SGTM. Le taux de sursouscription semble le meilleur indicateur : r = 0,77 (p = 0,015) sur 9 introductions, et 0,93 sans SGTM.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Limites et suites</h2></div><div><ul class="steps"><li>Neuf introductions seulement : les tests ont peu de puissance et un seul titre peut changer la conclusion.</li><li>Le MASI comme référence ne contrôle ni la taille ni le secteur ; un appariement par portefeuille serait plus robuste.</li></ul></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Autres études de cas</h2></div><div><ul class="plainlinks"><li><a href="monte-carlo-lsm.html">Options américaines par Monte-Carlo et Longstaff-Schwartz</a></li><li><a href="arma-garch-var.html">Volatilité et Value-at-Risk de Managem par ARMA–GARCH</a></li></ul></div></div></section>
+</main>
+<footer><div class="wrap"><span>Reda Erraoui · Mis à jour en octobre 2026</span><span><a href="https://www.linkedin.com/in/reda-erraoui" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Redae03" target="_blank" rel="noopener">GitHub</a></span></div></footer>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulateur · Reda Erraoui</title>
+<meta name="description" content="Portfolio de Reda Erraoui, élève ingénieur en finance quantitative : risque de marché, produits dérivés et économétrie financière en Python. Projets, simulateurs interactifs et certificats vérifiables.">
+<meta name="author" content="Reda Erraoui">
+<meta name="theme-color" content="#0f2a4a">
+<link rel="canonical" href="https://redae03.github.io/simulateurs/option-pricing-lab.html">
+<link rel="alternate" hreflang="fr" href="https://redae03.github.io/simulateurs/option-pricing-lab.html">
+<link rel="alternate" hreflang="en" href="https://redae03.github.io/simulateurs/option-pricing-lab.html">
+<link rel="alternate" hreflang="x-default" href="https://redae03.github.io/simulateurs/option-pricing-lab.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simulateur · Reda Erraoui">
+<meta property="og:description" content="Portfolio de Reda Erraoui, élève ingénieur en finance quantitative : risque de marché, produits dérivés et économétrie financière en Python. Projets, simulateurs interactifs et certificats vérifiables.">
+<meta property="og:url" content="https://redae03.github.io/simulateurs/option-pricing-lab.html">
+<meta property="og:image" content="https://redae03.github.io/assets/og-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body class="simpage-body">
+<div class="simbar"><div class="wrap"><a class="simback" href="../index.html">← Retour au portfolio</a><span class="small-caps">Simulateur interactif</span><a class="lang" href="../en/index.html" lang="en">English site</a></div></div>
+<main>
+<section id="simulateur-opl" class="simsec">
+    <div class="wrap sec">
+      <div class="side">
+        <h2>Option Pricing Lab</h2>
+        <p>Quatre méthodes de valorisation d'une option européenne : formule de Black-Scholes, Monte-Carlo, schéma d'Euler-Maruyama et Random Forest entraîné dans le navigateur.</p>
+      </div>
+      <div class="sim">
+        <form class="sim-form" id="opl-form" novalidate>
+          <div class="sim-row">
+            <div class="seg" role="radiogroup" aria-label="Type d'option">
+              <label><input type="radio" name="oplopt" id="opl-call" value="call" checked> Call</label>
+              <label><input type="radio" name="oplopt" id="opl-put" value="put"> Put</label>
+            </div>
+          </div>
+          <div class="sim-grid">
+            <label class="fld"><span>Spot S₀</span><input id="o-S" inputmode="decimal" value="100"></label>
+            <label class="fld"><span>Strike K</span><input id="o-K" inputmode="decimal" value="100"></label>
+            <label class="fld"><span>Taux r</span><input id="o-r" inputmode="decimal" value="0.05"></label>
+            <label class="fld"><span>Volatilité σ</span><input id="o-sigma" inputmode="decimal" value="0.20"></label>
+            <label class="fld"><span>Maturité T (ans)</span><input id="o-T" inputmode="decimal" value="1"></label>
+            <label class="fld"><span>Simulations M</span><input id="o-M" inputmode="numeric" value="10000"></label>
+            <label class="fld"><span>Pas d'Euler N</span><input id="o-N" inputmode="numeric" value="252"></label>
+            <label class="fld"><span>Graine aléatoire</span><input id="o-seed" inputmode="numeric" value="42"></label>
+          </div>
+          <div class="sim-actions">
+            <button type="submit" class="btn solid" id="opl-run">Calculer</button>
+            <span class="sim-msg" id="opl-msg" role="status"></span>
+          </div>
+        </form>
+
+        <div class="tbl-wrap">
+          <table class="res">
+            <thead><tr><th>Méthode</th><th>Prix</th><th>Écart vs BS</th><th>Écart relatif</th><th>Temps</th></tr></thead>
+            <tbody id="opl-body"></tbody>
+          </table>
+        </div>
+        <p class="sim-note" id="opl-note"></p>
+
+        <dl class="stats greeks" id="opl-greeks"></dl>
+
+        <div class="charts">
+          <figure class="chart"><figcaption>Monte-Carlo : convergence et IC à 95 %</figcaption><canvas id="c-mc" role="img" aria-label="Prix Monte-Carlo en fonction du nombre de simulations, avec intervalle de confiance et prix Black-Scholes"></canvas></figure>
+          <figure class="chart"><figcaption>Euler-Maruyama : trajectoires simulées (t en années)</figcaption><canvas id="c-paths" role="img" aria-label="Huit trajectoires du sous-jacent simulées par le schéma d'Euler-Maruyama"></canvas></figure>
+          <figure class="chart"><figcaption>Euler-Maruyama : biais de discrétisation selon N</figcaption><canvas id="c-bias" role="img" aria-label="Écart du prix Euler-Maruyama au prix Black-Scholes selon le nombre de pas, avec la bande d'erreur statistique"></canvas></figure>
+          <figure class="chart"><figcaption>Random Forest : prix prédit et prix réel (test)</figcaption><canvas id="c-rf" role="img" aria-label="Nuage de points du prix prédit par le Random Forest contre le prix Black-Scholes sur l'échantillon de test"></canvas></figure>
+        </div>
+        <p class="sim-note" id="opl-bias-note"></p>
+
+        <div>
+          <h3 class="sub">Random Forest : apprentissage de la fonction de pricing</h3>
+          <dl class="stats" id="rf-stats"></dl>
+          <p class="sim-note" id="rf-note" style="margin-top:10px"></p>
+          <div class="sim-actions" style="margin-top:12px">
+            <button type="button" class="btn line" id="rf-train">Réentraîner le modèle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var fr = function (x, d) { return x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var sup = function (n) { var m = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" }; return String(n).split("").map(function (c) { return m[c]; }).join(""); };
+  var sci = function (x) { if (!isFinite(x)) return "–"; if (x === 0) return "0"; var e = Math.floor(Math.log10(Math.abs(x))), m = Math.round(x / Math.pow(10, e) * 100) / 100; if (m >= 10) { m /= 10; e++; } return fr(m, 2) + "×10" + sup(e); };
+  var ms = function (t) { return t < 1 ? fr(t, 3) + " ms" : t < 1000 ? fr(t, 1) + " ms" : fr(t / 1000, 2) + " s"; };
+
+  // ---------- Générateur pseudo-aléatoire reproductible (graine) ----------
+  function rng(seed) {
+    var a = seed >>> 0, spare = null;
+    function u() { a = (a + 0x6D2B79F5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+    return { u: u, n: function () { if (spare !== null) { var s = spare; spare = null; return s; } var x, y, r; do { x = 2 * u() - 1; y = 2 * u() - 1; r = x * x + y * y; } while (r >= 1 || r === 0); var f = Math.sqrt(-2 * Math.log(r) / r); spare = y * f; return x * f; } };
+  }
+
+  // ---------- Black-Scholes et grecques ----------
+  function ncdf(x) { var z = Math.abs(x), c; if (z > 37) c = 0; else { var e = Math.exp(-z * z / 2); if (z < 7.07106781186547) { var n = ((((((0.0352624965998911 * z + 0.700383064443688) * z + 6.37396220353165) * z + 33.912866078383) * z + 112.079291497871) * z + 221.213596169931) * z + 220.206867912376); var d = (((((((0.0883883476483184 * z + 1.75566716318264) * z + 16.064177579207) * z + 86.7807322029461) * z + 296.564248779674) * z + 637.333633378831) * z + 793.826512519948) * z + 440.413735824752); c = e * n / d; } else c = e / (z + 1 / (z + 2 / (z + 3 / (z + 4 / (z + 0.65))))) / 2.506628274631; } return x > 0 ? 1 - c : c; }
+  function npdf(x) { return Math.exp(-x * x / 2) / 2.5066282746310002; }
+  function bs(S, K, r, s, T, call) {
+    var sq = Math.sqrt(T), d1 = (Math.log(S / K) + (r + s * s / 2) * T) / (s * sq), d2 = d1 - s * sq, df = Math.exp(-r * T);
+    var price = call ? S * ncdf(d1) - K * df * ncdf(d2) : K * df * ncdf(-d2) - S * ncdf(-d1);
+    return { price: price, d1: d1, d2: d2, delta: call ? ncdf(d1) : ncdf(d1) - 1, gamma: npdf(d1) / (S * s * sq),
+      theta: ((-S * npdf(d1) * s / (2 * sq)) + (call ? -r * K * df * ncdf(d2) : r * K * df * ncdf(-d2))) / 365,
+      vega: S * npdf(d1) * sq / 100, rho: (call ? K * T * df * ncdf(d2) : -K * T * df * ncdf(-d2)) / 100 };
+  }
+
+  // ---------- Monte-Carlo (solution exacte du MBG) ----------
+  function mc(p, call, M, seed, checkpoints) {
+    var g = rng(seed), df = Math.exp(-p.r * p.T), dr = (p.r - p.sigma * p.sigma / 2) * p.T, vol = p.sigma * Math.sqrt(p.T), s1 = 0, s2 = 0, conv = [], k = 0;
+    for (var i = 1; i <= M; i++) {
+      var ST = p.S * Math.exp(dr + vol * g.n()), pf = call ? Math.max(ST - p.K, 0) : Math.max(p.K - ST, 0);
+      s1 += pf; s2 += pf * pf;
+      if (checkpoints && k < checkpoints.length && i === checkpoints[k]) { var m = s1 / i, sd = Math.sqrt(Math.max(0, (s2 - i * m * m) / (i - 1))); conv.push({ M: i, p: df * m, se: df * sd / Math.sqrt(i) }); k++; }
+    }
+    var mean = s1 / M, sdv = Math.sqrt(Math.max(0, (s2 - M * mean * mean) / (M - 1)));
+    return { price: df * mean, se: df * sdv / Math.sqrt(M), conv: conv };
+  }
+
+  // ---------- Euler-Maruyama ----------
+  function euler(p, call, M, N, seed, keep) {
+    var g = rng(seed), dt = p.T / N, sq = Math.sqrt(dt), df = Math.exp(-p.r * p.T), s1 = 0, s2 = 0, paths = [];
+    for (var i = 0; i < M; i++) {
+      var S = p.S, path = i < keep ? [S] : null;
+      for (var j = 0; j < N; j++) { S = Math.max(S + p.r * S * dt + p.sigma * S * sq * g.n(), 0); if (path) path.push(S); }
+      var pf = call ? Math.max(S - p.K, 0) : Math.max(p.K - S, 0); s1 += pf; s2 += pf * pf; if (path) paths.push(path);
+    }
+    var mean = s1 / M, sdv = Math.sqrt(Math.max(0, (s2 - M * mean * mean) / (M - 1)));
+    return { price: df * mean, se: df * sdv / Math.sqrt(M), paths: paths };
+  }
+
+  // Écart Euler – solution exacte calculé sur les mêmes incréments browniens
+  function eulerBias(p, call, M, N, seed) {
+    var g = rng(seed), dt = p.T / N, sq = Math.sqrt(dt), df = Math.exp(-p.r * p.T), dr = (p.r - p.sigma * p.sigma / 2) * p.T, s1 = 0, s2 = 0;
+    for (var i = 0; i < M; i++) {
+      var S = p.S, W = 0;
+      for (var j = 0; j < N; j++) { var z = g.n(); W += sq * z; S = Math.max(S + p.r * S * dt + p.sigma * S * sq * z, 0); }
+      var SX = p.S * Math.exp(dr + p.sigma * W);
+      var d = df * ((call ? Math.max(S - p.K, 0) : Math.max(p.K - S, 0)) - (call ? Math.max(SX - p.K, 0) : Math.max(p.K - SX, 0)));
+      s1 += d; s2 += d * d;
+    }
+    var m = s1 / M; return { d: m, se: Math.sqrt(Math.max(0, (s2 - M * m * m) / (M - 1)) / M) };
+  }
+
+  // ---------- Random Forest de régression (CART + bagging), écrit à la main ----------
+  function feats(S, K, r, s, T, call) { return [S / K, Math.log(S / K), s, T, r, call ? 1 : 0, s * Math.sqrt(T), r * T]; }
+  function grow(X, y, idx, depth, opt, g) {
+    var n = idx.length, sum = 0; for (var i = 0; i < n; i++) sum += y[idx[i]];
+    var mean = sum / n;
+    if (depth >= opt.maxDepth || n < 2 * opt.minLeaf) return { v: mean };
+    var nf = X[0].length, fs = [], best = { sse: Infinity };
+    while (fs.length < opt.mtry) { var f = Math.floor(g.u() * nf); if (fs.indexOf(f) < 0) fs.push(f); }
+    var tot2 = 0; for (i = 0; i < n; i++) tot2 += y[idx[i]] * y[idx[i]];
+    fs.forEach(function (f) {
+      var o = idx.slice().sort(function (a, b) { return X[a][f] - X[b][f]; }), ls = 0, ls2 = 0;
+      for (var k = 0; k < n - 1; k++) {
+        var yy = y[o[k]]; ls += yy; ls2 += yy * yy;
+        var nl = k + 1, nr = n - nl;
+        if (nl < opt.minLeaf || nr < opt.minLeaf || X[o[k]][f] === X[o[k + 1]][f]) continue;
+        var rs = sum - ls, sse = (ls2 - ls * ls / nl) + (tot2 - ls2 - rs * rs / nr);
+        if (sse < best.sse) best = { sse: sse, f: f, t: (X[o[k]][f] + X[o[k + 1]][f]) / 2 };
+      }
+    });
+    if (best.sse === Infinity) return { v: mean };
+    var L = [], R = []; idx.forEach(function (j) { (X[j][best.f] <= best.t ? L : R).push(j); });
+    return { f: best.f, t: best.t, l: grow(X, y, L, depth + 1, opt, g), r: grow(X, y, R, depth + 1, opt, g) };
+  }
+  function predTree(nd, x) { while (nd.v === undefined) nd = x[nd.f] <= nd.t ? nd.l : nd.r; return nd.v; }
+  var RF = null;
+  function trainRF(seed) {
+    var g = rng(seed + 7), n = 3000, X = [], y = [], Ks = [], t0 = performance.now();
+    for (var i = 0; i < n; i++) {
+      var S = 50 + 150 * g.u(), K = 40 + 180 * g.u(), r = 0.10 * g.u(), s = 0.05 + 0.75 * g.u(), T = 0.1 + 2.9 * g.u(), call = g.u() < 0.5;
+      X.push(feats(S, K, r, s, T, call)); y.push(bs(S, K, r, s, T, call).price / K); Ks.push(K);
+    }
+    var nTr = Math.floor(0.8 * n), opt = { maxDepth: 13, minLeaf: 2, mtry: 5 }, trees = [];
+    for (var b = 0; b < 30; b++) { var idx = []; for (i = 0; i < nTr; i++) idx.push(Math.floor(g.u() * nTr)); trees.push(grow(X, y, idx, 0, opt, g)); }
+    var tTrain = performance.now() - t0, pred = function (x) { var s = 0; trees.forEach(function (tr) { s += predTree(tr, x); }); return s / trees.length; };
+    var test = [], ae = 0, se = 0, my = 0;
+    for (i = nTr; i < n; i++) { var yt = y[i] * Ks[i], yp = pred(X[i]) * Ks[i]; test.push([yt, yp]); ae += Math.abs(yt - yp); se += (yt - yp) * (yt - yp); my += yt; }
+    var nt = n - nTr; my /= nt; var sst = 0; test.forEach(function (q) { sst += (q[0] - my) * (q[0] - my); });
+    RF = { pred: pred, test: test, mae: ae / nt, rmse: Math.sqrt(se / nt), r2: 1 - se / sst, tTrain: tTrain, nTr: nTr, nt: nt };
+  }
+
+  // ---------- Interface ----------
+  function read() {
+    var p = {}, bad = null;
+    ["S", "K", "r", "sigma", "T", "M", "N", "seed"].forEach(function (k) {
+      var el = $("o-" + k), v = parseFloat(String(el.value).replace(",", ".")); el.removeAttribute("aria-invalid");
+      if (!isFinite(v)) { el.setAttribute("aria-invalid", "true"); bad = "Saisissez un nombre valide pour chaque paramètre."; } p[k] = v;
+    });
+    if (bad) return { err: bad };
+    if (p.S <= 0 || p.K <= 0 || p.T <= 0 || p.sigma <= 0 || p.r < 0) return { err: "S, K, T et σ doivent être strictement positifs, et r positif ou nul." };
+    p.M = Math.round(p.M); p.N = Math.round(p.N); p.seed = Math.round(p.seed);
+    if (p.M < 500 || p.M > 200000) return { err: "M doit être compris entre 500 et 200 000." };
+    if (p.N < 1 || p.N > 1000) return { err: "N doit être compris entre 1 et 1 000." };
+    if (p.M * p.N > 5e6) return { err: "M × N est limité à 5 millions pour garder la page fluide : réduisez M ou N." };
+    return { p: p };
+  }
+
+  function run() {
+    var msg = $("opl-msg"), rd = read(); msg.className = "sim-msg";
+    if (rd.err) { msg.textContent = rd.err; msg.className = "sim-msg err"; return; }
+    var p = rd.p, call = $("opl-call").checked, t;
+    t = performance.now(); var B = bs(p.S, p.K, p.r, p.sigma, p.T, call), tB = performance.now() - t;
+    var cps = []; for (var m = 100; m < p.M; m = Math.round(m * 1.5)) cps.push(m); cps.push(p.M);
+    t = performance.now(); var MC = mc(p, call, p.M, p.seed, cps), tM = performance.now() - t;
+    t = performance.now(); var EM = euler(p, call, p.M, p.N, p.seed + 1, 8), tE = performance.now() - t;
+    if (!RF) { if (!run.pending) { run.pending = true; setTimeout(function () { trainRF(p.seed); run.pending = false; run(); }, 60); } }
+    t = performance.now(); var ML = RF ? 0 : NaN; if (RF) ML = RF.pred(feats(p.S, p.K, p.r, p.sigma, p.T, call)) * p.K, tL = performance.now() - t;
+    var ref = B.price;
+    var row = function (n, v, tt, extra) { var e = Math.abs(v - ref); return "<tr" + (extra === "ref" ? ' class="ref"' : "") + "><td>" + n + "</td><td>" + fr(v, 4) + "</td><td>" + (extra === "ref" ? "–" : fr(e, 4)) + "</td><td>" + (extra === "ref" ? "–" : fr(100 * e / ref, 3) + " %") + "</td><td>" + ms(tt) + "</td></tr>"; };
+    $("opl-body").innerHTML = row("Black-Scholes (référence)", ref, tB, "ref") + row("Monte-Carlo (M = " + p.M.toLocaleString("fr-FR") + ")", MC.price, tM) + row("Euler-Maruyama (N = " + p.N + ")", EM.price, tE) + (RF ? row("Random Forest", ML, tL) : "<tr><td>Random Forest</td><td colspan=\"4\" style=\"text-align:left\">Entraînement du modèle en cours…</td></tr>");
+    var inCI = Math.abs(MC.price - ref) <= 1.96 * MC.se;
+    var outRange = p.S < 50 || p.S > 200 || p.K < 40 || p.K > 220 || p.r > 0.10 || p.sigma < 0.05 || p.sigma > 0.80 || p.T < 0.1 || p.T > 3;
+    $("opl-note").textContent = "IC à 95 % de Monte-Carlo : [" + fr(MC.price - 1.96 * MC.se, 4) + " ; " + fr(MC.price + 1.96 * MC.se, 4) + "], " + (inCI ? "qui contient" : "qui ne contient pas") + " le prix Black-Scholes. Parité call-put : C − P = " + fr(bs(p.S, p.K, p.r, p.sigma, p.T, true).price - bs(p.S, p.K, p.r, p.sigma, p.T, false).price, 6) + " pour S₀ − K·e^(−rT) = " + fr(p.S - p.K * Math.exp(-p.r * p.T), 6) + "." + (outRange ? " Ces paramètres sortent de la plage d'entraînement du Random Forest : sa prédiction est une extrapolation peu fiable." : "");
+    $("opl-greeks").innerHTML = [["Delta Δ", fr(B.delta, 4)], ["Gamma Γ", fr(B.gamma, 5)], ["Thêta Θ / jour", fr(B.theta, 4)], ["Véga ν (+1 pt σ)", fr(B.vega, 4)], ["Rhô ρ (+1 pt r)", fr(B.rho, 4)]].map(function (q) { return "<div><dt>" + q[0] + "</dt><dd>" + q[1] + "</dd></div>"; }).join("");
+
+    drawMC(MC.conv, ref); drawPaths(EM.paths, p);
+    // Écart d'Euler selon N, avec la bande d'erreur statistique
+    var Ns = [1, 2, 5, 10, 25, 50, 100, 252].filter(function (n) { return n <= Math.max(252, p.N); }), Mb = 20000, bias = [];
+    Ns.forEach(function (n) { var e = eulerBias(p, call, Mb, n, p.seed + 100); bias.push({ n: n, d: e.d, se: e.se }); });
+    drawBias(bias);
+    var big = bias.filter(function (q) { return Math.abs(q.d) > 1.96 * q.se; }).map(function (q) { return q.n; });
+    $("opl-bias-note").textContent = "Biais de discrétisation : écart moyen entre le prix Euler-Maruyama et la solution exacte du mouvement brownien géométrique, calculés sur les mêmes 20 000 trajectoires browniennes. Cette méthode des nombres aléatoires communs isole le biais du bruit de simulation (bande grise : ±1,96 erreur standard). " + (big.length ? "Le biais semble significatif pour N = " + big.join(", ") + " et décroît lorsque le pas diminue." : "Aucun biais significatif n'apparaît, ce qui suggère qu'il reste plus petit que la précision de la simulation.");
+    if (!RF) { $("rf-stats").innerHTML = ""; $("rf-note").textContent = "Entraînement du Random Forest en cours…"; msg.textContent = ""; return; }
+    $("rf-stats").innerHTML = "<div><dt>MAE (test)</dt><dd>" + fr(RF.mae, 3) + "</dd></div><div><dt>RMSE (test)</dt><dd>" + fr(RF.rmse, 3) + "</dd></div><div><dt>R² (test)</dt><dd>" + fr(RF.r2, 4) + "</dd></div><div><dt>Entraînement</dt><dd>" + ms(RF.tTrain) + "</dd></div>";
+    $("rf-note").textContent = "30 arbres de profondeur 13 maximum, entraînés sur " + RF.nTr.toLocaleString("fr-FR") + " options générées dans les plages du rapport (S₀ de 50 à 200, K de 40 à 220, r de 0 à 10 %, σ de 5 à 80 %, T de 0,1 à 3 ans) et évalués sur " + RF.nt + " options de test. Le modèle apprend le prix rapporté au strike (C/K), ce qui exploite l'homogénéité de la formule de Black-Scholes. Implémentation JavaScript simplifiée, distincte du modèle scikit-learn de l'application.";
+    drawRF(RF.test);
+    msg.textContent = (call ? "Call" : "Put") + " calculé avec la graine " + p.seed + ".";
+  }
+  $("opl-form").addEventListener("submit", function (e) { e.preventDefault(); run(); });
+  $("opl-call").addEventListener("change", run); $("opl-put").addEventListener("change", run);
+  $("rf-train").addEventListener("click", function () { var rd = read(); RF = null; trainRF(rd.p ? rd.p.seed + Math.floor(Math.random() * 1000) : 42); run(); });
+
+  // ---------- Graphiques ----------
+  var css = getComputedStyle(document.documentElement), col = function (n) { return css.getPropertyValue(n).trim(); };
+  function setup(id, L) { var cv = $(id), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; var c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h); c.font = "12px " + col("--sans"); return { c: c, w: w, h: h, L: L || 56, R: 14, T: 14, B: 34 }; }
+  function niceStep(span, k) { var raw = span / (k || 4), m = Math.pow(10, Math.floor(Math.log10(raw))); return [1, 2, 2.5, 5, 10].map(function (f) { return f * m; }).find(function (f) { return f >= raw; }); }
+  function yAxis(g, lo, hi, Y, dec, suffix) { var c = g.c, s = niceStep(hi - lo); c.strokeStyle = col("--rule"); c.fillStyle = col("--muted"); c.textAlign = "right"; c.textBaseline = "middle"; for (var v = Math.ceil(lo / s) * s; v <= hi + 1e-12; v += s) { var y = Math.round(Y(v)) + .5; c.beginPath(); c.moveTo(g.L, y); c.lineTo(g.w - g.R, y); c.stroke(); c.fillText(fr(Math.abs(v) < 1e-12 ? 0 : v, dec) + (suffix || ""), g.L - 8, y); } }
+  function xLabels(g, ticks, X, fmt) { var c = g.c; c.fillStyle = col("--muted"); c.textAlign = "center"; c.textBaseline = "top"; ticks.forEach(function (t) { c.fillText(fmt ? fmt(t) : String(t), X(t), g.h - g.B + 8); }); c.strokeStyle = col("--ink"); c.beginPath(); c.moveTo(g.L, g.h - g.B + .5); c.lineTo(g.w - g.R, g.h - g.B + .5); c.stroke(); }
+  function line(c, pts, color, w, dash) { c.strokeStyle = color; c.lineWidth = w || 2; c.setLineDash(dash || []); c.beginPath(); pts.forEach(function (q, i) { if (i) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); }); c.stroke(); c.setLineDash([]); c.lineWidth = 1; }
+  function decFor(span) { return Math.max(0, Math.min(4, 1 - Math.floor(Math.log10(span / 4)))); }
+  function drawMC(conv, ref) {
+    var g = setup("c-mc"), c = g.c, lo = Infinity, hi = -Infinity;
+    conv.forEach(function (q) { lo = Math.min(lo, q.p - 1.96 * q.se); hi = Math.max(hi, q.p + 1.96 * q.se); }); lo = Math.min(lo, ref); hi = Math.max(hi, ref); var pad = (hi - lo) * .06; lo -= pad; hi += pad;
+    var xl = Math.log10(conv[0].M), xh = Math.log10(conv[conv.length - 1].M);
+    var X = function (m) { return g.L + (Math.log10(m) - xl) / (xh - xl) * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (hi - v) / (hi - lo) * (g.h - g.T - g.B); };
+    yAxis(g, lo, hi, Y, decFor(hi - lo));
+    xLabels(g, [100, 1000, 10000, 100000].filter(function (m) { return m >= conv[0].M && m <= conv[conv.length - 1].M; }), X, function (m) { return m >= 1000 ? fr(m / 1000, 0) + " k" : String(m); });
+    c.fillStyle = "rgba(15,42,74,.12)"; c.beginPath(); conv.forEach(function (q, i) { var x = X(q.M), y = Y(q.p + 1.96 * q.se); if (i) c.lineTo(x, y); else c.moveTo(x, y); }); for (var i = conv.length - 1; i >= 0; i--) c.lineTo(X(conv[i].M), Y(conv[i].p - 1.96 * conv[i].se)); c.closePath(); c.fill();
+    line(c, [[g.L, Y(ref)], [g.w - g.R, Y(ref)]], col("--c-ref"), 1.5, [5, 4]);
+    line(c, conv.map(function (q) { return [X(q.M), Y(q.p)]; }), col("--c-crr"), 2);
+  }
+  function drawPaths(paths, p) {
+    var g = setup("c-paths"), c = g.c, lo = Infinity, hi = -Infinity; paths.forEach(function (pt) { pt.forEach(function (v) { lo = Math.min(lo, v); hi = Math.max(hi, v); }); }); lo = Math.min(lo, p.K); hi = Math.max(hi, p.K); var pad = (hi - lo) * .05; lo -= pad; hi += pad;
+    var N = paths[0].length - 1, X = function (j) { return g.L + j / N * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (hi - v) / (hi - lo) * (g.h - g.T - g.B); };
+    yAxis(g, lo, hi, Y, 0);
+    xLabels(g, [0, 0.25, 0.5, 0.75, 1].map(function (f) { return f * N; }), X, function (j) { return fr(j / N * p.T, 2); });
+    line(c, [[g.L, Y(p.K)], [g.w - g.R, Y(p.K)]], col("--c-ref"), 1.5, [5, 4]);
+    var shades = ["#0f2a4a", "#1d3f69", "#2f5a8c", "#4874a8", "#b07a2a", "#8a5d1c", "#5f6773", "#7d93ad"];
+    paths.forEach(function (pt, k) { var step = Math.max(1, Math.floor(N / 300)), pts = []; for (var j = 0; j <= N; j += step) pts.push([X(j), Y(pt[j])]); line(c, pts, shades[k % shades.length], 1.3); });
+  }
+  function drawBias(b) {
+    var g = setup("c-bias"), c = g.c, lo = 0, hi = 0; b.forEach(function (q) { lo = Math.min(lo, q.d - 1.96 * q.se, q.d); hi = Math.max(hi, q.d + 1.96 * q.se, q.d); }); var pad = (hi - lo) * .08; lo -= pad; hi += pad;
+    var xl = 0, xh = Math.log10(b[b.length - 1].n), X = function (n) { return g.L + (Math.log10(n) - xl) / (xh - xl) * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (hi - v) / (hi - lo) * (g.h - g.T - g.B); };
+    yAxis(g, lo, hi, Y, decFor(hi - lo));
+    xLabels(g, b.map(function (q) { return q.n; }).filter(function (n) { return [1, 5, 25, 100, 252].indexOf(n) >= 0; }), X);
+    c.fillStyle = "rgba(95,103,115,.16)"; c.beginPath(); b.forEach(function (q, i) { var x = X(q.n), y = Y(1.96 * q.se); if (i) c.lineTo(x, y); else c.moveTo(x, y); }); for (var i = b.length - 1; i >= 0; i--) c.lineTo(X(b[i].n), Y(-1.96 * b[i].se)); c.closePath(); c.fill();
+    line(c, [[g.L, Y(0)], [g.w - g.R, Y(0)]], col("--ink"), 1);
+    line(c, b.map(function (q) { return [X(q.n), Y(q.d)]; }), col("--c-tri"), 2);
+    c.fillStyle = col("--c-tri"); b.forEach(function (q) { c.beginPath(); c.arc(X(q.n), Y(q.d), 3, 0, 6.283); c.fill(); });
+  }
+  function drawRF(test) {
+    var g = setup("c-rf"), c = g.c, hi = 0; test.forEach(function (q) { hi = Math.max(hi, q[0], q[1]); }); var s = niceStep(hi); hi = Math.ceil(hi / s) * s;
+    var X = function (v) { return g.L + v / hi * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (hi - v) / hi * (g.h - g.T - g.B); };
+    yAxis(g, 0, hi, Y, 0); var tk = []; for (var v = 0; v <= hi + 1e-9; v += s) tk.push(v); xLabels(g, tk, X, function (v) { return fr(v, 0); });
+    line(c, [[X(0), Y(0)], [X(hi), Y(hi)]], col("--c-ref"), 1.5, [5, 4]);
+    c.fillStyle = "rgba(15,42,74,.45)"; test.forEach(function (q) { c.beginPath(); c.arc(X(q[0]), Y(q[1]), 2.2, 0, 6.283); c.fill(); });
+  }
+  var tm; window.addEventListener("resize", function () { clearTimeout(tm); tm = setTimeout(run, 250); });
+  run();
+})();
+</script>
+
+</main>
+<footer><div class="wrap"><span>Reda Erraoui · Mis à jour en octobre 2026</span><span><a href="https://www.linkedin.com/in/reda-erraoui" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Redae03" target="_blank" rel="noopener">GitHub</a></span></div></footer>
+<script>
+(function () {
+  // Retour : revient à la page précédente du portfolio si on en vient, sinon à l'accueil
+  var b = document.querySelector(".simback");
+  if (document.referrer && document.referrer.indexOf(location.host) >= 0) b.addEventListener("click", function (e) { e.preventDefault(); history.back(); });
+})();
+</script>
+</body>
+</html>

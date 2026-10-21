@@ -1,0 +1,207 @@
+<section id="simulateur-ipo" class="simsec">
+    <div class="wrap sec">
+      <div class="side">
+        <h2>Simulateur IPO</h2>
+        <p>Données et méthode du stage à la Bourse de Casablanca : 9 introductions en bourse de 2020 à 2025, BHAR par rapport au MASI. Modifiez l'échantillon pour tester la robustesse des résultats.</p>
+      </div>
+      <div class="sim">
+        <div class="sim-form">
+          <div class="sim-row">
+            <div class="fld"><span>Horizon</span>
+              <div class="seg" role="radiogroup" aria-label="Horizon" id="ipo-h">
+                <label><input type="radio" name="ipoh" id="h-0" value="0"> J+1</label>
+                <label><input type="radio" name="ipoh" id="h-1" value="1"> 1M</label>
+                <label><input type="radio" name="ipoh" id="h-2" value="2"> 3M</label>
+                <label><input type="radio" name="ipoh" id="h-3" value="3" checked> 6M</label>
+                <label><input type="radio" name="ipoh" id="h-4" value="4"> 12M</label>
+              </div>
+            </div>
+            <label class="fld wide"><span>Facteur étudié</span>
+              <select id="ipo-f">
+                <option value="ov">Taux de sursouscription</option>
+                <option value="mt">Montant levé (MMAD)</option>
+              </select>
+            </label>
+          </div>
+          <div class="fld"><span>Échantillon</span>
+            <div class="chips" id="ipo-list"></div>
+          </div>
+          <div class="sim-actions">
+            <button type="button" class="btn line" id="ipo-all">Avec SGTM (n = 9)</button>
+            <button type="button" class="btn line" id="ipo-nosgtm">Sans SGTM (n = 8)</button>
+          </div>
+        </div>
+
+        <dl class="stats" id="ipo-stats"></dl>
+        <p class="sim-note" id="ipo-verdict"></p>
+
+        <div class="charts">
+          <figure class="chart"><figcaption id="cap-bars">BHAR par introduction</figcaption><canvas id="c-bars" role="img" aria-label="BHAR de chaque introduction pour l'horizon choisi"></canvas></figure>
+          <figure class="chart"><figcaption id="cap-scat">Facteur et BHAR</figcaption><canvas id="c-scat" role="img" aria-label="Nuage de points entre le facteur choisi et le BHAR, avec droite de régression"></canvas></figure>
+        </div>
+        <p class="sim-note" id="ipo-corr"></p>
+
+        <div>
+          <h3 class="sub">Backtest : participation systématique, détention 6 mois</h3>
+          <div class="tbl-wrap">
+            <table class="res">
+              <thead><tr><th>Indicateur</th><th>Stratégie IPO</th><th>MASI</th></tr></thead>
+              <tbody id="ipo-bt"></tbody>
+            </table>
+          </div>
+          <p class="sim-note" style="margin-top:10px">Sharpe simplifié = rendement moyen / écart-type, sans taux sans risque ni annualisation. Aucun coût de transaction ni contrainte d'allocation n'est intégré.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+<script>
+(function () {
+  // Données : rapport de stage (tableaux 2.3 et 3.1) et modèle Excel (rendements à 6 mois)
+  var IPO = [
+    { n: "Aradei Capital", t: "ARD", d: "2020-11", s: "Foncière", ov: 4, mt: 600, b: [-2.57, -4.69, -5.03, -17.03, -20.30], ra: -2.00, rm: 15.0334 },
+    { n: "TGCC", t: "TGCC", d: "2021-11", s: "Construction", ov: 22, mt: 600, b: [10.49, 29.27, 27.39, 11.05, 5.41], ra: 2.9412, rm: -8.1133 },
+    { n: "Disty Technologies", t: "DISTY", d: "2022-06", s: "Matériel informatique", ov: 1, mt: 172, b: [-9.69, -13.31, -26.36, -13.23, -26.81], ra: -27.9754, rm: -14.7417 },
+    { n: "Akdital", t: "AKT", d: "2022-11", s: "Santé", ov: 4, mt: 1200, b: [-3.86, -4.41, -1.75, 2.76, 52.48], ra: 6.5833, rm: 3.8189 },
+    { n: "CFG Bank", t: "CFG", d: "2023-11", s: "Banque", ov: 35, mt: 600, b: [8.52, 34.15, 33.68, 35.18, 76.91], ra: 45.0909, rm: 9.9107 },
+    { n: "CMGP Group", t: "CMGP", d: "2024-11", s: "Infrastructures agricoles", ov: 37, mt: 1100, b: [11.08, 71.84, 42.84, 37.73, 60.01], ra: 60.00, rm: 22.2655 },
+    { n: "Vicenne", t: "VCN", d: "2025-06", s: "Santé", ov: 64, mt: 500, b: [4.61, 79.60, 82.88, 84.93, 46.09], ra: 92.7966, rm: 7.8648 },
+    { n: "Cash Plus", t: "CAP", d: "2025-10", s: "Fintech", ov: 64, mt: 750, b: [15.90, 53.31, 50.80, 44.01, null], ra: 38.875, rm: -5.1301 },
+    { n: "SGTM", t: "SGTM", d: "2025-11", s: "Construction", ov: 34.06, mt: 4826.7, b: [21.09, 126.46, 91.56, 98.45, null], ra: 100.00, rm: 1.5488 }
+  ];
+  var H = ["J+1", "1 mois", "3 mois", "6 mois", "12 mois"];
+  var $ = function (id) { return document.getElementById(id); };
+  var fr = function (x, d) { return x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var pct = function (x) { return (x > 0 ? "+" : "") + fr(x, 2) + " %"; };
+  var pv = function (p) { return p < 0.001 ? "< 0,001" : "= " + fr(p, 3); };
+
+  // ---------- Statistiques ----------
+  function mean(a) { return a.reduce(function (s, v) { return s + v; }, 0) / a.length; }
+  function sd(a) { var m = mean(a); return Math.sqrt(a.reduce(function (s, v) { return s + (v - m) * (v - m); }, 0) / (a.length - 1)); }
+  function median(a) { var b = a.slice().sort(function (x, y) { return x - y; }), k = b.length >> 1; return b.length % 2 ? b[k] : (b[k - 1] + b[k]) / 2; }
+  function ranks(a) {
+    var idx = a.map(function (v, i) { return [v, i]; }).sort(function (x, y) { return x[0] - y[0]; }), r = new Array(a.length), i = 0;
+    while (i < idx.length) { var j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++; for (var k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2 + 1; i = j + 1; }
+    return r;
+  }
+  function wilcoxon(x) { // test exact des rangs signés, bilatéral
+    var z = x.filter(function (v) { return v !== 0; }), n = z.length;
+    if (n < 2) return { W: NaN, p: NaN };
+    var r = ranks(z.map(Math.abs)), wp = 0, tot = 0;
+    z.forEach(function (v, i) { if (v > 0) wp += r[i]; tot += r[i]; });
+    var W = Math.min(wp, tot - wp), cnt = 0, N = 1 << n;
+    for (var m = 0; m < N; m++) { var s = 0; for (var i = 0; i < n; i++) if (m & (1 << i)) s += r[i]; if (Math.min(s, tot - s) <= W + 1e-9) cnt++; }
+    return { W: W, p: Math.min(1, cnt / N), n: n };
+  }
+  function lgamma(x) { var c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5], y = x, t = x + 5.5; t -= (x + 0.5) * Math.log(t); var s = 1.000000000190015; for (var j = 0; j < 6; j++) s += c[j] / ++y; return -t + Math.log(2.5066282746310005 * s / x); }
+  function betacf(a, b, x) { var qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); var h = d;
+    for (var m = 1; m <= 200; m++) { var m2 = 2 * m, aa = m * (b - m) * x / ((qam + m2) * (a + m2)); d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; h *= d * c;
+      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2)); d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; var del = d * c; h *= del; if (Math.abs(del - 1) < 3e-14) break; }
+    return h; }
+  function ibeta(a, b, x) { if (x <= 0) return 0; if (x >= 1) return 1; var bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+    return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b; }
+  function corr(x, y) { // Pearson, p-value par la loi de Student à n − 2 degrés de liberté
+    var n = x.length, mx = mean(x), my = mean(y), sxy = 0, sxx = 0, syy = 0;
+    for (var i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) * (x[i] - mx); syy += (y[i] - my) * (y[i] - my); }
+    var r = sxy / Math.sqrt(sxx * syy), df = n - 2, t2 = r * r * df / Math.max(1e-300, 1 - r * r);
+    return { r: r, p: df > 0 ? ibeta(df / 2, 0.5, df / (df + t2)) : NaN, a: my - sxy / sxx * mx, b: sxy / sxx };
+  }
+
+  // ---------- Interface ----------
+  var list = $("ipo-list");
+  list.innerHTML = IPO.map(function (o, i) { return '<label><input type="checkbox" id="ipo-' + i + '" checked> ' + o.n + ' <small>' + o.d.slice(0, 4) + '</small></label>'; }).join("");
+  var boxes = IPO.map(function (o, i) { return $("ipo-" + i); });
+  boxes.forEach(function (b) { b.addEventListener("change", render); });
+  document.querySelectorAll('input[name="ipoh"]').forEach(function (r) { r.addEventListener("change", render); });
+  $("ipo-f").addEventListener("change", render);
+  $("ipo-all").addEventListener("click", function () { boxes.forEach(function (b) { b.checked = true; }); render(); });
+  $("ipo-nosgtm").addEventListener("click", function () { boxes.forEach(function (b, i) { b.checked = i !== 8; }); render(); });
+
+  function render() {
+    var h = +document.querySelector('input[name="ipoh"]:checked').value, f = $("ipo-f").value;
+    var sel = IPO.filter(function (o, i) { return boxes[i].checked; });
+    var avail = sel.filter(function (o) { return o.b[h] !== null; });
+    var x = avail.map(function (o) { return o.b[h]; });
+    var miss = sel.length - avail.length;
+    var st = $("ipo-stats"), verdict = $("ipo-verdict");
+    if (x.length < 3) {
+      st.innerHTML = "<div><dt>Observations</dt><dd>" + x.length + "</dd></div>";
+      verdict.textContent = "Sélectionnez au moins 3 introductions disposant de données à cet horizon.";
+      clear("c-bars"); clear("c-scat"); $("ipo-corr").textContent = ""; $("ipo-bt").innerHTML = ""; return;
+    }
+    var w = wilcoxon(x), m = mean(x);
+    st.innerHTML =
+      "<div><dt>Observations</dt><dd>" + x.length + "</dd></div>" +
+      "<div><dt>BHAR moyen " + H[h] + "</dt><dd>" + pct(m) + "</dd></div>" +
+      "<div><dt>BHAR médian</dt><dd>" + pct(median(x)) + "</dd></div>" +
+      "<div><dt>p-value de Wilcoxon</dt><dd>" + fr(w.p, 3) + "</dd></div>";
+    verdict.textContent = (w.p < 0.05
+      ? "Au seuil de 5 %, la médiane des BHAR semble significativement différente de zéro sur cet échantillon."
+      : w.p < 0.10
+        ? "La p-value se situe entre 5 % et 10 % : on peut parler de surperformance marginalement significative, que la petite taille de l'échantillon ne permet pas de confirmer."
+        : "Au seuil de 5 %, on ne peut pas rejeter l'hypothèse d'une médiane des BHAR nulle.") +
+      (miss ? " " + miss + " introduction" + (miss > 1 ? "s" : "") + " sans recul suffisant à cet horizon (n.d.)." : "");
+
+    $("cap-bars").textContent = "BHAR à " + H[h] + " par introduction";
+    drawBars(avail, h);
+    var lab = f === "ov" ? "Taux de sursouscription (×)" : "Montant levé (MMAD)";
+    $("cap-scat").textContent = lab + " et BHAR à " + H[h];
+    var fx = avail.map(function (o) { return o[f]; });
+    var pr = corr(fx, x), sp = corr(ranks(fx), ranks(x));
+    drawScatter(avail, fx, x, pr, f);
+    $("ipo-corr").textContent = "Pearson r = " + fr(pr.r, 3) + " (p " + pv(pr.p) + ") · Spearman ρ = " + fr(sp.r, 3) + " (p " + pv(sp.p) + "), n = " + x.length + ". " +
+      (sp.p < 0.05 ? "La relation semble statistiquement significative au seuil de 5 %, avec la prudence qu'impose un si petit échantillon." : "La relation n'apparaît pas significative au seuil de 5 %.");
+
+    // Backtest 6 mois (rapport, tableau 3.5)
+    var ra = sel.map(function (o) { return o.ra; }), rm = sel.map(function (o) { return o.rm; });
+    var ok = sel.length >= 2;
+    var row = function (l, a, b, cls) { return "<tr><td>" + l + "</td><td" + (cls ? ' class="' + cls + '"' : "") + ">" + a + "</td><td>" + b + "</td></tr>"; };
+    $("ipo-bt").innerHTML = ok ? (
+      row("Rendement moyen", fr(mean(ra), 2) + " %", fr(mean(rm), 2) + " %") +
+      row("Alpha moyen (surperformance)", pct(mean(ra) - mean(rm)), "–", mean(ra) - mean(rm) >= 0 ? "pos" : "neg") +
+      row("Écart-type", fr(sd(ra), 2) + " %", fr(sd(rm), 2) + " %") +
+      row("Sharpe simplifié", fr(mean(ra) / sd(ra), 2), fr(mean(rm) / sd(rm), 2))) : "";
+  }
+
+  // ---------- Graphiques ----------
+  var css = getComputedStyle(document.documentElement), col = function (n) { return css.getPropertyValue(n).trim(); };
+  function setup(id, L) { var cv = $(id), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, hh = cv.clientHeight; cv.width = w * dpr; cv.height = hh * dpr; var c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, hh); c.font = "12px " + col("--sans"); return { c: c, w: w, h: hh, L: L, R: 16, T: 14, B: 34 }; }
+  function clear(id) { setup(id, 0); }
+  function step(span) { var raw = span / 4, m = Math.pow(10, Math.floor(Math.log10(raw))); return [1, 2, 2.5, 5, 10].map(function (k) { return k * m; }).find(function (k) { return k >= raw; }); }
+  function drawBars(rows, h) {
+    var g = setup("c-bars", 128), c = g.c, v = rows.map(function (o) { return o.b[h]; });
+    var lo = Math.min(0, Math.min.apply(null, v)), hi = Math.max(0, Math.max.apply(null, v)), s = step(hi - lo); lo = Math.floor(lo / s) * s; hi = Math.ceil(hi / s) * s;
+    var X = function (x) { return g.L + (x - lo) / (hi - lo) * (g.w - g.L - g.R); }, bh = (g.h - g.T - g.B) / rows.length;
+    c.strokeStyle = col("--rule"); c.fillStyle = col("--muted"); c.textAlign = "center"; c.textBaseline = "top";
+    for (var t = lo; t <= hi + 1e-9; t += s) { var px = Math.round(X(t)) + .5; c.beginPath(); c.moveTo(px, g.T); c.lineTo(px, g.h - g.B); c.stroke(); c.fillText(fr(t, 0) + " %", px, g.h - g.B + 8); }
+    c.strokeStyle = col("--ink"); c.beginPath(); c.moveTo(Math.round(X(0)) + .5, g.T); c.lineTo(Math.round(X(0)) + .5, g.h - g.B); c.stroke();
+    rows.forEach(function (o, i) {
+      var y = g.T + i * bh, val = o.b[h], x0 = X(Math.min(0, val)), x1 = X(Math.max(0, val));
+      c.fillStyle = val >= 0 ? col("--navy") : "#b3563f"; c.fillRect(x0, y + bh * .2, Math.max(1, x1 - x0), bh * .6);
+      c.fillStyle = col("--ink"); c.textAlign = "right"; c.textBaseline = "middle"; c.fillText(o.n, g.L - 10, y + bh / 2);
+    });
+  }
+  function drawScatter(rows, fx, y, pr, f) {
+    var g = setup("c-scat", 56), c = g.c;
+    var xl = 0, xh = Math.max.apply(null, fx) * 1.08, yl = Math.min(0, Math.min.apply(null, y)), yh = Math.max.apply(null, y), sy = step(yh - yl); yl = Math.floor(yl / sy) * sy; yh = Math.ceil(yh / sy) * sy;
+    var sx = step(xh - xl); xh = Math.ceil(xh / sx) * sx;
+    var X = function (v) { return g.L + (v - xl) / (xh - xl) * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (yh - v) / (yh - yl) * (g.h - g.T - g.B); };
+    c.strokeStyle = col("--rule"); c.fillStyle = col("--muted"); c.textAlign = "right"; c.textBaseline = "middle";
+    for (var t = yl; t <= yh + 1e-9; t += sy) { var py = Math.round(Y(t)) + .5; c.beginPath(); c.moveTo(g.L, py); c.lineTo(g.w - g.R, py); c.stroke(); c.fillText(fr(t, 0) + " %", g.L - 8, py); }
+    c.textAlign = "center"; c.textBaseline = "top";
+    for (var u = xl; u <= xh + 1e-9; u += sx) c.fillText(fr(u, 0) + (f === "ov" ? "×" : ""), X(u), g.h - g.B + 8);
+    c.strokeStyle = col("--ink"); c.beginPath(); c.moveTo(g.L, Math.round(Y(0)) + .5); c.lineTo(g.w - g.R, Math.round(Y(0)) + .5); c.stroke();
+    c.save(); c.beginPath(); c.rect(g.L, g.T, g.w - g.L - g.R, g.h - g.T - g.B); c.clip(); c.strokeStyle = "#b07a2a"; c.lineWidth = 2; c.setLineDash([6, 4]); c.beginPath(); c.moveTo(X(xl), Y(pr.a + pr.b * xl)); c.lineTo(X(xh), Y(pr.a + pr.b * xh)); c.stroke(); c.restore();
+    var placed = [];
+    rows.forEach(function (o, i) { var px = X(fx[i]), py = Y(y[i]); c.fillStyle = col("--navy"); c.beginPath(); c.arc(px, py, 5, 0, 6.283); c.fill(); });
+    c.font = "11px " + col("--sans"); c.fillStyle = col("--ink");
+    rows.map(function (o, i) { return { t: o.t, px: X(fx[i]), py: Y(y[i]) }; }).sort(function (a, b) { return a.py - b.py; }).forEach(function (q) {
+      var right = q.px > g.w - 70, wdt = c.measureText(q.t).width, lx = right ? q.px - 7 - wdt : q.px + 7, ly = q.py - 4;
+      for (var k = 0; k < 4 && placed.some(function (b) { return lx < b.x + b.w + 2 && lx + wdt + 2 > b.x && Math.abs(ly - b.y) < 13; }); k++) ly += 13;
+      placed.push({ x: lx, y: ly, w: wdt }); c.textAlign = "left"; c.textBaseline = "bottom"; c.fillText(q.t, lx, ly);
+    });
+    c.font = "12px " + col("--sans");
+  }
+  var tm; window.addEventListener("resize", function () { clearTimeout(tm); tm = setTimeout(render, 200); });
+  render();
+})();
+</script>

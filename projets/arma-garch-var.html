@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Volatilité et Value-at-Risk de Managem par ARMA–GARCH · Reda Erraoui</title>
+<meta name="description" content="306 mois de cours : volatilité persistante (demi-vie d’environ 6 mois), effet de levier significatif, et une fuite d’information détectée dans la comparaison avec un réseau de neurones.">
+<meta name="author" content="Reda Erraoui">
+<meta name="theme-color" content="#0f2a4a">
+<link rel="canonical" href="https://redae03.github.io/projets/arma-garch-var.html">
+<link rel="alternate" hreflang="fr" href="https://redae03.github.io/projets/arma-garch-var.html">
+<link rel="alternate" hreflang="en" href="https://redae03.github.io/en/projects/arma-garch-var.html">
+<link rel="alternate" hreflang="x-default" href="https://redae03.github.io/en/projects/arma-garch-var.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Volatilité et Value-at-Risk de Managem par ARMA–GARCH · Reda Erraoui">
+<meta property="og:description" content="306 mois de cours : volatilité persistante (demi-vie d’environ 6 mois), effet de levier significatif, et une fuite d’information détectée dans la comparaison avec un réseau de neurones.">
+<meta property="og:url" content="https://redae03.github.io/projets/arma-garch-var.html">
+<meta property="og:image" content="https://redae03.github.io/assets/og-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="mark" href="../index.html">Reda Erraoui</a>
+    <nav class="topnav" aria-label="Sections"></nav>
+    <a class="lang" href="../en/projects/arma-garch-var.html" hreflang="en" lang="en">English</a>
+  </div>
+</div>
+<header class="case-head"><div class="wrap">
+  <a class="back" href="../index.html#phares">← Retour au portfolio</a>
+  <div class="small-caps">Risque de marché</div>
+  <h1>Volatilité et Value-at-Risk de Managem par ARMA–GARCH</h1>
+  <p class="ctx">Projet de séries temporelles · ENSA Agadir · encadré par Mme S. Hadiri · 2026</p>
+  <p class="hook">306 mois de cours : volatilité persistante (demi-vie d’environ 6 mois), effet de levier significatif, et une fuite d’information détectée dans la comparaison avec un réseau de neurones.</p>
+  <div class="actions">
+    <a class="btn solid" href="../simulateurs/arma-garch.html">Simuler</a>
+    <a class="btn line" href="https://github.com/Redae03/econometrie-managem-arma-garch" target="_blank" rel="noopener">Code (GitHub)</a>
+    <a class="btn line" href="https://github.com/Redae03/econometrie-managem-arma-garch/blob/main/rapport.pdf" target="_blank" rel="noopener">Rapport (PDF)</a>
+  </div>
+</div></header>
+<main class="case">
+<section><div class="wrap sec"><div class="side"><h2>Question</h2></div><div><p class="lead">Modéliser la dynamique et le risque d’un titre minier coté à la Bourse de Casablanca, sensible aux prix des métaux, puis comparer une approche économétrique et une méthode d’intelligence artificielle pour la prévision.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Méthode</h2></div><div><ol class="steps"><li>Tests de racine unitaire ADF et Phillips-Perron sur le cours, son logarithme et les rendements.</li><li>ARMA(1,1) pour la moyenne, diagnostics des résidus (Ljung-Box, Jarque-Bera, ARCH-LM).</li><li>GARCH(1,1), TARCH et EGARCH pour la volatilité ; VaR conditionnelle à 1 mois.</li><li>Prévision hors échantillon (découpage 80/20) contre un réseau de neurones MLP ; régression du cours sur l’or, l’argent et le cuivre (2022–2026).</li><li>EViews pour l’estimation, puis reproduction en Python (statsmodels, arch, scikit-learn).</li></ol></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Résultats</h2></div><div><div class="tbl-wrap"><table class="res case-table"><thead><tr><th>Élément</th><th>Résultat</th></tr></thead><tbody><tr><td>ADF cours / rendements</td><td>5,88 (p = 1,00) / −15,17 (p < 0,0001)</td></tr><tr><td>GARCH(1,1) : α + β</td><td>0,89, demi-vie d’environ 6 mois</td></tr><tr><td>EGARCH : asymétrie</td><td>−0,133 (p = 0,0001), effet de levier</td></tr><tr><td>VaR à 1 mois, 95 % (GARCH)</td><td>16,0 % de perte possible</td></tr><tr><td>RMSE hors échantillon</td><td>ARMA 0,089 · prévision nulle 0,092 · MLP 0,098</td></tr></tbody></table></div><p class="note">Le rapport initial donnait un net avantage au réseau de neurones (RMSE 0,052). En reproduisant le calcul, cet écart n’apparaît que si le rendement à prévoir figure par erreur parmi les entrées : l’avantage semble venir d’une fuite d’information. Correctement spécifiés, aucun modèle ne bat nettement une prévision nulle, ce qui est cohérent avec des rendements mensuels peu prévisibles.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Limites et suites</h2></div><div><ul class="steps"><li>La VaR normale sous-estime probablement le risque extrême : les résidus ont des queues épaisses. Une loi de Student ou un backtest de Kupiec seraient les prochaines étapes.</li><li>La régression sur l’or est estimée en niveaux : un test de cointégration permettrait d’écarter une corrélation fallacieuse.</li></ul><p class="muted">Dans le même thème : stationnarité de l’action Managem sur données quotidiennes. <a href="../index.html#projets">Voir les autres projets →</a></p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Autres études de cas</h2></div><div><ul class="plainlinks"><li><a href="monte-carlo-lsm.html">Options américaines par Monte-Carlo et Longstaff-Schwartz</a></li><li><a href="ipo-casablanca.html">Performance des introductions en Bourse à Casablanca</a></li></ul></div></div></section>
+</main>
+<footer><div class="wrap"><span>Reda Erraoui · Mis à jour en octobre 2026</span><span><a href="https://www.linkedin.com/in/reda-erraoui" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Redae03" target="_blank" rel="noopener">GitHub</a></span></div></footer>
+</body>
+</html>

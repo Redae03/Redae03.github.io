@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Options américaines par Monte-Carlo et Longstaff-Schwartz · Reda Erraoui</title>
+<meta name="description" content="Put américain valorisé à 4,46 contre 4,478 dans l’article de référence ; variance de l’estimateur divisée par 6,8 grâce à une variable de contrôle.">
+<meta name="author" content="Reda Erraoui">
+<meta name="theme-color" content="#0f2a4a">
+<link rel="canonical" href="https://redae03.github.io/projets/monte-carlo-lsm.html">
+<link rel="alternate" hreflang="fr" href="https://redae03.github.io/projets/monte-carlo-lsm.html">
+<link rel="alternate" hreflang="en" href="https://redae03.github.io/en/projects/monte-carlo-lsm.html">
+<link rel="alternate" hreflang="x-default" href="https://redae03.github.io/en/projects/monte-carlo-lsm.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Options américaines par Monte-Carlo et Longstaff-Schwartz · Reda Erraoui">
+<meta property="og:description" content="Put américain valorisé à 4,46 contre 4,478 dans l’article de référence ; variance de l’estimateur divisée par 6,8 grâce à une variable de contrôle.">
+<meta property="og:url" content="https://redae03.github.io/projets/monte-carlo-lsm.html">
+<meta property="og:image" content="https://redae03.github.io/assets/og-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="mark" href="../index.html">Reda Erraoui</a>
+    <nav class="topnav" aria-label="Sections"></nav>
+    <a class="lang" href="../en/projects/monte-carlo-lsm.html" hreflang="en" lang="en">English</a>
+  </div>
+</div>
+<header class="case-head"><div class="wrap">
+  <a class="back" href="../index.html#phares">← Retour au portfolio</a>
+  <div class="small-caps">Produits dérivés</div>
+  <h1>Options américaines par Monte-Carlo et Longstaff-Schwartz</h1>
+  <p class="ctx">Projet de calcul stochastique · ENSA Agadir · encadré par Pr. B. El Asri · 2026</p>
+  <p class="hook">Put américain valorisé à 4,46 contre 4,478 dans l’article de référence ; variance de l’estimateur divisée par 6,8 grâce à une variable de contrôle.</p>
+  <div class="actions">
+    <a class="btn solid" href="../simulateurs/monte-carlo-lsm.html">Simuler</a>
+    <a class="btn line" href="https://github.com/Redae03/monte-carlo-longstaff-schwartz" target="_blank" rel="noopener">Code (GitHub)</a>
+    <a class="btn line" href="https://github.com/Redae03/monte-carlo-longstaff-schwartz/blob/main/rapport.pdf" target="_blank" rel="noopener">Rapport (PDF)</a>
+  </div>
+</div></header>
+<main class="case">
+<section><div class="wrap sec"><div class="side"><h2>Question</h2></div><div><p class="lead">Une option américaine peut être exercée à tout moment : son prix n’a pas de formule fermée et dépend d’une règle d’exercice optimale inconnue. L’objectif était de construire un moteur de simulation fiable, de mesurer sa précision et de réduire son coût de calcul.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Méthode</h2></div><div><ol class="steps"><li>Simulation de lois (inversion, Box-Muller) et de trajectoires du mouvement brownien géométrique, schéma d’Euler-Maruyama.</li><li>Options européennes par Monte-Carlo avec intervalle de confiance et convergence en 1/√N.</li><li>Réduction de variance : variables antithétiques (variance calculée sur les moyennes de paires) et variable de contrôle e^(−rT)S_T − S₀.</li><li>Longstaff-Schwartz : régression des valeurs de continuation sur une base polynomiale, sur les trajectoires dans la monnaie, 50 dates d’exercice, 100 000 trajectoires.</li><li>Validation contre l’article de Longstaff et Schwartz (2001) et contre un arbre binomial bermudéen ; application PyQt5.</li></ol></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Résultats</h2></div><div><div class="tbl-wrap"><table class="res case-table"><thead><tr><th>Put américain (K = 40, r = 6 %, σ = 20 %, T = 1)</th><th>LSM</th><th>Article (2001)</th></tr></thead><tbody><tr><td>S₀ = 36</td><td>4,46</td><td>4,478</td></tr><tr><td>S₀ = 40</td><td>2,31</td><td>2,314</td></tr><tr><td>S₀ = 44</td><td>1,10</td><td>1,110</td></tr></tbody></table></div><p class="note">Sur un call européen à la monnaie, la variance de l’estimateur est divisée par 2,0 avec les variables antithétiques et par 6,8 avec la variable de contrôle, à nombre de simulations égal. En relisant le code, j’ai corrigé deux erreurs : la variance antithétique était calculée comme pour des tirages indépendants (gain affiché de 1,0 au lieu de 2,0), et la méthode par variable de contrôle n’était pas acceptée par le rapport de synthèse.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Limites et suites</h2></div><div><ul class="steps"><li>L’estimateur LSM est biaisé vers le bas : la règle d’exercice estimée est sous-optimale. Une borne haute (méthode duale d’Andersen-Broadie) permettrait d’encadrer le prix.</li><li>Le choix de la base de régression et du nombre de dates d’exercice reste empirique.</li></ul><p class="muted">Dans le même thème : arbres binomial et trinomial, Option Pricing Lab. <a href="../index.html#projets">Voir les autres projets →</a></p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Autres études de cas</h2></div><div><ul class="plainlinks"><li><a href="arma-garch-var.html">Volatilité et Value-at-Risk de Managem par ARMA–GARCH</a></li><li><a href="ipo-casablanca.html">Performance des introductions en Bourse à Casablanca</a></li></ul></div></div></section>
+</main>
+<footer><div class="wrap"><span>Reda Erraoui · Mis à jour en octobre 2026</span><span><a href="https://www.linkedin.com/in/reda-erraoui" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Redae03" target="_blank" rel="noopener">GitHub</a></span></div></footer>
+</body>
+</html>

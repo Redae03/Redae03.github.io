@@ -1,0 +1,230 @@
+<section id="simulateur-lsm" class="simsec">
+    <div class="wrap sec">
+      <div class="side">
+        <h2>Monte-Carlo et LSM</h2>
+        <p>Options européennes par Monte-Carlo avec réduction de variance, puis options américaines par la méthode de Longstaff-Schwartz, validée contre un arbre binomial américain.</p>
+      </div>
+      <div class="sim">
+        <form class="sim-form" id="lsm-form" novalidate>
+          <div class="sim-row">
+            <div class="seg" role="radiogroup" aria-label="Type d'option">
+              <label><input type="radio" name="lsmopt" id="lsm-put" value="put" checked> Put</label>
+              <label><input type="radio" name="lsmopt" id="lsm-call" value="call"> Call</label>
+            </div>
+          </div>
+          <div class="sim-grid">
+            <label class="fld"><span>Spot S₀</span><input id="l-S" inputmode="decimal" value="36"></label>
+            <label class="fld"><span>Strike K</span><input id="l-K" inputmode="decimal" value="40"></label>
+            <label class="fld"><span>Taux r</span><input id="l-r" inputmode="decimal" value="0.06"></label>
+            <label class="fld"><span>Volatilité σ</span><input id="l-sigma" inputmode="decimal" value="0.20"></label>
+            <label class="fld"><span>Maturité T (ans)</span><input id="l-T" inputmode="decimal" value="1"></label>
+            <label class="fld"><span>Trajectoires</span><input id="l-M" inputmode="numeric" value="50000"></label>
+            <label class="fld"><span>Dates d'exercice</span><input id="l-N" inputmode="numeric" value="50"></label>
+            <label class="fld"><span>Degré de la régression</span>
+              <select id="l-deg"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
+            </label>
+          </div>
+          <div class="sim-actions">
+            <button type="submit" class="btn solid" id="lsm-run">Calculer</button>
+            <span class="sim-msg" id="lsm-msg" role="status"></span>
+          </div>
+        </form>
+
+        <div>
+          <h3 class="sub">Option américaine : Longstaff-Schwartz</h3>
+          <dl class="stats lsm5" id="lsm-stats"></dl>
+          <p class="sim-note" id="lsm-note" style="margin-top:10px"></p>
+        </div>
+
+        <div class="charts">
+          <figure class="chart"><figcaption>Frontière d'exercice estimée et trajectoires</figcaption><canvas id="c-bound" role="img" aria-label="Frontière d'exercice anticipé estimée par la méthode LSM, avec quelques trajectoires simulées"></canvas></figure>
+          <figure class="chart"><figcaption id="cap-cont">Payoff immédiat et valeur de continuation</figcaption><canvas id="c-cont" role="img" aria-label="Comparaison du payoff immédiat et de la valeur de continuation estimée à une date intermédiaire"></canvas><div class="legend" style="margin-top:8px"><span><i style="background:#b07a2a;height:8px;width:8px;border-radius:50%"></i>Exercice</span><span><i style="background:rgba(15,42,74,.45);height:8px;width:8px;border-radius:50%"></i>Continuation</span><span><i style="background:var(--navy)"></i>Valeur de continuation estimée</span></div></figure>
+        </div>
+
+        <div>
+          <h3 class="sub">Option européenne : réduction de variance</h3>
+          <div class="tbl-wrap">
+            <table class="res">
+              <thead><tr><th>Méthode</th><th>Prix</th><th>IC à 95 %</th><th>Écart vs BS</th><th>Variance de l'estimateur</th><th>Gain</th></tr></thead>
+              <tbody id="eu-body"></tbody>
+            </table>
+          </div>
+          <p class="sim-note" id="eu-note" style="margin-top:10px"></p>
+        </div>
+        <figure class="chart"><figcaption>Convergence des trois estimateurs selon le nombre de simulations</figcaption><canvas id="c-eu" role="img" aria-label="Prix estimés par Monte-Carlo standard, antithétique et variable de contrôle selon le nombre de simulations, comparés au prix Black-Scholes"></canvas></figure>
+        <div class="legend">
+          <span><i style="background:#9aa7b8"></i>Standard</span>
+          <span><i style="background:var(--navy)"></i>Antithétique</span>
+          <span><i style="background:#b07a2a"></i>Variable de contrôle</span>
+          <span><i class="dash"></i>Black-Scholes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var fr = function (x, d) { return x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  function rng(seed) { var a = seed >>> 0, spare = null; function u() { a = (a + 0x6D2B79F5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; } return function () { if (spare !== null) { var s = spare; spare = null; return s; } var x, y, q; do { x = 2 * u() - 1; y = 2 * u() - 1; q = x * x + y * y; } while (q >= 1 || q === 0); var f = Math.sqrt(-2 * Math.log(q) / q); spare = y * f; return x * f; }; }
+  function ncdf(x) { var z = Math.abs(x), c; if (z > 37) c = 0; else { var e = Math.exp(-z * z / 2); if (z < 7.07106781186547) { var n = ((((((0.0352624965998911 * z + 0.700383064443688) * z + 6.37396220353165) * z + 33.912866078383) * z + 112.079291497871) * z + 221.213596169931) * z + 220.206867912376); var d = (((((((0.0883883476483184 * z + 1.75566716318264) * z + 16.064177579207) * z + 86.7807322029461) * z + 296.564248779674) * z + 637.333633378831) * z + 793.826512519948) * z + 440.413735824752); c = e * n / d; } else c = e / (z + 1 / (z + 2 / (z + 3 / (z + 4 / (z + 0.65))))) / 2.506628274631; } return x > 0 ? 1 - c : c; }
+  function bs(p, call) { var sq = Math.sqrt(p.T), d1 = (Math.log(p.S / p.K) + (p.r + p.sigma * p.sigma / 2) * p.T) / (p.sigma * sq), d2 = d1 - p.sigma * sq; return call ? p.S * ncdf(d1) - p.K * Math.exp(-p.r * p.T) * ncdf(d2) : p.K * Math.exp(-p.r * p.T) * ncdf(-d2) - p.S * ncdf(-d1); }
+  // Référence : arbre binomial CRR américain
+  function binomAmerican(p, call, N, every) { // every : exercice autorisé tous les "every" pas (1 = américaine)
+    every = every || 1;
+    var dt = p.T / N, u = Math.exp(p.sigma * Math.sqrt(dt)), d = 1 / u, q = (Math.exp(p.r * dt) - d) / (u - d), disc = Math.exp(-p.r * dt), V = new Float64Array(N + 1), j, i;
+    for (j = 0; j <= N; j++) { var s = p.S * Math.pow(u, 2 * j - N); V[j] = call ? Math.max(s - p.K, 0) : Math.max(p.K - s, 0); }
+    for (i = N - 1; i >= 0; i--) for (j = 0; j <= i; j++) { var st = p.S * Math.pow(u, 2 * j - i), cont = disc * (q * V[j + 1] + (1 - q) * V[j]); V[j] = (i % every === 0 && i > 0) ? Math.max(cont, call ? st - p.K : p.K - st) : cont; }
+    return V[0];
+  }
+  // Moindres carrés : équations normales sur la base 1, x, …, x^deg avec x = S/K
+  function lstsq(xs, ys, deg) {
+    var k = deg + 1, A = [], b = new Float64Array(k), i, j, m;
+    for (i = 0; i < k; i++) A.push(new Float64Array(k));
+    for (m = 0; m < xs.length; m++) { var pw = [1]; for (i = 1; i < k; i++) pw.push(pw[i - 1] * xs[m]); for (i = 0; i < k; i++) { b[i] += pw[i] * ys[m]; for (j = 0; j < k; j++) A[i][j] += pw[i] * pw[j]; } }
+    for (i = 0; i < k; i++) { var piv = i; for (j = i + 1; j < k; j++) if (Math.abs(A[j][i]) > Math.abs(A[piv][i])) piv = j; var tmp = A[i]; A[i] = A[piv]; A[piv] = tmp; var tb = b[i]; b[i] = b[piv]; b[piv] = tb; if (Math.abs(A[i][i]) < 1e-14) return null; for (j = i + 1; j < k; j++) { var f = A[j][i] / A[i][i]; for (m = i; m < k; m++) A[j][m] -= f * A[i][m]; b[j] -= f * b[i]; } }
+    var x = new Float64Array(k); for (i = k - 1; i >= 0; i--) { var s = b[i]; for (j = i + 1; j < k; j++) s -= A[i][j] * x[j]; x[i] = s / A[i][i]; } return x;
+  }
+  function poly(beta, x) { var v = 0; for (var i = beta.length - 1; i >= 0; i--) v = v * x + beta[i]; return v; }
+
+  // ---------- Longstaff-Schwartz ----------
+  function lsm(p, call, M, N, deg, seed) {
+    var g = rng(seed), dt = p.T / N, disc = Math.exp(-p.r * dt), dr = (p.r - p.sigma * p.sigma / 2) * dt, vol = p.sigma * Math.sqrt(dt);
+    var S = []; for (var t = 0; t <= N; t++) S.push(new Float64Array(M));
+    for (var m = 0; m < M; m++) { var s = p.S; S[0][m] = s; for (t = 1; t <= N; t++) { s *= Math.exp(dr + vol * g()); S[t][m] = s; } }
+    var pay = function (x) { return call ? Math.max(x - p.K, 0) : Math.max(p.K - x, 0); };
+    var cf = new Float64Array(M), tau = new Int32Array(M); for (m = 0; m < M; m++) { cf[m] = pay(S[N][m]); tau[m] = N; }
+    var boundary = [], snap = null, tSnap = Math.round(N / 2);
+    for (t = N - 1; t >= 1; t--) {
+      for (m = 0; m < M; m++) cf[m] *= disc; // ramène les flux à la date t
+      var xs = [], ys = [], ids = [];
+      for (m = 0; m < M; m++) { var im = pay(S[t][m]); if (im > 0) { xs.push(S[t][m] / p.K); ys.push(cf[m]); ids.push(m); } }
+      var bnd = null;
+      if (xs.length > deg + 1) {
+        var beta = lstsq(xs, ys, deg);
+        if (beta) {
+          var sx = [], si = [], sc = [];
+          for (var q = 0; q < ids.length; q++) {
+            m = ids[q]; var imv = pay(S[t][m]), cont = poly(beta, xs[q]);
+            if (imv > cont) { cf[m] = imv; tau[m] = t; bnd = bnd === null ? S[t][m] : (call ? Math.min(bnd, S[t][m]) : Math.max(bnd, S[t][m])); }
+            if (t === tSnap && q % Math.max(1, Math.floor(ids.length / 1500)) === 0) { sx.push(S[t][m]); si.push(imv); sc.push(cont); }
+          }
+          if (t === tSnap) snap = { x: sx, imm: si, cont: sc, t: t * dt };
+        }
+      }
+      boundary.push({ t: t * dt, s: bnd });
+    }
+    var sum = 0, sum2 = 0; for (m = 0; m < M; m++) { var v = cf[m] * disc; sum += v; sum2 += v * v; }
+    var mean = sum / M, se = Math.sqrt(Math.max(0, (sum2 - M * mean * mean) / (M - 1)) / M), early = 0;
+    for (m = 0; m < M; m++) if (tau[m] < N) early++;
+    var price = Math.max(mean, pay(p.S));
+    var keep = []; for (m = 0; m < 6; m++) { var path = []; for (t = 0; t <= N; t++) path.push(S[t][m]); keep.push(path); }
+    return { price: price, se: se, boundary: boundary.reverse(), snap: snap, paths: keep, early: early / M };
+  }
+
+  // ---------- Européenne : standard, antithétique (variance des moyennes de paires), variable de contrôle ----------
+  function european(p, call, N, seed) {
+    var g = rng(seed), df = Math.exp(-p.r * p.T), dr = (p.r - p.sigma * p.sigma / 2) * p.T, vol = p.sigma * Math.sqrt(p.T);
+    var f = function (z) { var ST = p.S * Math.exp(dr + vol * z); return [df * (call ? Math.max(ST - p.K, 0) : Math.max(p.K - ST, 0)), df * ST - p.S]; };
+    var half = Math.floor(N / 2), a1 = 0, a2 = 0, s1 = 0, s2 = 0, c = [], i;
+    for (i = 0; i < half; i++) {
+      var z = g(), y1 = f(z), y2 = f(-z), z2 = g(), y3 = f(z2);
+      var pair = (y1[0] + y2[0]) / 2; a1 += pair; a2 += pair * pair;
+      c.push(y1, y3); s1 += y1[0] + y3[0]; s2 += y1[0] * y1[0] + y3[0] * y3[0];
+    }
+    var n = 2 * half, mS = s1 / n, vS = (s2 - n * mS * mS) / (n - 1) / n;
+    var mA = a1 / half, vA = (a2 - half * mA * mA) / (half - 1) / half;
+    // variable de contrôle : X = e^{-rT} S_T − S0, d'espérance nulle sous la mesure risque-neutre
+    var my = mS, mx = 0, sxy = 0, sxx = 0; c.forEach(function (q) { mx += q[1]; }); mx /= n;
+    c.forEach(function (q) { sxy += (q[0] - my) * (q[1] - mx); sxx += (q[1] - mx) * (q[1] - mx); });
+    var beta = sxy / sxx, cv = c.map(function (q) { return q[0] - beta * q[1]; }), mC = 0, vC = 0;
+    cv.forEach(function (v) { mC += v; }); mC /= n; cv.forEach(function (v) { vC += (v - mC) * (v - mC); }); vC = vC / (n - 1) / n;
+    return { std: { p: mS, v: vS }, ant: { p: mA, v: vA }, cv: { p: mC, v: vC, beta: beta } };
+  }
+
+  function read() {
+    var p = {}, bad = null;
+    ["S", "K", "r", "sigma", "T", "M", "N"].forEach(function (k) { var el = $("l-" + k), v = parseFloat(String(el.value).replace(",", ".")); el.removeAttribute("aria-invalid"); if (!isFinite(v)) { el.setAttribute("aria-invalid", "true"); bad = "Saisissez un nombre valide pour chaque paramètre."; } p[k] = v; });
+    if (bad) return { err: bad };
+    if (p.S <= 0 || p.K <= 0 || p.T <= 0 || p.sigma <= 0) return { err: "S, K, T et σ doivent être strictement positifs." };
+    p.M = Math.round(p.M); p.N = Math.round(p.N); p.deg = +$("l-deg").value;
+    if (p.M < 1000 || p.M > 200000) return { err: "Le nombre de trajectoires doit être compris entre 1 000 et 200 000." };
+    if (p.N < 2 || p.N > 250) return { err: "Le nombre de dates d'exercice doit être compris entre 2 et 250." };
+    if (p.M * p.N > 1.5e7) return { err: "Trajectoires × dates est limité à 15 millions : réduisez l'un des deux." };
+    return { p: p };
+  }
+
+  function run() {
+    var msg = $("lsm-msg"), rd = read(); msg.className = "sim-msg";
+    if (rd.err) { msg.textContent = rd.err; msg.className = "sim-msg err"; return; }
+    var p = rd.p, call = $("lsm-call").checked, t0 = performance.now();
+    var L = lsm(p, call, p.M, p.N, p.deg, 42), tL = performance.now() - t0;
+    var ref = binomAmerican(p, call, 2000), k = Math.max(1, Math.floor(3000 / p.N)), berm = binomAmerican(p, call, p.N * k, k), eu = bs(p, call);
+    $("lsm-stats").innerHTML =
+      "<div><dt>Prix LSM</dt><dd>" + fr(L.price, 4) + "</dd></div>" +
+      "<div><dt>Arbre, mêmes " + p.N + " dates</dt><dd>" + fr(berm, 4) + "</dd></div>" +
+      "<div><dt>Américaine (arbre 2 000 pas)</dt><dd>" + fr(ref, 4) + "</dd></div>" +
+      "<div><dt>Européenne (BS)</dt><dd>" + fr(eu, 4) + "</dd></div>" +
+      "<div><dt>Prime d'exercice anticipé</dt><dd>" + fr(L.price - eu, 4) + "</dd></div>";
+    var inCI = Math.abs(L.price - berm) <= 1.96 * L.se;
+    $("lsm-note").textContent = "LSM avec " + p.M.toLocaleString("fr-FR") + " trajectoires, " + p.N + " dates d'exercice et une régression polynomiale de degré " + p.deg + " : erreur standard de " + fr(L.se, 4) + ", écart de " + fr(L.price - berm, 4) + " avec l'arbre exerçable aux mêmes dates" + (inCI ? " (dans l'IC à 95 %)" : "") + ". LSM sous-estime légèrement le prix, car la règle d'exercice estimée par régression est sous-optimale. " + fr(100 * L.early, 1) + " % des trajectoires sont exercées avant l'échéance. Calcul en " + fr(tL / 1000, 2) + " s." +
+      (call ? " Sans dividende, exercer un call américain avant l'échéance n'est jamais optimal : sa valeur égale celle du call européen, et les exercices anticipés de LSM ne sont que des erreurs de régression qui font baisser son prix." : "") +
+      (p.S === 36 && p.K === 40 && p.r === 0.06 && p.sigma === 0.2 && p.T === 1 && !call ? " Cas de référence de l'article de Longstaff et Schwartz (2001) : valeur de 4,478 par différences finies." : "");
+    drawBoundary(L, p, call); drawCont(L.snap, call);
+    $("cap-cont").textContent = "Payoff immédiat et valeur de continuation à t = " + fr(L.snap ? L.snap.t : 0, 2) + " an";
+
+    var E = european(p, call, p.M, 7), rows = [["Monte-Carlo standard", E.std], ["Variables antithétiques", E.ant], ["Variable de contrôle (S_T)", E.cv]];
+    $("eu-body").innerHTML = rows.map(function (q) { var se = Math.sqrt(q[1].v); return "<tr><td>" + q[0] + "</td><td>" + fr(q[1].p, 4) + "</td><td>[" + fr(q[1].p - 1.96 * se, 3) + " ; " + fr(q[1].p + 1.96 * se, 3) + "]</td><td>" + fr(q[1].p - eu, 4) + "</td><td>" + q[1].v.toExponential(2).replace(".", ",") + "</td><td>× " + fr(E.std.v / q[1].v, 2) + "</td></tr>"; }).join("");
+    $("eu-note").textContent = "Même nombre total de simulations (" + p.M.toLocaleString("fr-FR") + ") pour les trois méthodes. Pour les variables antithétiques, la variance est calculée sur les moyennes des paires (Z, −Z), qui sont indépendantes entre elles. Le coefficient de la variable de contrôle est β = " + fr(E.cv.beta, 3) + ".";
+    // Convergence
+    var Ns = [], conv = { std: [], ant: [], cv: [] }; for (var n = 500; n <= p.M; n = Math.round(n * 1.6)) Ns.push(n);
+    Ns.forEach(function (n) { var e = european(p, call, n, 11); conv.std.push(e.std.p); conv.ant.push(e.ant.p); conv.cv.push(e.cv.p); });
+    drawConv(Ns, conv, eu);
+    msg.textContent = (call ? "Call" : "Put") + " calculé.";
+  }
+  $("lsm-form").addEventListener("submit", function (e) { e.preventDefault(); run(); });
+  $("lsm-put").addEventListener("change", run); $("lsm-call").addEventListener("change", run);
+
+  // ---------- Graphiques ----------
+  var css = getComputedStyle(document.documentElement), col = function (n) { return css.getPropertyValue(n).trim(); };
+  function setup(id) { var cv = $(id), dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; var c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h); c.font = "12px " + col("--sans"); return { c: c, w: w, h: h, L: 56, R: 14, T: 14, B: 34 }; }
+  function step(span) { var raw = span / 4, m = Math.pow(10, Math.floor(Math.log10(raw))); return [1, 2, 2.5, 5, 10].map(function (f) { return f * m; }).find(function (f) { return f >= raw; }); }
+  function axes(g, xlo, xhi, ylo, yhi, xfmt, ydec) {
+    var c = g.c, sy = step(yhi - ylo), sx = step(xhi - xlo), X = function (v) { return g.L + (v - xlo) / (xhi - xlo) * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (yhi - v) / (yhi - ylo) * (g.h - g.T - g.B); };
+    c.strokeStyle = col("--rule"); c.fillStyle = col("--muted"); c.textAlign = "right"; c.textBaseline = "middle";
+    for (var v = Math.ceil(ylo / sy) * sy; v <= yhi + 1e-12; v += sy) { var y = Math.round(Y(v)) + .5; c.beginPath(); c.moveTo(g.L, y); c.lineTo(g.w - g.R, y); c.stroke(); c.fillText(fr(Math.abs(v) < 1e-12 ? 0 : v, ydec), g.L - 8, y); }
+    c.textAlign = "center"; c.textBaseline = "top"; for (v = Math.ceil(xlo / sx) * sx; v <= xhi + 1e-12; v += sx) c.fillText(xfmt(v), X(v), g.h - g.B + 8);
+    c.strokeStyle = col("--ink"); c.beginPath(); c.moveTo(g.L, g.h - g.B + .5); c.lineTo(g.w - g.R, g.h - g.B + .5); c.stroke();
+    return { X: X, Y: Y };
+  }
+  function line(c, pts, color, w, dash) { c.strokeStyle = color; c.lineWidth = w || 2; c.setLineDash(dash || []); c.beginPath(); var on = false; pts.forEach(function (q) { if (q === null) { on = false; return; } if (on) c.lineTo(q[0], q[1]); else { c.moveTo(q[0], q[1]); on = true; } }); c.stroke(); c.setLineDash([]); c.lineWidth = 1; }
+  function drawBoundary(L, p, call) {
+    var g = setup("c-bound"), lo = Infinity, hi = -Infinity; L.paths.forEach(function (pt) { pt.forEach(function (v) { lo = Math.min(lo, v); hi = Math.max(hi, v); }); }); L.boundary.forEach(function (b) { if (b.s !== null) { lo = Math.min(lo, b.s); hi = Math.max(hi, b.s); } }); lo = Math.min(lo, p.K); hi = Math.max(hi, p.K); var pad = (hi - lo) * .06; lo -= pad; hi += pad;
+    var A = axes(g, 0, p.T, lo, hi, function (v) { return fr(v, 2); }, 0), N = L.paths[0].length - 1;
+    var shades = ["#9aa7b8", "#7d93ad", "#b4bfcc", "#8796aa", "#a7b3c2", "#6f8299"];
+    L.paths.forEach(function (pt, k) { line(g.c, pt.map(function (v, t) { return [A.X(t / N * p.T), A.Y(v)]; }), shades[k], 1.2); });
+    line(g.c, [[A.X(0), A.Y(p.K)], [A.X(p.T), A.Y(p.K)]], col("--c-ref"), 1.5, [5, 4]);
+    line(g.c, L.boundary.map(function (b) { return b.s === null ? null : [A.X(b.t), A.Y(b.s)]; }), "#b07a2a", 2.5);
+    g.c.fillStyle = col("--ink"); g.c.textAlign = "left"; g.c.textBaseline = "bottom"; g.c.fillText(call ? "Zone d'exercice au-dessus de la frontière" : "Zone d'exercice sous la frontière", g.L + 8, g.T + 16);
+  }
+  function drawCont(snap, call) {
+    var g = setup("c-cont"); if (!snap || !snap.x.length) return;
+    var xlo = Math.min.apply(null, snap.x), xhi = Math.max.apply(null, snap.x), ys = snap.imm.concat(snap.cont), ylo = Math.min(0, Math.min.apply(null, ys)), yhi = Math.max.apply(null, ys) * 1.05;
+    var A = axes(g, xlo, xhi, ylo, yhi, function (v) { return fr(v, 0); }, 1), c = g.c;
+    var idx = snap.x.map(function (v, i) { return i; }).sort(function (a, b) { return snap.x[a] - snap.x[b]; });
+    snap.x.forEach(function (x, i) { var ex = snap.imm[i] > snap.cont[i]; c.fillStyle = ex ? "rgba(176,122,42,.55)" : "rgba(15,42,74,.35)"; c.beginPath(); c.arc(A.X(x), A.Y(snap.imm[i]), 2.6, 0, 6.283); c.fill(); });
+    line(c, idx.map(function (i) { return [A.X(snap.x[i]), A.Y(snap.cont[i])]; }), col("--navy"), 2);
+  }
+  function drawConv(Ns, conv, ref) {
+    var g = setup("c-eu"), all = conv.std.concat(conv.ant, conv.cv, [ref]), lo = Math.min.apply(null, all), hi = Math.max.apply(null, all), pad = (hi - lo) * .08 || .01; lo -= pad; hi += pad;
+    var xl = Math.log10(Ns[0]), xh = Math.log10(Ns[Ns.length - 1]), X = function (n) { return g.L + (Math.log10(n) - xl) / (xh - xl) * (g.w - g.L - g.R); };
+    var A = axes(g, 0, 1, lo, hi, function () { return ""; }, 2), c = g.c;
+    c.fillStyle = col("--muted"); c.textAlign = "center"; c.textBaseline = "top"; [500, 1000, 5000, 10000, 50000, 100000, 200000].forEach(function (n) { if (n >= Ns[0] && n <= Ns[Ns.length - 1]) c.fillText(n >= 1000 ? fr(n / 1000, 0) + " k" : String(n), X(n), g.h - g.B + 8); });
+    line(c, [[g.L, A.Y(ref)], [g.w - g.R, A.Y(ref)]], col("--c-ref"), 1.5, [5, 4]);
+    line(c, Ns.map(function (n, i) { return [X(n), A.Y(conv.std[i])]; }), "#9aa7b8", 2);
+    line(c, Ns.map(function (n, i) { return [X(n), A.Y(conv.ant[i])]; }), col("--navy"), 2);
+    line(c, Ns.map(function (n, i) { return [X(n), A.Y(conv.cv[i])]; }), "#b07a2a", 2);
+  }
+  var tm; window.addEventListener("resize", function () { clearTimeout(tm); tm = setTimeout(run, 300); });
+  setTimeout(run, 50);
+})();
+</script>

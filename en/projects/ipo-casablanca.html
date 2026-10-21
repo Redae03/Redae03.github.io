@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Performance of IPOs on the Casablanca Stock Exchange · Reda Erraoui</title>
+<meta name="description" content="9 IPOs from 2020 to 2025: +31.5% six-month outperformance versus the MASI, linked to oversubscription (r = 0.77), but fragile without the largest deal.">
+<meta name="author" content="Reda Erraoui">
+<meta name="theme-color" content="#0f2a4a">
+<link rel="canonical" href="https://redae03.github.io/en/projects/ipo-casablanca.html">
+<link rel="alternate" hreflang="fr" href="https://redae03.github.io/projets/ipo-casablanca.html">
+<link rel="alternate" hreflang="en" href="https://redae03.github.io/en/projects/ipo-casablanca.html">
+<link rel="alternate" hreflang="x-default" href="https://redae03.github.io/en/projects/ipo-casablanca.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Performance of IPOs on the Casablanca Stock Exchange · Reda Erraoui">
+<meta property="og:description" content="9 IPOs from 2020 to 2025: +31.5% six-month outperformance versus the MASI, linked to oversubscription (r = 0.77), but fragile without the largest deal.">
+<meta property="og:url" content="https://redae03.github.io/en/projects/ipo-casablanca.html">
+<meta property="og:image" content="https://redae03.github.io/assets/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="mark" href="../../en/index.html">Reda Erraoui</a>
+    <nav class="topnav" aria-label="Sections"></nav>
+    <a class="lang" href="../../projets/ipo-casablanca.html" hreflang="fr" lang="fr">Français</a>
+  </div>
+</div>
+<header class="case-head"><div class="wrap">
+  <a class="back" href="../../en/index.html#phares">← Back to portfolio</a>
+  <div class="small-caps">Equity markets</div>
+  <h1>Performance of IPOs on the Casablanca Stock Exchange</h1>
+  <p class="ctx">Internship · Casablanca Stock Exchange, Market Development Department · July 2026</p>
+  <p class="hook">9 IPOs from 2020 to 2025: +31.5% six-month outperformance versus the MASI, linked to oversubscription (r = 0.77), but fragile without the largest deal.</p>
+  <div class="actions">
+    <a class="btn solid" href="../../simulateurs/ipo-casablanca.html">Simulator (French interface)</a>
+    <a class="btn line" href="https://github.com/Redae03/performance-post-ipo-casablanca" target="_blank" rel="noopener">Code (GitHub)</a>
+    <a class="btn line" href="https://github.com/Redae03/performance-post-ipo-casablanca/blob/main/rapport.pdf" target="_blank" rel="noopener">Report (PDF, French)</a>
+  </div>
+</div></header>
+<main class="case">
+<section><div class="wrap sec"><div class="side"><h2>Question</h2></div><div><p class="lead">Did recent Moroccan IPOs outperform the market, and which factors explain their performance? A question that matters to the Market Development Department when supporting future issuers.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Method</h2></div><div><ol class="steps"><li>Collection and cleaning of prices and offering data for the 9 IPOs.</li><li>Buy-and-hold abnormal returns (BHAR) versus the MASI at day 1, 1, 3, 6 and 12 months.</li><li>Wilcoxon test on the median, Pearson and Spearman correlations with oversubscription and amount raised.</li><li>Backtest of a systematic participation strategy, 7-sheet Excel model.</li><li>Live follow-up of the T2S Group Holding IPO, from subscription to the first trading sessions.</li></ol></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Results</h2></div><div><div class="tbl-wrap"><table class="res case-table"><thead><tr><th>BHAR versus MASI</th><th>Mean</th><th>Median</th><th>p (Wilcoxon)</th></tr></thead><tbody><tr><td>Day 1 (n = 9)</td><td>+6.2%</td><td>+8.5%</td><td>0.098</td></tr><tr><td>6 months (n = 9)</td><td>+31.5%</td><td>+35.2%</td><td>0.074</td></tr><tr><td>6 months, excl. SGTM (n = 8)</td><td>+23.2%</td><td>+23.1%</td><td>0.148</td></tr><tr><td>12 months (n = 7)</td><td>+27.7%</td><td>+46.1%</td><td>0.156</td></tr></tbody></table></div><p class="note">The six-month outperformance is marginally significant (p = 0.074) and loses significance without SGTM. Oversubscription appears to be the best indicator: r = 0.77 (p = 0.015) across 9 IPOs, and 0.93 without SGTM.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Limitations and next steps</h2></div><div><ul class="steps"><li>Only nine IPOs: tests have low power and a single stock can change the conclusion.</li><li>The MASI benchmark controls neither for size nor for sector; a matched-portfolio benchmark would be more robust.</li></ul></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Other case studies</h2></div><div><ul class="plainlinks"><li><a href="monte-carlo-lsm.html">American options with Monte Carlo and Longstaff-Schwartz</a></li><li><a href="arma-garch-var.html">Volatility and Value-at-Risk of Managem with ARMA–GARCH</a></li></ul></div></div></section>
+</main>
+<footer><div class="wrap"><span>Reda Erraoui · Updated October 2026</span><span><a href="https://www.linkedin.com/in/reda-erraoui" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Redae03" target="_blank" rel="noopener">GitHub</a></span></div></footer>
+</body>
+</html>

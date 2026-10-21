@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulateur · Reda Erraoui</title>
+<meta name="description" content="Portfolio de Reda Erraoui, élève ingénieur en finance quantitative : risque de marché, produits dérivés et économétrie financière en Python. Projets, simulateurs interactifs et certificats vérifiables.">
+<meta name="author" content="Reda Erraoui">
+<meta name="theme-color" content="#0f2a4a">
+<link rel="canonical" href="https://redae03.github.io/simulateurs/arbres.html">
+<link rel="alternate" hreflang="fr" href="https://redae03.github.io/simulateurs/arbres.html">
+<link rel="alternate" hreflang="en" href="https://redae03.github.io/simulateurs/arbres.html">
+<link rel="alternate" hreflang="x-default" href="https://redae03.github.io/simulateurs/arbres.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simulateur · Reda Erraoui">
+<meta property="og:description" content="Portfolio de Reda Erraoui, élève ingénieur en finance quantitative : risque de marché, produits dérivés et économétrie financière en Python. Projets, simulateurs interactifs et certificats vérifiables.">
+<meta property="og:url" content="https://redae03.github.io/simulateurs/arbres.html">
+<meta property="og:image" content="https://redae03.github.io/assets/og-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body class="simpage-body">
+<div class="simbar"><div class="wrap"><a class="simback" href="../index.html">← Retour au portfolio</a><span class="small-caps">Simulateur interactif</span><a class="lang" href="../en/index.html" lang="en">English site</a></div></div>
+<main>
+<section id="simulateur" class="simsec">
+    <div class="wrap sec">
+      <div class="side">
+        <h2>Simulateur options</h2>
+        <p>Version en ligne de l'application développée pour le projet d'évaluation d'options. Les calculs s'exécutent dans le navigateur.</p>
+      </div>
+      <div class="sim">
+        <form class="sim-form" id="sim-form" novalidate>
+          <div class="sim-row">
+            <div class="seg" role="radiogroup" aria-label="Type d'option">
+              <label><input type="radio" name="opt" id="opt-call" value="call" checked> Call</label>
+              <label><input type="radio" name="opt" id="opt-put" value="put"> Put</label>
+            </div>
+            <label class="fld wide"><span>Scénario</span>
+              <select id="scen">
+                <option value="ref">Cas de référence (à la monnaie)</option>
+                <option value="itm">Dans la monnaie</option>
+                <option value="otm">Hors de la monnaie</option>
+                <option value="vol">Forte volatilité</option>
+                <option value="short">Courte maturité</option>
+              </select>
+            </label>
+          </div>
+          <div class="sim-grid">
+            <label class="fld"><span>Spot S₀</span><input id="p-S" inputmode="decimal" value="100"></label>
+            <label class="fld"><span>Strike K</span><input id="p-K" inputmode="decimal" value="100"></label>
+            <label class="fld"><span>Maturité T (ans)</span><input id="p-T" inputmode="decimal" value="1"></label>
+            <label class="fld"><span>Taux r</span><input id="p-r" inputmode="decimal" value="0.05"></label>
+            <label class="fld"><span>Volatilité σ</span><input id="p-sigma" inputmode="decimal" value="0.20"></label>
+            <label class="fld"><span>Dividende q</span><input id="p-q" inputmode="decimal" value="0"></label>
+            <label class="fld"><span>Nombre de pas N</span><input id="p-N" inputmode="numeric" value="100"></label>
+            <label class="fld"><span>N maximum (étude)</span><input id="p-Nmax" inputmode="numeric" value="1000"></label>
+          </div>
+          <div class="sim-actions">
+            <button type="submit" class="btn solid" id="run">Calculer</button>
+            <span class="sim-msg" id="sim-msg" role="status"></span>
+          </div>
+        </form>
+
+        <div class="tbl-wrap">
+          <table class="res">
+            <thead><tr><th>Méthode</th><th>Prix</th><th>Écart vs BS</th><th>Écart relatif</th><th>Temps</th></tr></thead>
+            <tbody id="res-body"></tbody>
+          </table>
+        </div>
+        <p class="sim-note" id="sim-note"></p>
+
+        <div class="charts">
+          <figure class="chart"><figcaption>Prix en fonction de N (échelle log)</figcaption><canvas id="c-price" aria-label="Prix CRR et Boyle en fonction du nombre de pas, comparés à Black-Scholes" role="img"></canvas></figure>
+          <figure class="chart"><figcaption>Erreur absolue, échelle log-log</figcaption><canvas id="c-err" aria-label="Erreur absolue des deux arbres en fonction de N, en échelle log-log" role="img"></canvas></figure>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--c-crr)"></i>Binomial CRR</span>
+          <span><i style="background:var(--c-tri)"></i>Trinomial de Boyle</span>
+          <span><i class="dash"></i>Black-Scholes / pente −1</span>
+        </div>
+        <dl class="stats" id="stats"></dl>
+        <p class="sim-note" id="time-note" style="margin-top:-6px"></p>
+      </div>
+    </div>
+  </section>
+<script>
+(function () {
+  // ---------- Moteur de calcul (traduction de pricing_options.py) ----------
+  function normCdf(x) { // Hart (1968), précision double
+    var z = Math.abs(x), c;
+    if (z > 37) c = 0;
+    else {
+      var e = Math.exp(-z * z / 2);
+      if (z < 7.07106781186547) {
+        var n = ((((((0.0352624965998911 * z + 0.700383064443688) * z + 6.37396220353165) * z + 33.912866078383) * z + 112.079291497871) * z + 221.213596169931) * z + 220.206867912376);
+        var d = (((((((0.0883883476483184 * z + 1.75566716318264) * z + 16.064177579207) * z + 86.7807322029461) * z + 296.564248779674) * z + 637.333633378831) * z + 793.826512519948) * z + 440.413735824752);
+        c = e * n / d;
+      } else {
+        c = e / (z + 1 / (z + 2 / (z + 3 / (z + 4 / (z + 0.65))))) / 2.506628274631;
+      }
+    }
+    return x > 0 ? 1 - c : c;
+  }
+  function bs(S, K, T, r, s, q, call) {
+    var d1 = (Math.log(S / K) + (r - q + 0.5 * s * s) * T) / (s * Math.sqrt(T)), d2 = d1 - s * Math.sqrt(T);
+    return call ? S * Math.exp(-q * T) * normCdf(d1) - K * Math.exp(-r * T) * normCdf(d2)
+                : K * Math.exp(-r * T) * normCdf(-d2) - S * Math.exp(-q * T) * normCdf(-d1);
+  }
+  function crr(S, K, T, r, s, N, q, call) {
+    var dt = T / N, u = Math.exp(s * Math.sqrt(dt)), d = 1 / u, p = (Math.exp((r - q) * dt) - d) / (u - d), disc = Math.exp(-r * dt);
+    var V = new Float64Array(N + 1);
+    for (var j = 0; j <= N; j++) { var x = S * Math.pow(u, 2 * j - N); V[j] = call ? Math.max(x - K, 0) : Math.max(K - x, 0); }
+    var a = disc * p, b = disc * (1 - p);
+    for (var i = N - 1; i >= 0; i--) for (var k = 0; k <= i; k++) V[k] = a * V[k + 1] + b * V[k];
+    return V[0];
+  }
+  function boyle(S, K, T, r, s, N, q, call) {
+    var dt = T / N, u = Math.exp(s * Math.sqrt(2 * dt)), A = Math.exp((r - q) * dt / 2), B = Math.exp(s * Math.sqrt(dt / 2));
+    var pu = Math.pow((A - 1 / B) / (B - 1 / B), 2), pd = Math.pow((B - A) / (B - 1 / B), 2), pm = 1 - pu - pd, disc = Math.exp(-r * dt);
+    var V = new Float64Array(2 * N + 1);
+    for (var j = -N; j <= N; j++) { var x = S * Math.pow(u, j); V[j + N] = call ? Math.max(x - K, 0) : Math.max(K - x, 0); }
+    var a = disc * pu, m = disc * pm, b = disc * pd;
+    for (var i = N - 1; i >= 0; i--) for (var k = 0; k <= 2 * i; k++) V[k] = a * V[k + 2] + m * V[k + 1] + b * V[k];
+    return V[0];
+  }
+  function chrono(f) { f(); f(); var n = 0, t = 0, v, t0; while (t < 15 && n < 200) { t0 = performance.now(); v = f(); t += performance.now() - t0; n++; } return [v, t / n]; }
+  function probasOk(p, n) {
+    var dt = p.T / n, u = Math.exp(p.sigma * Math.sqrt(dt)), pc = (Math.exp((p.r - p.q) * dt) - 1 / u) / (u - 1 / u);
+    var A = Math.exp((p.r - p.q) * dt / 2), B = Math.exp(p.sigma * Math.sqrt(dt / 2));
+    return pc >= 0 && pc <= 1 && A >= 1 / B && A <= B;
+  }
+  function slope(xs, ys) {
+    var X = [], Y = [];
+    for (var i = 0; i < xs.length; i++) if (xs[i] >= 50 && ys[i] > 0) { X.push(Math.log(xs[i])); Y.push(Math.log(ys[i])); }
+    if (X.length < 2) return NaN;
+    var mx = X.reduce(function (a, b) { return a + b; }) / X.length, my = Y.reduce(function (a, b) { return a + b; }) / Y.length, sxy = 0, sxx = 0;
+    for (var k = 0; k < X.length; k++) { sxy += (X[k] - mx) * (Y[k] - my); sxx += (X[k] - mx) * (X[k] - mx); }
+    return sxy / sxx;
+  }
+
+  // ---------- Interface ----------
+  var $ = function (id) { return document.getElementById(id); };
+  var fields = ["S", "K", "T", "r", "sigma", "q", "N", "Nmax"];
+  var frNum = function (x, d) { return x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var sci = function (x) { if (!isFinite(x)) return "–"; if (x === 0) return "0"; var e = Math.floor(Math.log10(Math.abs(x))), m = Math.round(x / Math.pow(10, e) * 100) / 100; if (m >= 10) { m /= 10; e++; } return frNum(m, 2) + "×10" + sup(e); };
+  var sup = function (n) { var m = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" }; return String(n).split("").map(function (c) { return m[c]; }).join(""); };
+
+  function scenario(key, call) {
+    var b = { S: "100", K: "100", T: "1", r: "0.05", sigma: "0.20", q: "0" };
+    if (key === "itm") b.S = call ? "120" : "80";
+    if (key === "otm") b.S = call ? "80" : "120";
+    if (key === "vol") b.sigma = "0.50";
+    if (key === "short") b.T = "0.25";
+    return b;
+  }
+  function applyScenario() {
+    var s = scenario($("scen").value, $("opt-call").checked);
+    Object.keys(s).forEach(function (k) { $("p-" + k).value = s[k]; });
+    run();
+  }
+  $("scen").addEventListener("change", applyScenario);
+  $("opt-call").addEventListener("change", applyScenario);
+  $("opt-put").addEventListener("change", applyScenario);
+
+  function read() {
+    var p = {}, bad = null;
+    fields.forEach(function (k) {
+      var el = $("p-" + k), v = parseFloat(String(el.value).replace(",", "."));
+      el.removeAttribute("aria-invalid");
+      if (!isFinite(v)) { el.setAttribute("aria-invalid", "true"); bad = bad || "Saisissez un nombre valide pour chaque paramètre."; }
+      p[k] = v;
+    });
+    if (bad) return { err: bad };
+    if (p.S <= 0 || p.K <= 0 || p.T <= 0 || p.sigma <= 0) return { err: "S, K, T et σ doivent être strictement positifs." };
+    p.N = Math.round(p.N); p.Nmax = Math.round(p.Nmax);
+    if (p.N < 1 || p.N > 5000) return { err: "N doit être compris entre 1 et 5 000." };
+    if (p.Nmax < 50 || p.Nmax > 2000) return { err: "N maximum doit être compris entre 50 et 2 000." };
+    if (!probasOk(p, p.N)) return { err: "Pour ce N, les probabilités de transition sortent de [0, 1]. Augmentez N ou réduisez |r − q|." };
+    return { p: p };
+  }
+
+  function run() {
+    var msg = $("sim-msg"), rd = read();
+    msg.className = "sim-msg";
+    if (rd.err) { msg.textContent = rd.err; msg.className = "sim-msg err"; return; }
+    var p = rd.p, call = $("opt-call").checked, A = [p.S, p.K, p.T, p.r, p.sigma];
+    var rB = chrono(function () { return bs(A[0], A[1], A[2], A[3], A[4], p.q, call); });
+    var rC = chrono(function () { return crr(A[0], A[1], A[2], A[3], A[4], p.N, p.q, call); });
+    var rT = chrono(function () { return boyle(A[0], A[1], A[2], A[3], A[4], p.N, p.q, call); });
+    var r2 = chrono(function () { return crr(A[0], A[1], A[2], A[3], A[4], 2 * p.N, p.q, call); });
+    var ref = rB[0], rows = [["Black-Scholes (référence)", rB, true], ["Binomial CRR (N = " + p.N + ")", rC], ["Trinomial de Boyle (N = " + p.N + ")", rT], ["Binomial CRR (2N = " + 2 * p.N + ")", r2]];
+    $("res-body").innerHTML = rows.map(function (r) {
+      var e = Math.abs(r[1][0] - ref);
+      return "<tr" + (r[2] ? ' class="ref"' : "") + "><td>" + r[0] + "</td><td>" + frNum(r[1][0], 6) + "</td><td>" + (r[2] ? "–" : sci(e)) + "</td><td>" + (r[2] ? "–" : frNum(100 * e / ref, 4) + " %") + "</td><td>" + frNum(r[1][1], 3) + " ms</td></tr>";
+    }).join("");
+    $("sim-note").textContent = "Écart |Trinomial(N) − CRR(2N)| = " + sci(Math.abs(rT[0] - r2[0])) + " : les deux prix semblent coïncider, ce qui est cohérent avec l'équivalence théorique établie dans le rapport.";
+
+    // étude de convergence
+    var Ns = [], seen = {};
+    for (var i = 0; i < 25; i++) { var n = Math.round(5 * Math.pow(p.Nmax / 5, i / 24)); if (!seen[n] && probasOk(p, n)) { seen[n] = 1; Ns.push(n); } }
+    var vc = [], vt = [], tc = [], tt = [];
+    Ns.forEach(function (n) {
+      var a = chrono(function () { return crr(A[0], A[1], A[2], A[3], A[4], n, p.q, call); });
+      var b = chrono(function () { return boyle(A[0], A[1], A[2], A[3], A[4], n, p.q, call); });
+      vc.push(a[0]); tc.push(a[1]); vt.push(b[0]); tt.push(b[1]);
+    });
+    var ec = vc.map(function (v) { return Math.abs(v - ref); }), et = vt.map(function (v) { return Math.abs(v - ref); });
+    drawPrice(Ns, vc, vt, ref); drawErr(Ns, ec, et);
+    var ratio = tt.reduce(function (s, v, k) { return s + v / tc[k]; }, 0) / tt.length;
+    $("stats").innerHTML =
+      "<div><dt>Pente log-log CRR</dt><dd>" + frNum(slope(Ns, ec), 2) + "</dd></div>" +
+      "<div><dt>Pente log-log Boyle</dt><dd>" + frNum(slope(Ns, et), 2) + "</dd></div>" +
+      "<div><dt>Erreur CRR à N = " + Ns[Ns.length - 1] + "</dt><dd>" + sci(ec[ec.length - 1]) + "</dd></div>" +
+      "<div><dt>Erreur Boyle à N = " + Ns[Ns.length - 1] + "</dt><dd>" + sci(et[et.length - 1]) + "</dd></div>";
+    $("time-note").textContent = "Temps de calcul moyen du trinomial rapporté au binomial : × " + frNum(ratio, 2) + ". Les temps dépendent de l'implémentation et de la machine : ici une version JavaScript à boucles, différente de la version vectorisée NumPy du rapport (× 1,2 à 1,6).";
+    msg.textContent = (call ? "Call" : "Put") + " calculé. Étude sur " + Ns.length + " valeurs de N, de 5 à " + Ns[Ns.length - 1] + ".";
+  }
+  $("sim-form").addEventListener("submit", function (e) { e.preventDefault(); run(); });
+
+  // ---------- Graphiques ----------
+  var css = getComputedStyle(document.documentElement), col = function (n) { return css.getPropertyValue(n).trim(); };
+  function setup(cv) {
+    var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr; var c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
+    c.font = "12px " + col("--sans"); return { c: c, w: w, h: h, L: 64, R: 14, T: 14, B: 34 };
+  }
+  function axes(g, xt, yt, xl, yl) {
+    var c = g.c; c.strokeStyle = col("--rule"); c.fillStyle = col("--muted"); c.lineWidth = 1;
+    yt.forEach(function (t) { var y = Math.round(t.p) + .5; c.beginPath(); c.moveTo(g.L, y); c.lineTo(g.w - g.R, y); c.stroke(); c.textAlign = "right"; c.textBaseline = "middle"; c.fillText(t.l, g.L - 8, y); });
+    xt.forEach(function (t) { c.textAlign = "center"; c.textBaseline = "top"; c.fillText(t.l, t.p, g.h - g.B + 8); });
+    c.strokeStyle = col("--ink"); c.beginPath(); c.moveTo(g.L, g.h - g.B + .5); c.lineTo(g.w - g.R, g.h - g.B + .5); c.stroke();
+  }
+  function line(g, xs, ys, color, dash, dots) {
+    var c = g.c; c.strokeStyle = color; c.lineWidth = 2; c.setLineDash(dash || []); c.beginPath();
+    xs.forEach(function (x, i) { if (i) c.lineTo(x, ys[i]); else c.moveTo(x, ys[i]); }); c.stroke(); c.setLineDash([]);
+    if (dots) { c.fillStyle = color; xs.forEach(function (x, i) { c.beginPath(); c.arc(x, ys[i], 2.5, 0, 6.283); c.fill(); }); }
+  }
+  function nice(lo, hi, k) { var st = (hi - lo) / k, m = Math.pow(10, Math.floor(Math.log10(st))), s = [1, 2, 2.5, 5, 10].map(function (f) { return f * m; }).find(function (f) { return f >= st; }); var out = []; for (var v = Math.ceil(lo / s) * s; v <= hi + 1e-12; v += s) out.push(v); return { t: out, s: s }; }
+  function drawPrice(Ns, vc, vt, ref) {
+    var g = setup($("c-price")), all = vc.concat(vt, [ref]), lo = Math.min.apply(null, all), hi = Math.max.apply(null, all), pad = (hi - lo) * .08 || .01; lo -= pad; hi += pad;
+    var xl = Math.log10(Ns[0]), xh = Math.log10(Ns[Ns.length - 1]);
+    var X = function (n) { return g.L + (Math.log10(n) - xl) / (xh - xl) * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (hi - v) / (hi - lo) * (g.h - g.T - g.B); };
+    var ny = nice(lo, hi, 4), dec = Math.max(0, -Math.floor(Math.log10(ny.s)));
+    var nx = [5, 10, 50, 100, 500, 1000, 2000].filter(function (n) { return n >= Ns[0] && n <= Ns[Ns.length - 1]; });
+    axes(g, nx.map(function (v) { return { p: X(v), l: String(v) }; }), ny.t.map(function (v) { return { p: Y(v), l: frNum(v, dec) }; }));
+    line(g, [g.L, g.w - g.R], [Y(ref), Y(ref)], col("--c-ref"), [5, 4]);
+    line(g, Ns.map(X), vc.map(Y), col("--c-crr"), null, true);
+    line(g, Ns.map(X), vt.map(Y), col("--c-tri"), null, true);
+  }
+  function drawErr(Ns, ec, et) {
+    var g = setup($("c-err")), pos = ec.concat(et).filter(function (v) { return v > 0; });
+    var lo = Math.floor(Math.log10(Math.min.apply(null, pos))), hi = Math.ceil(Math.log10(Math.max.apply(null, pos)));
+    var xl = Math.log10(Ns[0]), xh = Math.log10(Ns[Ns.length - 1]);
+    var X = function (n) { return g.L + (Math.log10(n) - xl) / (xh - xl) * (g.w - g.L - g.R); }, Y = function (v) { return g.T + (hi - Math.log10(Math.max(v, Math.pow(10, lo)))) / (hi - lo) * (g.h - g.T - g.B); };
+    var yt = []; for (var e = lo; e <= hi; e++) yt.push({ p: Y(Math.pow(10, e)), l: "10" + sup(e) });
+    var xt = [5, 10, 50, 100, 500, 1000, 2000].filter(function (n) { return n >= Ns[0] && n <= Ns[Ns.length - 1]; }).map(function (n) { return { p: X(n), l: String(n) }; });
+    axes(g, xt, yt);
+    var g0 = ec[0] * Ns[0];
+    line(g, [X(Ns[0]), X(Ns[Ns.length - 1])], [Y(g0 / Ns[0]), Y(g0 / Ns[Ns.length - 1])], col("--c-ref"), [5, 4]);
+    var keep = function (arr) { return arr.map(function (v) { return v > 0 ? v : Math.pow(10, lo); }); };
+    line(g, Ns.map(X), keep(ec).map(Y), col("--c-crr"), null, true);
+    line(g, Ns.map(X), keep(et).map(Y), col("--c-tri"), null, true);
+  }
+  var tmr; window.addEventListener("resize", function () { clearTimeout(tmr); tmr = setTimeout(run, 200); });
+  run();
+})();
+</script>
+
+</main>
+<footer><div class="wrap"><span>Reda Erraoui · Mis à jour en octobre 2026</span><span><a href="https://www.linkedin.com/in/reda-erraoui" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Redae03" target="_blank" rel="noopener">GitHub</a></span></div></footer>
+<script>
+(function () {
+  // Retour : revient à la page précédente du portfolio si on en vient, sinon à l'accueil
+  var b = document.querySelector(".simback");
+  if (document.referrer && document.referrer.indexOf(location.host) >= 0) b.addEventListener("click", function (e) { e.preventDefault(); history.back(); });
+})();
+</script>
+</body>
+</html>

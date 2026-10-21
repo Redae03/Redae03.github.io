@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Volatility and Value-at-Risk of Managem with ARMA–GARCH · Reda Erraoui</title>
+<meta name="description" content="306 months of prices: persistent volatility (half-life about 6 months), a significant leverage effect, and an information leak detected in the neural-network benchmark.">
+<meta name="author" content="Reda Erraoui">
+<meta name="theme-color" content="#0f2a4a">
+<link rel="canonical" href="https://redae03.github.io/en/projects/arma-garch-var.html">
+<link rel="alternate" hreflang="fr" href="https://redae03.github.io/projets/arma-garch-var.html">
+<link rel="alternate" hreflang="en" href="https://redae03.github.io/en/projects/arma-garch-var.html">
+<link rel="alternate" hreflang="x-default" href="https://redae03.github.io/en/projects/arma-garch-var.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Volatility and Value-at-Risk of Managem with ARMA–GARCH · Reda Erraoui">
+<meta property="og:description" content="306 months of prices: persistent volatility (half-life about 6 months), a significant leverage effect, and an information leak detected in the neural-network benchmark.">
+<meta property="og:url" content="https://redae03.github.io/en/projects/arma-garch-var.html">
+<meta property="og:image" content="https://redae03.github.io/assets/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="mark" href="../../en/index.html">Reda Erraoui</a>
+    <nav class="topnav" aria-label="Sections"></nav>
+    <a class="lang" href="../../projets/arma-garch-var.html" hreflang="fr" lang="fr">Français</a>
+  </div>
+</div>
+<header class="case-head"><div class="wrap">
+  <a class="back" href="../../en/index.html#phares">← Back to portfolio</a>
+  <div class="small-caps">Market risk</div>
+  <h1>Volatility and Value-at-Risk of Managem with ARMA–GARCH</h1>
+  <p class="ctx">Time-series project · ENSA Agadir · supervised by Ms S. Hadiri · 2026</p>
+  <p class="hook">306 months of prices: persistent volatility (half-life about 6 months), a significant leverage effect, and an information leak detected in the neural-network benchmark.</p>
+  <div class="actions">
+    <a class="btn solid" href="../../simulateurs/arma-garch.html">Simulator (French interface)</a>
+    <a class="btn line" href="https://github.com/Redae03/econometrie-managem-arma-garch" target="_blank" rel="noopener">Code (GitHub)</a>
+    <a class="btn line" href="https://github.com/Redae03/econometrie-managem-arma-garch/blob/main/rapport.pdf" target="_blank" rel="noopener">Report (PDF, French)</a>
+  </div>
+</div></header>
+<main class="case">
+<section><div class="wrap sec"><div class="side"><h2>Question</h2></div><div><p class="lead">Model the dynamics and risk of a mining stock listed in Casablanca, sensitive to metal prices, then compare an econometric approach with a machine-learning method for forecasting.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Method</h2></div><div><ol class="steps"><li>ADF and Phillips-Perron unit-root tests on the price, its log and returns.</li><li>ARMA(1,1) for the mean, residual diagnostics (Ljung-Box, Jarque-Bera, ARCH-LM).</li><li>GARCH(1,1), TARCH and EGARCH for volatility; one-month conditional VaR.</li><li>Out-of-sample forecasting (80/20 split) against an MLP neural network; regression of the price on gold, silver and copper (2022–2026).</li><li>Estimation in EViews, then replication in Python (statsmodels, arch, scikit-learn).</li></ol></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Results</h2></div><div><div class="tbl-wrap"><table class="res case-table"><thead><tr><th>Item</th><th>Result</th></tr></thead><tbody><tr><td>ADF price / returns</td><td>5.88 (p = 1.00) / −15.17 (p < 0.0001)</td></tr><tr><td>GARCH(1,1): α + β</td><td>0.89, half-life about 6 months</td></tr><tr><td>EGARCH: asymmetry</td><td>−0.133 (p = 0.0001), leverage effect</td></tr><tr><td>1-month 95% VaR (GARCH)</td><td>16.0% potential loss</td></tr><tr><td>Out-of-sample RMSE</td><td>ARMA 0.089 · zero forecast 0.092 · MLP 0.098</td></tr></tbody></table></div><p class="note">The original report showed a large advantage for the neural network (RMSE 0.052). Replicating it, this gap only appears if the return being forecast is mistakenly included among the inputs: the advantage appears to come from an information leak. Correctly specified, no model clearly beats a zero forecast, consistent with hard-to-predict monthly returns.</p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Limitations and next steps</h2></div><div><ul class="steps"><li>The normal VaR likely underestimates tail risk given fat-tailed residuals. A Student-t distribution and a Kupiec backtest are the next steps.</li><li>The gold regression is estimated in levels: a cointegration test would rule out a spurious correlation.</li></ul><p class="muted">Related: stationarity of Managem stock on daily data. <a href="../../en/index.html#projets">See other projects →</a></p></div></div></section>
+<section><div class="wrap sec"><div class="side"><h2>Other case studies</h2></div><div><ul class="plainlinks"><li><a href="monte-carlo-lsm.html">American options with Monte Carlo and Longstaff-Schwartz</a></li><li><a href="ipo-casablanca.html">Performance of IPOs on the Casablanca Stock Exchange</a></li></ul></div></div></section>
+</main>
+<footer><div class="wrap"><span>Reda Erraoui · Updated October 2026</span><span><a href="https://www.linkedin.com/in/reda-erraoui" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/Redae03" target="_blank" rel="noopener">GitHub</a></span></div></footer>
+</body>
+</html>
