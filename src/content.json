@@ -8,9 +8,11 @@
     "analytics_goatcounter": "",
     "updated": "2026-10"
   },
-
   "hero": {
-    "eyebrow": {"fr": "Élève ingénieur · Finance quantitative", "en": "Engineering student · Quantitative finance"},
+    "eyebrow": {
+      "fr": "Élève ingénieur · Finance quantitative",
+      "en": "Engineering student · Quantitative finance"
+    },
     "positioning": {
       "fr": "Risque de marché, valorisation de produits dérivés et économétrie financière, en Python.",
       "en": "Market risk, derivatives pricing and financial econometrics, in Python."
@@ -19,209 +21,828 @@
       "fr": "Élève ingénieur en dernière année de Finance et Ingénierie Décisionnelle à l’ENSA Agadir. J’ai réalisé trois stages (Bourse de Casablanca, ministère de l’Économie et des Finances, Direction Générale des Impôts) et je publie chaque projet avec son code, son rapport et un simulateur interactif.",
       "en": "Final-year engineering student in Finance and Decision Engineering at ENSA Agadir. I have completed three internships (Casablanca Stock Exchange, Moroccan Ministry of Economy and Finance, Moroccan Tax Administration) and publish every project with its code, report and an interactive simulator."
     },
-    "details": [
-      {"k": {"fr": "Recherche", "en": "Seeking"}, "v": {"fr": "Stage de fin d’études de 6 mois, à partir de février 2027", "en": "6-month final-year internship, from February 2027"}},
-      {"k": {"fr": "Et ensuite", "en": "Next"}, "v": {"fr": "M2 en finance quantitative", "en": "Master’s in quantitative finance"}},
-      {"k": {"fr": "Mobilité", "en": "Mobility"}, "v": {"fr": "Maroc et international", "en": "Morocco and abroad"}}
-    ]
+    "details": []
   },
-
   "keys": [
-    {"n": "3", "t": {"fr": "stages : marchés actions, finance publique, data science", "en": "internships: equity markets, public finance, data science"}},
-    {"n": "8", "t": {"fr": "projets publiés avec code et rapport", "en": "projects published with code and report"}},
-    {"n": "15", "t": {"fr": "certificats vérifiables (CFI, DataCamp)", "en": "verifiable certificates (CFI, DataCamp)"}},
-    {"n": {"fr": "Fév. 2027", "en": "Feb. 2027"}, "t": {"fr": "début du stage recherché", "en": "internship start date"}}
+    {
+      "n": "3",
+      "t": {
+        "fr": "stages : marchés actions, finance publique, data science",
+        "en": "internships: equity markets, public finance, data science"
+      }
+    },
+    {
+      "n": "8",
+      "t": {
+        "fr": "projets publiés avec code et rapport",
+        "en": "projects published with code and report"
+      }
+    },
+    {
+      "n": "15",
+      "t": {
+        "fr": "certificats vérifiables (CFI, DataCamp)",
+        "en": "verifiable certificates (CFI, DataCamp)"
+      }
+    },
+    {
+      "n": "10",
+      "t": {
+        "fr": "simulateurs interactifs à essayer en ligne",
+        "en": "interactive simulators to try online"
+      }
+    }
   ],
-
   "flagships": [
     {
       "slug": "monte-carlo-lsm",
       "slug_en": "monte-carlo-lsm",
-      "theme": {"fr": "Produits dérivés", "en": "Derivatives"},
-      "title": {"fr": "Options américaines par Monte-Carlo et Longstaff-Schwartz", "en": "American options with Monte Carlo and Longstaff-Schwartz"},
-      "context": {"fr": "Projet de calcul stochastique · ENSA Agadir · encadré par Pr. B. El Asri · 2026", "en": "Stochastic calculus project · ENSA Agadir · supervised by Prof. B. El Asri · 2026"},
-      "hook": {"fr": "Put américain valorisé à 4,46 contre 4,478 dans l’article de référence ; variance de l’estimateur divisée par 6,8 grâce à une variable de contrôle.", "en": "American put priced at 4.46 against 4.478 in the reference paper; estimator variance cut 6.8-fold with a control variate."},
-      "problem": {"fr": "Une option américaine peut être exercée à tout moment : son prix n’a pas de formule fermée et dépend d’une règle d’exercice optimale inconnue. L’objectif était de construire un moteur de simulation fiable, de mesurer sa précision et de réduire son coût de calcul.", "en": "An American option can be exercised at any time: its price has no closed form and depends on an unknown optimal exercise rule. The goal was to build a reliable simulation engine, measure its accuracy and reduce its computational cost."},
+      "theme": {
+        "fr": "Produits dérivés",
+        "en": "Derivatives"
+      },
+      "title": {
+        "fr": "Options américaines par Monte-Carlo et Longstaff-Schwartz",
+        "en": "American options with Monte Carlo and Longstaff-Schwartz"
+      },
+      "context": {
+        "fr": "Projet de calcul stochastique · ENSA Agadir · encadré par Pr. B. El Asri · 2026",
+        "en": "Stochastic calculus project · ENSA Agadir · supervised by Prof. B. El Asri · 2026"
+      },
+      "hook": {
+        "fr": "Put américain valorisé à 4,46 contre 4,478 dans l’article de référence ; variance de l’estimateur divisée par 6,8 grâce à une variable de contrôle.",
+        "en": "American put priced at 4.46 against 4.478 in the reference paper; estimator variance cut 6.8-fold with a control variate."
+      },
+      "problem": {
+        "fr": "Une option américaine peut être exercée à tout moment : son prix n’a pas de formule fermée et dépend d’une règle d’exercice optimale inconnue. L’objectif était de construire un moteur de simulation fiable, de mesurer sa précision et de réduire son coût de calcul.",
+        "en": "An American option can be exercised at any time: its price has no closed form and depends on an unknown optimal exercise rule. The goal was to build a reliable simulation engine, measure its accuracy and reduce its computational cost."
+      },
       "method": {
-        "fr": ["Simulation de lois (inversion, Box-Muller) et de trajectoires du mouvement brownien géométrique, schéma d’Euler-Maruyama.", "Options européennes par Monte-Carlo avec intervalle de confiance et convergence en 1/√N.", "Réduction de variance : variables antithétiques (variance calculée sur les moyennes de paires) et variable de contrôle e^(−rT)S_T − S₀.", "Longstaff-Schwartz : régression des valeurs de continuation sur une base polynomiale, sur les trajectoires dans la monnaie, 50 dates d’exercice, 100 000 trajectoires.", "Validation contre l’article de Longstaff et Schwartz (2001) et contre un arbre binomial bermudéen ; application PyQt5."],
-        "en": ["Random variate generation (inversion, Box-Muller) and geometric Brownian motion paths, Euler-Maruyama scheme.", "European options by Monte Carlo with confidence intervals and 1/√N convergence.", "Variance reduction: antithetic variates (variance computed on pair averages) and the control variate e^(−rT)S_T − S₀.", "Longstaff-Schwartz: regression of continuation values on a polynomial basis over in-the-money paths, 50 exercise dates, 100,000 paths.", "Validation against Longstaff and Schwartz (2001) and a Bermudan binomial tree; PyQt5 application."]
+        "fr": [
+          "Simulation de lois (inversion, Box-Muller) et de trajectoires du mouvement brownien géométrique, schéma d’Euler-Maruyama.",
+          "Options européennes par Monte-Carlo avec intervalle de confiance et convergence en 1/√N.",
+          "Réduction de variance : variables antithétiques (variance calculée sur les moyennes de paires) et variable de contrôle e^(−rT)S_T − S₀.",
+          "Longstaff-Schwartz : régression des valeurs de continuation sur une base polynomiale, sur les trajectoires dans la monnaie, 50 dates d’exercice, 100 000 trajectoires.",
+          "Validation contre l’article de Longstaff et Schwartz (2001) et contre un arbre binomial bermudéen ; application PyQt5."
+        ],
+        "en": [
+          "Random variate generation (inversion, Box-Muller) and geometric Brownian motion paths, Euler-Maruyama scheme.",
+          "European options by Monte Carlo with confidence intervals and 1/√N convergence.",
+          "Variance reduction: antithetic variates (variance computed on pair averages) and the control variate e^(−rT)S_T − S₀.",
+          "Longstaff-Schwartz: regression of continuation values on a polynomial basis over in-the-money paths, 50 exercise dates, 100,000 paths.",
+          "Validation against Longstaff and Schwartz (2001) and a Bermudan binomial tree; PyQt5 application."
+        ]
       },
       "results": {
-        "head": {"fr": ["Put américain (K = 40, r = 6 %, σ = 20 %, T = 1)", "LSM", "Article (2001)"], "en": ["American put (K = 40, r = 6%, σ = 20%, T = 1)", "LSM", "Paper (2001)"]},
-        "rows": [["S₀ = 36", "4,46", "4,478"], ["S₀ = 40", "2,31", "2,314"], ["S₀ = 44", "1,10", "1,110"]],
-        "rows_en": [["S₀ = 36", "4.46", "4.478"], ["S₀ = 40", "2.31", "2.314"], ["S₀ = 44", "1.10", "1.110"]],
-        "note": {"fr": "Sur un call européen à la monnaie, la variance de l’estimateur est divisée par 2,0 avec les variables antithétiques et par 6,8 avec la variable de contrôle, à nombre de simulations égal. En relisant le code, j’ai corrigé deux erreurs : la variance antithétique était calculée comme pour des tirages indépendants (gain affiché de 1,0 au lieu de 2,0), et la méthode par variable de contrôle n’était pas acceptée par le rapport de synthèse.", "en": "On an at-the-money European call, estimator variance falls 2.0-fold with antithetic variates and 6.8-fold with the control variate, for the same number of simulations. Reviewing the code, I fixed two bugs: the antithetic variance was computed as if draws were independent (reported gain of 1.0 instead of 2.0), and the control-variate method was rejected by the summary report."}
+        "head": {
+          "fr": [
+            "Put américain (K = 40, r = 6 %, σ = 20 %, T = 1)",
+            "LSM",
+            "Article (2001)"
+          ],
+          "en": [
+            "American put (K = 40, r = 6%, σ = 20%, T = 1)",
+            "LSM",
+            "Paper (2001)"
+          ]
+        },
+        "rows": [
+          [
+            "S₀ = 36",
+            "4,46",
+            "4,478"
+          ],
+          [
+            "S₀ = 40",
+            "2,31",
+            "2,314"
+          ],
+          [
+            "S₀ = 44",
+            "1,10",
+            "1,110"
+          ]
+        ],
+        "rows_en": [
+          [
+            "S₀ = 36",
+            "4.46",
+            "4.478"
+          ],
+          [
+            "S₀ = 40",
+            "2.31",
+            "2.314"
+          ],
+          [
+            "S₀ = 44",
+            "1.10",
+            "1.110"
+          ]
+        ],
+        "note": {
+          "fr": "Sur un call européen à la monnaie, la variance de l’estimateur est divisée par 2,0 avec les variables antithétiques et par 6,8 avec la variable de contrôle, à nombre de simulations égal. En relisant le code, j’ai corrigé deux erreurs : la variance antithétique était calculée comme pour des tirages indépendants (gain affiché de 1,0 au lieu de 2,0), et la méthode par variable de contrôle n’était pas acceptée par le rapport de synthèse.",
+          "en": "On an at-the-money European call, estimator variance falls 2.0-fold with antithetic variates and 6.8-fold with the control variate, for the same number of simulations. Reviewing the code, I fixed two bugs: the antithetic variance was computed as if draws were independent (reported gain of 1.0 instead of 2.0), and the control-variate method was rejected by the summary report."
+        }
       },
       "limits": {
-        "fr": ["L’estimateur LSM est biaisé vers le bas : la règle d’exercice estimée est sous-optimale. Une borne haute (méthode duale d’Andersen-Broadie) permettrait d’encadrer le prix.", "Le choix de la base de régression et du nombre de dates d’exercice reste empirique."],
-        "en": ["The LSM estimator is biased downward because the estimated exercise rule is sub-optimal. An upper bound (Andersen-Broadie dual method) would bracket the price.", "The regression basis and the number of exercise dates are chosen empirically."]
+        "fr": [
+          "L’estimateur LSM est biaisé vers le bas : la règle d’exercice estimée est sous-optimale. Une borne haute (méthode duale d’Andersen-Broadie) permettrait d’encadrer le prix.",
+          "Le choix de la base de régression et du nombre de dates d’exercice reste empirique."
+        ],
+        "en": [
+          "The LSM estimator is biased downward because the estimated exercise rule is sub-optimal. An upper bound (Andersen-Broadie dual method) would bracket the price.",
+          "The regression basis and the number of exercise dates are chosen empirically."
+        ]
       },
       "sim": "monte-carlo-lsm",
       "repo": "monte-carlo-longstaff-schwartz",
       "report": "rapport.pdf",
-      "related": {"fr": "Dans le même thème : arbres binomial et trinomial, Option Pricing Lab.", "en": "Related: binomial and trinomial trees, Option Pricing Lab."}
+      "related": {
+        "fr": "Dans le même thème : arbres binomial et trinomial, Option Pricing Lab.",
+        "en": "Related: binomial and trinomial trees, Option Pricing Lab."
+      }
     },
     {
       "slug": "arma-garch-var",
       "slug_en": "arma-garch-var",
-      "theme": {"fr": "Risque de marché", "en": "Market risk"},
-      "title": {"fr": "Volatilité et Value-at-Risk de Managem par ARMA–GARCH", "en": "Volatility and Value-at-Risk of Managem with ARMA–GARCH"},
-      "context": {"fr": "Projet de séries temporelles · ENSA Agadir · encadré par Mme S. Hadiri · 2026", "en": "Time-series project · ENSA Agadir · supervised by Ms S. Hadiri · 2026"},
-      "hook": {"fr": "306 mois de cours : volatilité persistante (demi-vie d’environ 6 mois), effet de levier significatif, et une fuite d’information détectée dans la comparaison avec un réseau de neurones.", "en": "306 months of prices: persistent volatility (half-life about 6 months), a significant leverage effect, and an information leak detected in the neural-network benchmark."},
-      "problem": {"fr": "Modéliser la dynamique et le risque d’un titre minier coté à la Bourse de Casablanca, sensible aux prix des métaux, puis comparer une approche économétrique et une méthode d’intelligence artificielle pour la prévision.", "en": "Model the dynamics and risk of a mining stock listed in Casablanca, sensitive to metal prices, then compare an econometric approach with a machine-learning method for forecasting."},
+      "theme": {
+        "fr": "Risque de marché",
+        "en": "Market risk"
+      },
+      "title": {
+        "fr": "Volatilité et Value-at-Risk de Managem par ARMA–GARCH",
+        "en": "Volatility and Value-at-Risk of Managem with ARMA–GARCH"
+      },
+      "context": {
+        "fr": "Projet de séries temporelles · ENSA Agadir · encadré par Mme S. Hadiri · 2026",
+        "en": "Time-series project · ENSA Agadir · supervised by Ms S. Hadiri · 2026"
+      },
+      "hook": {
+        "fr": "306 mois de cours : volatilité persistante (demi-vie d’environ 6 mois), effet de levier significatif, et une fuite d’information détectée dans la comparaison avec un réseau de neurones.",
+        "en": "306 months of prices: persistent volatility (half-life about 6 months), a significant leverage effect, and an information leak detected in the neural-network benchmark."
+      },
+      "problem": {
+        "fr": "Modéliser la dynamique et le risque d’un titre minier coté à la Bourse de Casablanca, sensible aux prix des métaux, puis comparer une approche économétrique et une méthode d’intelligence artificielle pour la prévision.",
+        "en": "Model the dynamics and risk of a mining stock listed in Casablanca, sensitive to metal prices, then compare an econometric approach with a machine-learning method for forecasting."
+      },
       "method": {
-        "fr": ["Tests de racine unitaire ADF et Phillips-Perron sur le cours, son logarithme et les rendements.", "ARMA(1,1) pour la moyenne, diagnostics des résidus (Ljung-Box, Jarque-Bera, ARCH-LM).", "GARCH(1,1), TARCH et EGARCH pour la volatilité ; VaR conditionnelle à 1 mois.", "Prévision hors échantillon (découpage 80/20) contre un réseau de neurones MLP ; régression du cours sur l’or, l’argent et le cuivre (2022–2026).", "EViews pour l’estimation, puis reproduction en Python (statsmodels, arch, scikit-learn)."],
-        "en": ["ADF and Phillips-Perron unit-root tests on the price, its log and returns.", "ARMA(1,1) for the mean, residual diagnostics (Ljung-Box, Jarque-Bera, ARCH-LM).", "GARCH(1,1), TARCH and EGARCH for volatility; one-month conditional VaR.", "Out-of-sample forecasting (80/20 split) against an MLP neural network; regression of the price on gold, silver and copper (2022–2026).", "Estimation in EViews, then replication in Python (statsmodels, arch, scikit-learn)."]
+        "fr": [
+          "Tests de racine unitaire ADF et Phillips-Perron sur le cours, son logarithme et les rendements.",
+          "ARMA(1,1) pour la moyenne, diagnostics des résidus (Ljung-Box, Jarque-Bera, ARCH-LM).",
+          "GARCH(1,1), TARCH et EGARCH pour la volatilité ; VaR conditionnelle à 1 mois.",
+          "Prévision hors échantillon (découpage 80/20) contre un réseau de neurones MLP ; régression du cours sur l’or, l’argent et le cuivre (2022–2026).",
+          "EViews pour l’estimation, puis reproduction en Python (statsmodels, arch, scikit-learn)."
+        ],
+        "en": [
+          "ADF and Phillips-Perron unit-root tests on the price, its log and returns.",
+          "ARMA(1,1) for the mean, residual diagnostics (Ljung-Box, Jarque-Bera, ARCH-LM).",
+          "GARCH(1,1), TARCH and EGARCH for volatility; one-month conditional VaR.",
+          "Out-of-sample forecasting (80/20 split) against an MLP neural network; regression of the price on gold, silver and copper (2022–2026).",
+          "Estimation in EViews, then replication in Python (statsmodels, arch, scikit-learn)."
+        ]
       },
       "results": {
-        "head": {"fr": ["Élément", "Résultat"], "en": ["Item", "Result"]},
-        "rows": [["ADF cours / rendements", "5,88 (p = 1,00) / −15,17 (p < 0,0001)"], ["GARCH(1,1) : α + β", "0,89, demi-vie d’environ 6 mois"], ["EGARCH : asymétrie", "−0,133 (p = 0,0001), effet de levier"], ["VaR à 1 mois, 95 % (GARCH)", "16,0 % de perte possible"], ["RMSE hors échantillon", "ARMA 0,089 · prévision nulle 0,092 · MLP 0,098"]],
-        "rows_en": [["ADF price / returns", "5.88 (p = 1.00) / −15.17 (p < 0.0001)"], ["GARCH(1,1): α + β", "0.89, half-life about 6 months"], ["EGARCH: asymmetry", "−0.133 (p = 0.0001), leverage effect"], ["1-month 95% VaR (GARCH)", "16.0% potential loss"], ["Out-of-sample RMSE", "ARMA 0.089 · zero forecast 0.092 · MLP 0.098"]],
-        "note": {"fr": "Le rapport initial donnait un net avantage au réseau de neurones (RMSE 0,052). En reproduisant le calcul, cet écart n’apparaît que si le rendement à prévoir figure par erreur parmi les entrées : l’avantage semble venir d’une fuite d’information. Correctement spécifiés, aucun modèle ne bat nettement une prévision nulle, ce qui est cohérent avec des rendements mensuels peu prévisibles.", "en": "The original report showed a large advantage for the neural network (RMSE 0.052). Replicating it, this gap only appears if the return being forecast is mistakenly included among the inputs: the advantage appears to come from an information leak. Correctly specified, no model clearly beats a zero forecast, consistent with hard-to-predict monthly returns."}
+        "head": {
+          "fr": [
+            "Élément",
+            "Résultat"
+          ],
+          "en": [
+            "Item",
+            "Result"
+          ]
+        },
+        "rows": [
+          [
+            "ADF cours / rendements",
+            "5,88 (p = 1,00) / −15,17 (p < 0,0001)"
+          ],
+          [
+            "GARCH(1,1) : α + β",
+            "0,89, demi-vie d’environ 6 mois"
+          ],
+          [
+            "EGARCH : asymétrie",
+            "−0,133 (p = 0,0001), effet de levier"
+          ],
+          [
+            "VaR à 1 mois, 95 % (GARCH)",
+            "16,0 % de perte possible"
+          ],
+          [
+            "RMSE hors échantillon",
+            "ARMA 0,089 · prévision nulle 0,092 · MLP 0,098"
+          ]
+        ],
+        "rows_en": [
+          [
+            "ADF price / returns",
+            "5.88 (p = 1.00) / −15.17 (p < 0.0001)"
+          ],
+          [
+            "GARCH(1,1): α + β",
+            "0.89, half-life about 6 months"
+          ],
+          [
+            "EGARCH: asymmetry",
+            "−0.133 (p = 0.0001), leverage effect"
+          ],
+          [
+            "1-month 95% VaR (GARCH)",
+            "16.0% potential loss"
+          ],
+          [
+            "Out-of-sample RMSE",
+            "ARMA 0.089 · zero forecast 0.092 · MLP 0.098"
+          ]
+        ],
+        "note": {
+          "fr": "Le rapport initial donnait un net avantage au réseau de neurones (RMSE 0,052). En reproduisant le calcul, cet écart n’apparaît que si le rendement à prévoir figure par erreur parmi les entrées : l’avantage semble venir d’une fuite d’information. Correctement spécifiés, aucun modèle ne bat nettement une prévision nulle, ce qui est cohérent avec des rendements mensuels peu prévisibles.",
+          "en": "The original report showed a large advantage for the neural network (RMSE 0.052). Replicating it, this gap only appears if the return being forecast is mistakenly included among the inputs: the advantage appears to come from an information leak. Correctly specified, no model clearly beats a zero forecast, consistent with hard-to-predict monthly returns."
+        }
       },
       "limits": {
-        "fr": ["La VaR normale sous-estime probablement le risque extrême : les résidus ont des queues épaisses. Une loi de Student ou un backtest de Kupiec seraient les prochaines étapes.", "La régression sur l’or est estimée en niveaux : un test de cointégration permettrait d’écarter une corrélation fallacieuse."],
-        "en": ["The normal VaR likely underestimates tail risk given fat-tailed residuals. A Student-t distribution and a Kupiec backtest are the next steps.", "The gold regression is estimated in levels: a cointegration test would rule out a spurious correlation."]
+        "fr": [
+          "La VaR normale sous-estime probablement le risque extrême : les résidus ont des queues épaisses. Une loi de Student ou un backtest de Kupiec seraient les prochaines étapes.",
+          "La régression sur l’or est estimée en niveaux : un test de cointégration permettrait d’écarter une corrélation fallacieuse."
+        ],
+        "en": [
+          "The normal VaR likely underestimates tail risk given fat-tailed residuals. A Student-t distribution and a Kupiec backtest are the next steps.",
+          "The gold regression is estimated in levels: a cointegration test would rule out a spurious correlation."
+        ]
       },
       "sim": "arma-garch",
       "repo": "econometrie-managem-arma-garch",
       "report": "rapport.pdf",
-      "related": {"fr": "Dans le même thème : stationnarité de l’action Managem sur données quotidiennes.", "en": "Related: stationarity of Managem stock on daily data."}
+      "related": {
+        "fr": "Dans le même thème : stationnarité de l’action Managem sur données quotidiennes.",
+        "en": "Related: stationarity of Managem stock on daily data."
+      }
     },
     {
       "slug": "ipo-casablanca",
       "slug_en": "ipo-casablanca",
-      "theme": {"fr": "Marchés actions", "en": "Equity markets"},
-      "title": {"fr": "Performance des introductions en Bourse à Casablanca", "en": "Performance of IPOs on the Casablanca Stock Exchange"},
-      "context": {"fr": "Stage · Bourse de Casablanca, Département Développement Marché · juillet 2026", "en": "Internship · Casablanca Stock Exchange, Market Development Department · July 2026"},
-      "hook": {"fr": "9 introductions de 2020 à 2025 : surperformance de +31,5 % à 6 mois par rapport au MASI, liée au taux de sursouscription (r = 0,77), mais fragile sans la plus grosse opération.", "en": "9 IPOs from 2020 to 2025: +31.5% six-month outperformance versus the MASI, linked to oversubscription (r = 0.77), but fragile without the largest deal."},
-      "problem": {"fr": "Les introductions en Bourse marocaines récentes ont-elles surperformé le marché, et quels facteurs expliquent cette performance ? Une question utile au Département Développement Marché pour accompagner les futurs émetteurs.", "en": "Did recent Moroccan IPOs outperform the market, and which factors explain their performance? A question that matters to the Market Development Department when supporting future issuers."},
+      "theme": {
+        "fr": "Marchés actions",
+        "en": "Equity markets"
+      },
+      "title": {
+        "fr": "Performance des introductions en Bourse à Casablanca",
+        "en": "Performance of IPOs on the Casablanca Stock Exchange"
+      },
+      "context": {
+        "fr": "Stage · Bourse de Casablanca, Département Développement Marché · juillet 2026",
+        "en": "Internship · Casablanca Stock Exchange, Market Development Department · July 2026"
+      },
+      "hook": {
+        "fr": "9 introductions de 2020 à 2025 : surperformance de +31,5 % à 6 mois par rapport au MASI, liée au taux de sursouscription (r = 0,77), mais fragile sans la plus grosse opération.",
+        "en": "9 IPOs from 2020 to 2025: +31.5% six-month outperformance versus the MASI, linked to oversubscription (r = 0.77), but fragile without the largest deal."
+      },
+      "problem": {
+        "fr": "Les introductions en Bourse marocaines récentes ont-elles surperformé le marché, et quels facteurs expliquent cette performance ? Une question utile au Département Développement Marché pour accompagner les futurs émetteurs.",
+        "en": "Did recent Moroccan IPOs outperform the market, and which factors explain their performance? A question that matters to the Market Development Department when supporting future issuers."
+      },
       "method": {
-        "fr": ["Collecte et nettoyage des cours et des données d’offre des 9 introductions.", "Rendements anormaux BHAR (buy-and-hold) par rapport au MASI à J+1, 1, 3, 6 et 12 mois.", "Test de Wilcoxon sur la médiane, corrélations de Pearson et de Spearman avec la sursouscription et le montant levé.", "Backtest d’une stratégie de participation systématique, modèle Excel en 7 feuilles.", "Suivi en temps réel de l’introduction de T2S Group Holding, de la souscription aux premières séances."],
-        "en": ["Collection and cleaning of prices and offering data for the 9 IPOs.", "Buy-and-hold abnormal returns (BHAR) versus the MASI at day 1, 1, 3, 6 and 12 months.", "Wilcoxon test on the median, Pearson and Spearman correlations with oversubscription and amount raised.", "Backtest of a systematic participation strategy, 7-sheet Excel model.", "Live follow-up of the T2S Group Holding IPO, from subscription to the first trading sessions."]
+        "fr": [
+          "Collecte et nettoyage des cours et des données d’offre des 9 introductions.",
+          "Rendements anormaux BHAR (buy-and-hold) par rapport au MASI à J+1, 1, 3, 6 et 12 mois.",
+          "Test de Wilcoxon sur la médiane, corrélations de Pearson et de Spearman avec la sursouscription et le montant levé.",
+          "Backtest d’une stratégie de participation systématique, modèle Excel en 7 feuilles.",
+          "Suivi en temps réel de l’introduction de T2S Group Holding, de la souscription aux premières séances."
+        ],
+        "en": [
+          "Collection and cleaning of prices and offering data for the 9 IPOs.",
+          "Buy-and-hold abnormal returns (BHAR) versus the MASI at day 1, 1, 3, 6 and 12 months.",
+          "Wilcoxon test on the median, Pearson and Spearman correlations with oversubscription and amount raised.",
+          "Backtest of a systematic participation strategy, 7-sheet Excel model.",
+          "Live follow-up of the T2S Group Holding IPO, from subscription to the first trading sessions."
+        ]
       },
       "results": {
-        "head": {"fr": ["BHAR par rapport au MASI", "Moyen", "Médian", "p (Wilcoxon)"], "en": ["BHAR versus MASI", "Mean", "Median", "p (Wilcoxon)"]},
-        "rows": [["J+1 (n = 9)", "+6,2 %", "+8,5 %", "0,098"], ["6 mois (n = 9)", "+31,5 %", "+35,2 %", "0,074"], ["6 mois, sans SGTM (n = 8)", "+23,2 %", "+23,1 %", "0,148"], ["12 mois (n = 7)", "+27,7 %", "+46,1 %", "0,156"]],
-        "rows_en": [["Day 1 (n = 9)", "+6.2%", "+8.5%", "0.098"], ["6 months (n = 9)", "+31.5%", "+35.2%", "0.074"], ["6 months, excl. SGTM (n = 8)", "+23.2%", "+23.1%", "0.148"], ["12 months (n = 7)", "+27.7%", "+46.1%", "0.156"]],
-        "note": {"fr": "La surperformance à 6 mois est marginalement significative (p = 0,074) et devient non significative sans SGTM. Le taux de sursouscription semble le meilleur indicateur : r = 0,77 (p = 0,015) sur 9 introductions, et 0,93 sans SGTM.", "en": "The six-month outperformance is marginally significant (p = 0.074) and loses significance without SGTM. Oversubscription appears to be the best indicator: r = 0.77 (p = 0.015) across 9 IPOs, and 0.93 without SGTM."}
+        "head": {
+          "fr": [
+            "BHAR par rapport au MASI",
+            "Moyen",
+            "Médian",
+            "p (Wilcoxon)"
+          ],
+          "en": [
+            "BHAR versus MASI",
+            "Mean",
+            "Median",
+            "p (Wilcoxon)"
+          ]
+        },
+        "rows": [
+          [
+            "J+1 (n = 9)",
+            "+6,2 %",
+            "+8,5 %",
+            "0,098"
+          ],
+          [
+            "6 mois (n = 9)",
+            "+31,5 %",
+            "+35,2 %",
+            "0,074"
+          ],
+          [
+            "6 mois, sans SGTM (n = 8)",
+            "+23,2 %",
+            "+23,1 %",
+            "0,148"
+          ],
+          [
+            "12 mois (n = 7)",
+            "+27,7 %",
+            "+46,1 %",
+            "0,156"
+          ]
+        ],
+        "rows_en": [
+          [
+            "Day 1 (n = 9)",
+            "+6.2%",
+            "+8.5%",
+            "0.098"
+          ],
+          [
+            "6 months (n = 9)",
+            "+31.5%",
+            "+35.2%",
+            "0.074"
+          ],
+          [
+            "6 months, excl. SGTM (n = 8)",
+            "+23.2%",
+            "+23.1%",
+            "0.148"
+          ],
+          [
+            "12 months (n = 7)",
+            "+27.7%",
+            "+46.1%",
+            "0.156"
+          ]
+        ],
+        "note": {
+          "fr": "La surperformance à 6 mois est marginalement significative (p = 0,074) et devient non significative sans SGTM. Le taux de sursouscription semble le meilleur indicateur : r = 0,77 (p = 0,015) sur 9 introductions, et 0,93 sans SGTM.",
+          "en": "The six-month outperformance is marginally significant (p = 0.074) and loses significance without SGTM. Oversubscription appears to be the best indicator: r = 0.77 (p = 0.015) across 9 IPOs, and 0.93 without SGTM."
+        }
       },
       "limits": {
-        "fr": ["Neuf introductions seulement : les tests ont peu de puissance et un seul titre peut changer la conclusion.", "Le MASI comme référence ne contrôle ni la taille ni le secteur ; un appariement par portefeuille serait plus robuste."],
-        "en": ["Only nine IPOs: tests have low power and a single stock can change the conclusion.", "The MASI benchmark controls neither for size nor for sector; a matched-portfolio benchmark would be more robust."]
+        "fr": [
+          "Neuf introductions seulement : les tests ont peu de puissance et un seul titre peut changer la conclusion.",
+          "Le MASI comme référence ne contrôle ni la taille ni le secteur ; un appariement par portefeuille serait plus robuste."
+        ],
+        "en": [
+          "Only nine IPOs: tests have low power and a single stock can change the conclusion.",
+          "The MASI benchmark controls neither for size nor for sector; a matched-portfolio benchmark would be more robust."
+        ]
       },
       "sim": "ipo-casablanca",
       "repo": "performance-post-ipo-casablanca",
       "report": "rapport.pdf",
-      "related": {"fr": "", "en": ""}
+      "related": {
+        "fr": "",
+        "en": ""
+      }
     }
   ],
-
   "experience": [
     {
-      "when": {"fr": "Juil. 2026", "en": "Jul. 2026"}, "meta": {"fr": "1 mois · Casablanca", "en": "1 month · Casablanca"},
-      "title": {"fr": "Stagiaire en finance de marché", "en": "Capital markets intern"},
-      "org": {"fr": "Bourse de Casablanca · Département Développement Marché", "en": "Casablanca Stock Exchange · Market Development Department"},
-      "bullets": {
-        "fr": ["Étude de la performance des introductions en Bourse de 2020 à 2025 par la méthode BHAR, par rapport au MASI.", "Analyse des déterminants : sursouscription, secteur et taille ; backtest et modèle Excel en 7 feuilles.", "Suivi en temps réel de l’introduction de T2S Group Holding."],
-        "en": ["Study of IPO performance from 2020 to 2025 using BHAR against the MASI.", "Analysis of drivers: oversubscription, sector and size; backtest and 7-sheet Excel model.", "Live follow-up of the T2S Group Holding IPO."]
+      "when": {
+        "fr": "Juil. 2026",
+        "en": "Jul. 2026"
       },
-      "tools": {"fr": "Python, Excel, études d’événements", "en": "Python, Excel, event studies"},
-      "case": "ipo-casablanca", "sim": "ipo-casablanca", "repo": "performance-post-ipo-casablanca"
+      "meta": {
+        "fr": "1 mois · Casablanca",
+        "en": "1 month · Casablanca"
+      },
+      "title": {
+        "fr": "Stagiaire en finance de marché",
+        "en": "Capital markets intern"
+      },
+      "org": {
+        "fr": "Bourse de Casablanca · Département Développement Marché",
+        "en": "Casablanca Stock Exchange · Market Development Department"
+      },
+      "bullets": {
+        "fr": [
+          "Étude de la performance des introductions en Bourse de 2020 à 2025 par la méthode BHAR, par rapport au MASI.",
+          "Analyse des déterminants : sursouscription, secteur et taille ; backtest et modèle Excel en 7 feuilles.",
+          "Suivi en temps réel de l’introduction de T2S Group Holding."
+        ],
+        "en": [
+          "Study of IPO performance from 2020 to 2025 using BHAR against the MASI.",
+          "Analysis of drivers: oversubscription, sector and size; backtest and 7-sheet Excel model.",
+          "Live follow-up of the T2S Group Holding IPO."
+        ]
+      },
+      "tools": {
+        "fr": "Python, Excel, études d’événements",
+        "en": "Python, Excel, event studies"
+      },
+      "case": "ipo-casablanca",
+      "sim": "ipo-casablanca",
+      "repo": "performance-post-ipo-casablanca"
     },
     {
-      "when": {"fr": "Fév. – mai 2026", "en": "Feb. – May 2026"}, "meta": {"fr": "4 mois · Rabat", "en": "4 months · Rabat"},
-      "title": {"fr": "Stagiaire en finance quantitative et gestion des risques", "en": "Quantitative finance and risk management intern"},
-      "org": {"fr": "Ministère de l’Économie et des Finances · Direction des Entreprises Publiques et de la Privatisation", "en": "Ministry of Economy and Finance · Public Enterprises and Privatization Department (DEPP)"},
-      "bullets": {
-        "fr": ["Scoring multicritère en 7 blocs de la performance financière et du risque des établissements et entreprises publics.", "Optimisation de Markowitz sur 6 entreprises publiques (2016–2024) et simulation de 10 000 portefeuilles ; VaR et CVaR.", "Application web d’aide à la décision : comparaison entre entités et cartographie des risques. Projet soutenu le 16 juin 2026."],
-        "en": ["7-block multi-criteria scoring of the financial performance and risk of state-owned enterprises.", "Markowitz optimization on 6 state-owned enterprises (2016–2024) with 10,000 simulated portfolios; VaR and CVaR.", "Decision-support web application: peer comparison and risk mapping. Defended on 16 June 2026."]
+      "when": {
+        "fr": "Fév. – mai 2026",
+        "en": "Feb. – May 2026"
       },
-      "tools": {"fr": "Python, Flask, SQLite, Chart.js", "en": "Python, Flask, SQLite, Chart.js"},
+      "meta": {
+        "fr": "4 mois · Rabat",
+        "en": "4 months · Rabat"
+      },
+      "title": {
+        "fr": "Stagiaire en finance quantitative et gestion des risques",
+        "en": "Quantitative finance and risk management intern"
+      },
+      "org": {
+        "fr": "Ministère de l’Économie et des Finances · Direction des Entreprises Publiques et de la Privatisation",
+        "en": "Ministry of Economy and Finance · Public Enterprises and Privatization Department (DEPP)"
+      },
+      "bullets": {
+        "fr": [
+          "Scoring multicritère en 7 blocs de la performance financière et du risque des établissements et entreprises publics.",
+          "Optimisation de Markowitz sur 6 entreprises publiques (2016–2024) et simulation de 10 000 portefeuilles ; VaR et CVaR.",
+          "Application web d’aide à la décision : comparaison entre entités et cartographie des risques. Projet soutenu le 16 juin 2026."
+        ],
+        "en": [
+          "7-block multi-criteria scoring of the financial performance and risk of state-owned enterprises.",
+          "Markowitz optimization on 6 state-owned enterprises (2016–2024) with 10,000 simulated portfolios; VaR and CVaR.",
+          "Decision-support web application: peer comparison and risk mapping. Defended on 16 June 2026."
+        ]
+      },
+      "tools": {
+        "fr": "Python, Flask, SQLite, Chart.js",
+        "en": "Python, Flask, SQLite, Chart.js"
+      },
       "sim": "portefeuille-eep"
     },
     {
-      "when": {"fr": "Juil. 2025", "en": "Jul. 2025"}, "meta": {"fr": "1 mois · Agadir", "en": "1 month · Agadir"},
-      "title": {"fr": "Stagiaire en science des données et modélisation prédictive", "en": "Data science and predictive modeling intern"},
-      "org": {"fr": "Direction Générale des Impôts · Direction Régionale d’Agadir", "en": "Moroccan Tax Administration · Agadir Regional Office"},
-      "bullets": {
-        "fr": ["Analyse du traitement des demandes d’Identifiant Commun de l’Entreprise et des motifs de rejet récurrents.", "Régression logistique estimant la probabilité de rejet, évaluée par matrice de confusion ; application Streamlit d’aide à la décision."],
-        "en": ["Analysis of company identifier (ICE) applications and recurring rejection reasons.", "Logistic regression estimating rejection probability, evaluated with a confusion matrix; Streamlit decision-support app."]
+      "when": {
+        "fr": "Juil. 2025",
+        "en": "Jul. 2025"
       },
-      "tools": {"fr": "Python, scikit-learn, Streamlit", "en": "Python, scikit-learn, Streamlit"},
+      "meta": {
+        "fr": "1 mois · Agadir",
+        "en": "1 month · Agadir"
+      },
+      "title": {
+        "fr": "Stagiaire en science des données et modélisation prédictive",
+        "en": "Data science and predictive modeling intern"
+      },
+      "org": {
+        "fr": "Direction Générale des Impôts · Direction Régionale d’Agadir",
+        "en": "Moroccan Tax Administration · Agadir Regional Office"
+      },
+      "bullets": {
+        "fr": [
+          "Analyse du traitement des demandes d’Identifiant Commun de l’Entreprise et des motifs de rejet récurrents.",
+          "Régression logistique estimant la probabilité de rejet, évaluée par matrice de confusion ; application Streamlit d’aide à la décision."
+        ],
+        "en": [
+          "Analysis of company identifier (ICE) applications and recurring rejection reasons.",
+          "Logistic regression estimating rejection probability, evaluated with a confusion matrix; Streamlit decision-support app."
+        ]
+      },
+      "tools": {
+        "fr": "Python, scikit-learn, Streamlit",
+        "en": "Python, scikit-learn, Streamlit"
+      },
       "sim": "ice-dgi"
     }
   ],
-
   "projects": [
-    {"title": {"fr": "Option Pricing Lab", "en": "Option Pricing Lab"}, "year": "2026",
-     "text": {"fr": "Application Flask comparant Black-Scholes, Monte-Carlo, Euler-Maruyama et un modèle de substitution Random Forest (R² = 0,991 en apprenant C/K).", "en": "Flask app comparing Black-Scholes, Monte Carlo, Euler-Maruyama and a Random Forest surrogate model (R² = 0.991 when learning C/K)."},
-     "meth": "Black-Scholes, Monte-Carlo, Random Forest", "sim": "option-pricing-lab", "repo": "option-pricing-lab"},
-    {"title": {"fr": "Options européennes par arbres binomial et trinomial", "en": "European options with binomial and trinomial trees"}, "year": "2026",
-     "text": {"fr": "Convergence d’ordre 1 vers Black-Scholes (pentes de −0,98 et −1,00) et équivalence entre le trinomial à N pas et le binomial à 2N pas.", "en": "First-order convergence to Black-Scholes (slopes −0.98 and −1.00) and equivalence between an N-step trinomial and a 2N-step binomial tree."},
-     "meth": "Cox-Ross-Rubinstein, Boyle", "sim": "arbres", "repo": "pricing-options-arbres"},
-    {"title": {"fr": "Stationnarité de l’action Managem", "en": "Stationarity of Managem stock"}, "year": "2026",
-     "text": {"fr": "6 341 cotations quotidiennes : cours non stationnaire (ADF = 4,24), rendements stationnaires (ADF = −76,18).", "en": "6,341 daily quotes: non-stationary price (ADF = 4.24), stationary returns (ADF = −76.18)."},
-     "meth": "ADF, ACF, Ljung-Box", "sim": "stationnarite-managem", "repo": "stationnarite-managem"},
-    {"title": {"fr": "Prédiction du prix des billets d’avion", "en": "Airline ticket price prediction"}, "year": "2025",
-     "text": {"fr": "300 153 billets, sept modèles comparés ; Random Forest à R² = 0,973, remplacée par un modèle 5 000 fois plus léger de précision équivalente.", "en": "300,153 tickets, seven models compared; Random Forest at R² = 0.973, replaced by a 5,000-times lighter model of similar accuracy."},
-     "meth": "Random Forest, Gradient Boosting", "sim": "prix-billets", "repo": "prediction-prix-billets-avion"},
-    {"title": {"fr": "Classification non supervisée", "en": "Unsupervised clustering"}, "year": "2025",
-     "text": {"fr": "K-means implémenté à la main et classification ascendante hiérarchique dans une application Streamlit.", "en": "Hand-written K-means and hierarchical clustering in a Streamlit app."},
-     "meth": "K-means, CAH", "sim": "clustering", "repo": "clustering-kmeans-cah"}
+    {
+      "title": {
+        "fr": "Option Pricing Lab",
+        "en": "Option Pricing Lab"
+      },
+      "year": "2026",
+      "text": {
+        "fr": "Application Flask comparant Black-Scholes, Monte-Carlo, Euler-Maruyama et un modèle de substitution Random Forest (R² = 0,991 en apprenant C/K).",
+        "en": "Flask app comparing Black-Scholes, Monte Carlo, Euler-Maruyama and a Random Forest surrogate model (R² = 0.991 when learning C/K)."
+      },
+      "meth": "Black-Scholes, Monte-Carlo, Random Forest",
+      "sim": "option-pricing-lab",
+      "repo": "option-pricing-lab"
+    },
+    {
+      "title": {
+        "fr": "Options européennes par arbres binomial et trinomial",
+        "en": "European options with binomial and trinomial trees"
+      },
+      "year": "2026",
+      "text": {
+        "fr": "Convergence d’ordre 1 vers Black-Scholes (pentes de −0,98 et −1,00) et équivalence entre le trinomial à N pas et le binomial à 2N pas.",
+        "en": "First-order convergence to Black-Scholes (slopes −0.98 and −1.00) and equivalence between an N-step trinomial and a 2N-step binomial tree."
+      },
+      "meth": "Cox-Ross-Rubinstein, Boyle",
+      "sim": "arbres",
+      "repo": "pricing-options-arbres"
+    },
+    {
+      "title": {
+        "fr": "Stationnarité de l’action Managem",
+        "en": "Stationarity of Managem stock"
+      },
+      "year": "2026",
+      "text": {
+        "fr": "6 341 cotations quotidiennes : cours non stationnaire (ADF = 4,24), rendements stationnaires (ADF = −76,18).",
+        "en": "6,341 daily quotes: non-stationary price (ADF = 4.24), stationary returns (ADF = −76.18)."
+      },
+      "meth": "ADF, ACF, Ljung-Box",
+      "sim": "stationnarite-managem",
+      "repo": "stationnarite-managem"
+    },
+    {
+      "title": {
+        "fr": "Prédiction du prix des billets d’avion",
+        "en": "Airline ticket price prediction"
+      },
+      "year": "2025",
+      "text": {
+        "fr": "300 153 billets, sept modèles comparés ; Random Forest à R² = 0,973, remplacée par un modèle 5 000 fois plus léger de précision équivalente.",
+        "en": "300,153 tickets, seven models compared; Random Forest at R² = 0.973, replaced by a 5,000-times lighter model of similar accuracy."
+      },
+      "meth": "Random Forest, Gradient Boosting",
+      "sim": "prix-billets",
+      "repo": "prediction-prix-billets-avion"
+    },
+    {
+      "title": {
+        "fr": "Classification non supervisée",
+        "en": "Unsupervised clustering"
+      },
+      "year": "2025",
+      "text": {
+        "fr": "K-means implémenté à la main et classification ascendante hiérarchique dans une application Streamlit.",
+        "en": "Hand-written K-means and hierarchical clustering in a Streamlit app."
+      },
+      "meth": "K-means, CAH",
+      "sim": "clustering",
+      "repo": "clustering-kmeans-cah"
+    }
   ],
-
   "education": {
-    "school": {"fr": "ENSA Agadir · Finance et Ingénierie Décisionnelle", "en": "ENSA Agadir (National School of Applied Sciences) · Finance and Decision Engineering"},
-    "degree": {"fr": "Diplôme d’ingénieur d’État, 2021–2027 (dernière année en 2026–2027)", "en": "State engineering degree (5-year program), 2021–2027, final year 2026–2027"},
-    "courses": {"fr": "Calcul stochastique, optimisation de portefeuille et modèle de Merton, séries temporelles, analyse de données, théorie du risque, mathématiques actuarielles, théorie des jeux.", "en": "Stochastic calculus, portfolio optimization and the Merton model, time series, data analysis, risk theory, actuarial mathematics, game theory."},
-    "bac": {"fr": "Baccalauréat Sciences mathématiques B, 2021", "en": "Moroccan baccalaureate in Mathematical Sciences, 2021"}
+    "school": {
+      "fr": "ENSA Agadir · Finance et Ingénierie Décisionnelle",
+      "en": "ENSA Agadir (National School of Applied Sciences) · Finance and Decision Engineering"
+    },
+    "degree": {
+      "fr": "Diplôme d’ingénieur d’État, 2021–2027 (dernière année en 2026–2027)",
+      "en": "State engineering degree (5-year program), 2021–2027, final year 2026–2027"
+    },
+    "courses": {
+      "fr": "Calcul stochastique, optimisation de portefeuille et modèle de Merton, séries temporelles, analyse de données, théorie du risque, mathématiques actuarielles, théorie des jeux.",
+      "en": "Stochastic calculus, portfolio optimization and the Merton model, time series, data analysis, risk theory, actuarial mathematics, game theory."
+    },
+    "bac": {
+      "fr": "Baccalauréat Sciences mathématiques B, 2021",
+      "en": "Moroccan baccalaureate in Mathematical Sciences, 2021"
+    }
   },
-
   "certifications": [
-    {"org": "Corporate Finance Institute (CFI)", "items": [
-      ["Data Analysis with Python", "https://credentials.corporatefinanceinstitute.com/ec86f85c-0f4d-462c-a839-d96dc1bed5bf", "2026-08"],
-      ["Portfolio Optimization with Python (case study)", "https://credentials.corporatefinanceinstitute.com/7ac78aa3-d485-4a1f-88e2-978aec922a34", "2026-08"],
-      ["SQL Fundamentals", "https://credentials.corporatefinanceinstitute.com/bdafd1c8-afa2-4d4f-a6aa-e68583bd9fa1", "2026-08"],
-      ["Data Prep for Machine Learning in Python", "https://credentials.corporatefinanceinstitute.com/1da81a66-9878-4afc-98b9-d1d28cc550a4", "2026-08"],
-      ["Classification: Fundamentals & Practical Applications", "https://credentials.corporatefinanceinstitute.com/059d4342-2358-4f8c-b466-ee8e41d22ba5", "2026-07"],
-      ["Regression Analysis: Fundamentals & Practical Applications", "https://credentials.corporatefinanceinstitute.com/8e13977a-4404-4038-a019-a42cd17a6cf3", "2026-07"],
-      ["Python Fundamentals", "https://credentials.corporatefinanceinstitute.com/36ccf9f7-a3fa-4c4d-9cd4-3a1357c6c4a0", "2025-10"],
-      ["Advanced Excel Formulas & Functions", "https://credentials.corporatefinanceinstitute.com/2618d7d6-cc3c-48ab-9cf9-a33cb78de56e", "2025-09"],
-      ["Excel Fundamentals: Formulas for Finance", "https://credentials.corporatefinanceinstitute.com/f072eb18-fa65-4564-85dd-1c22785dc882", "2025-09"],
-      ["Financial Analysis Fundamentals", "https://credentials.corporatefinanceinstitute.com/6715dcec-3f66-49bf-8e2d-b29889851177", "2025-09"],
-      ["Statistics Fundamentals", "https://credentials.corporatefinanceinstitute.com/ebc9c059-6a05-4d73-a6ec-8d39da5bdc20", "2025-09"]
-    ]},
-    {"org": "DataCamp", "items": [
-      ["Time Series in Python", "https://www.datacamp.com/statement-of-accomplishment/track/717e9717fc8c341138eb3c41ac0cc8c21ea15e2a", "2025-09"],
-      ["Applied Finance in Python", "https://www.datacamp.com/statement-of-accomplishment/track/5b94f55f3bce75ac7ca504a2682df600d66a926b", "2025-08"],
-      ["Finance Fundamentals in Python", "https://www.datacamp.com/statement-of-accomplishment/track/4bb9ad9e7c6d131983b6e440109b29a342c2d976", "2025-08"],
-      ["Finance Fundamentals with CFI", "https://www.datacamp.com/statement-of-accomplishment/track/57a53158c9d192b19c011a3dc6e91b56a68b3bf6", "2025-08"]
-    ]}
+    {
+      "org": "Corporate Finance Institute (CFI)",
+      "items": [
+        [
+          "Data Analysis with Python",
+          "https://credentials.corporatefinanceinstitute.com/ec86f85c-0f4d-462c-a839-d96dc1bed5bf",
+          "2026-08"
+        ],
+        [
+          "Portfolio Optimization with Python (case study)",
+          "https://credentials.corporatefinanceinstitute.com/7ac78aa3-d485-4a1f-88e2-978aec922a34",
+          "2026-08"
+        ],
+        [
+          "SQL Fundamentals",
+          "https://credentials.corporatefinanceinstitute.com/bdafd1c8-afa2-4d4f-a6aa-e68583bd9fa1",
+          "2026-08"
+        ],
+        [
+          "Data Prep for Machine Learning in Python",
+          "https://credentials.corporatefinanceinstitute.com/1da81a66-9878-4afc-98b9-d1d28cc550a4",
+          "2026-08"
+        ],
+        [
+          "Classification: Fundamentals & Practical Applications",
+          "https://credentials.corporatefinanceinstitute.com/059d4342-2358-4f8c-b466-ee8e41d22ba5",
+          "2026-07"
+        ],
+        [
+          "Regression Analysis: Fundamentals & Practical Applications",
+          "https://credentials.corporatefinanceinstitute.com/8e13977a-4404-4038-a019-a42cd17a6cf3",
+          "2026-07"
+        ],
+        [
+          "Python Fundamentals",
+          "https://credentials.corporatefinanceinstitute.com/36ccf9f7-a3fa-4c4d-9cd4-3a1357c6c4a0",
+          "2025-10"
+        ],
+        [
+          "Advanced Excel Formulas & Functions",
+          "https://credentials.corporatefinanceinstitute.com/2618d7d6-cc3c-48ab-9cf9-a33cb78de56e",
+          "2025-09"
+        ],
+        [
+          "Excel Fundamentals: Formulas for Finance",
+          "https://credentials.corporatefinanceinstitute.com/f072eb18-fa65-4564-85dd-1c22785dc882",
+          "2025-09"
+        ],
+        [
+          "Financial Analysis Fundamentals",
+          "https://credentials.corporatefinanceinstitute.com/6715dcec-3f66-49bf-8e2d-b29889851177",
+          "2025-09"
+        ],
+        [
+          "Statistics Fundamentals",
+          "https://credentials.corporatefinanceinstitute.com/ebc9c059-6a05-4d73-a6ec-8d39da5bdc20",
+          "2025-09"
+        ]
+      ]
+    },
+    {
+      "org": "DataCamp",
+      "items": [
+        [
+          "Time Series in Python",
+          "https://www.datacamp.com/statement-of-accomplishment/track/717e9717fc8c341138eb3c41ac0cc8c21ea15e2a",
+          "2025-09"
+        ],
+        [
+          "Applied Finance in Python",
+          "https://www.datacamp.com/statement-of-accomplishment/track/5b94f55f3bce75ac7ca504a2682df600d66a926b",
+          "2025-08"
+        ],
+        [
+          "Finance Fundamentals in Python",
+          "https://www.datacamp.com/statement-of-accomplishment/track/4bb9ad9e7c6d131983b6e440109b29a342c2d976",
+          "2025-08"
+        ],
+        [
+          "Finance Fundamentals with CFI",
+          "https://www.datacamp.com/statement-of-accomplishment/track/57a53158c9d192b19c011a3dc6e91b56a68b3bf6",
+          "2025-08"
+        ]
+      ]
+    }
   ],
-
   "skills": [
-    {"h": {"fr": "Finance quantitative", "en": "Quantitative finance"}, "items": {
-      "fr": ["Valorisation d’options : Black-Scholes, arbres, Monte-Carlo, Longstaff-Schwartz", "Risque de marché : VaR, CVaR, GARCH, stress", "Optimisation de portefeuille : Markowitz, frontière efficiente", "Études d’événements : BHAR, tests non paramétriques"],
-      "en": ["Option pricing: Black-Scholes, trees, Monte Carlo, Longstaff-Schwartz", "Market risk: VaR, CVaR, GARCH, stress", "Portfolio optimization: Markowitz, efficient frontier", "Event studies: BHAR, non-parametric tests"]}},
-    {"h": {"fr": "Statistiques et apprentissage", "en": "Statistics and machine learning"}, "items": {
-      "fr": ["Économétrie des séries temporelles : ARMA, tests de racine unitaire", "Régression, classification, Random Forest, Gradient Boosting", "Clustering : K-means, CAH", "Validation hors échantillon, détection de fuites d’information"],
-      "en": ["Time-series econometrics: ARMA, unit-root tests", "Regression, classification, Random Forest, Gradient Boosting", "Clustering: K-means, hierarchical", "Out-of-sample validation, leakage detection"]}},
-    {"h": {"fr": "Outils", "en": "Tools"}, "items": {
-      "fr": ["Python : NumPy, pandas, statsmodels, arch, scikit-learn", "Applications : Flask, Streamlit, PyQt5", "SQL, Excel avancé, Power Query, EViews", "Git, LaTeX"],
-      "en": ["Python: NumPy, pandas, statsmodels, arch, scikit-learn", "Apps: Flask, Streamlit, PyQt5", "SQL, advanced Excel, Power Query, EViews", "Git, LaTeX"]}}
+    {
+      "h": {
+        "fr": "Finance quantitative",
+        "en": "Quantitative finance"
+      },
+      "items": {
+        "fr": [
+          "Valorisation d’options : Black-Scholes, arbres, Monte-Carlo, Longstaff-Schwartz",
+          "Risque de marché : VaR, CVaR, GARCH, stress",
+          "Optimisation de portefeuille : Markowitz, frontière efficiente",
+          "Études d’événements : BHAR, tests non paramétriques"
+        ],
+        "en": [
+          "Option pricing: Black-Scholes, trees, Monte Carlo, Longstaff-Schwartz",
+          "Market risk: VaR, CVaR, GARCH, stress",
+          "Portfolio optimization: Markowitz, efficient frontier",
+          "Event studies: BHAR, non-parametric tests"
+        ]
+      }
+    },
+    {
+      "h": {
+        "fr": "Statistiques et apprentissage",
+        "en": "Statistics and machine learning"
+      },
+      "items": {
+        "fr": [
+          "Économétrie des séries temporelles : ARMA, tests de racine unitaire",
+          "Régression, classification, Random Forest, Gradient Boosting",
+          "Clustering : K-means, CAH",
+          "Validation hors échantillon, détection de fuites d’information"
+        ],
+        "en": [
+          "Time-series econometrics: ARMA, unit-root tests",
+          "Regression, classification, Random Forest, Gradient Boosting",
+          "Clustering: K-means, hierarchical",
+          "Out-of-sample validation, leakage detection"
+        ]
+      }
+    },
+    {
+      "h": {
+        "fr": "Outils",
+        "en": "Tools"
+      },
+      "items": {
+        "fr": [
+          "Python : NumPy, pandas, statsmodels, arch, scikit-learn",
+          "Applications : Flask, Streamlit, PyQt5",
+          "SQL, Excel avancé, Power Query, EViews",
+          "Git, LaTeX"
+        ],
+        "en": [
+          "Python: NumPy, pandas, statsmodels, arch, scikit-learn",
+          "Apps: Flask, Streamlit, PyQt5",
+          "SQL, advanced Excel, Power Query, EViews",
+          "Git, LaTeX"
+        ]
+      }
+    }
   ],
-
   "activities": [
-    {"title": {"fr": "Financial Day, 5<sup>e</sup> édition", "en": "Financial Day, 5th edition"},
-     "meta": {"fr": "ENSA Agadir · 29 novembre 2025 · responsable logistique", "en": "ENSA Agadir · 29 November 2025 · logistics lead"},
-     "text": {"fr": "Journée consacrée aux marchés financiers, entre modèles quantitatifs et décision managériale, avec la 2<sup>e</sup> édition du Portfolio Management Challenge. Responsable logistique de juin à novembre 2025 ; partenaires dont Société Générale Africa Technologies &amp; Services et CIH Bank.", "en": "A day on financial markets, between quantitative models and managerial decisions, including the 2nd Portfolio Management Challenge. Logistics lead from June to November 2025; partners included Société Générale Africa Technologies &amp; Services and CIH Bank."},
-     "gallery": "pair", "imgs": [["fd-portrait.webp", 640, 960, {"fr": "Reda Erraoui devant l’affiche du Financial Day, 5e édition", "en": "Reda Erraoui in front of the Financial Day 5th edition banner"}], ["fd-groupe.webp", 1400, 933, {"fr": "L’équipe d’organisation du Financial Day sur scène", "en": "The Financial Day organizing team on stage"}]],
-     "caption": {"fr": "L’équipe d’organisation de la 5<sup>e</sup> édition", "en": "The 5th edition organizing team"}},
-    {"title": {"fr": "AppsClub ENSA Agadir et Info Days", "en": "AppsClub ENSA Agadir and Info Days"},
-     "meta": {"fr": "Trésorier (août 2025 – mai 2026) · équipe d’organisation des Info Days 2025", "en": "Treasurer (Aug. 2025 – May 2026) · Info Days 2025 organizing team"},
-     "text": {"fr": "Première édition des journées de l’informatique de l’ENSA Agadir, avec la South Coding Cup, compétition de programmation organisée par l’AppsClub le 20 avril 2025. Trésorier du club l’année suivante.", "en": "First edition of ENSA Agadir’s computer science days, including the South Coding Cup programming contest organized by AppsClub on 20 April 2025. Club treasurer the following year."},
-     "gallery": "triple", "imgs": [["id-portrait.webp", 640, 960, {"fr": "Reda Erraoui en t-shirt Info Days avec un badge de l’organisation", "en": "Reda Erraoui wearing an Info Days t-shirt and organizer badge"}], ["id-cup1.webp", 1000, 667, {"fr": "Avec des participants de la South Coding Cup", "en": "With South Coding Cup participants"}], ["id-cup2.webp", 1000, 667, {"fr": "Avec d’autres participants de la South Coding Cup", "en": "With other South Coding Cup participants"}]],
-     "caption": {"fr": "Avec des participants de la South Coding Cup", "en": "With South Coding Cup participants"}}
+    {
+      "title": {
+        "fr": "Financial Day, 5<sup>e</sup> édition",
+        "en": "Financial Day, 5th edition"
+      },
+      "meta": {
+        "fr": "ENSA Agadir · 29 novembre 2025 · responsable logistique",
+        "en": "ENSA Agadir · 29 November 2025 · logistics lead"
+      },
+      "text": {
+        "fr": "Journée consacrée aux marchés financiers, entre modèles quantitatifs et décision managériale, avec la 2<sup>e</sup> édition du Portfolio Management Challenge. Responsable logistique de juin à novembre 2025 ; partenaires dont Société Générale Africa Technologies &amp; Services et CIH Bank.",
+        "en": "A day on financial markets, between quantitative models and managerial decisions, including the 2nd Portfolio Management Challenge. Logistics lead from June to November 2025; partners included Société Générale Africa Technologies &amp; Services and CIH Bank."
+      },
+      "gallery": "pair",
+      "imgs": [
+        [
+          "fd-portrait.webp",
+          640,
+          960,
+          {
+            "fr": "Reda Erraoui devant l’affiche du Financial Day, 5e édition",
+            "en": "Reda Erraoui in front of the Financial Day 5th edition banner"
+          }
+        ],
+        [
+          "fd-groupe.webp",
+          1400,
+          933,
+          {
+            "fr": "L’équipe d’organisation du Financial Day sur scène",
+            "en": "The Financial Day organizing team on stage"
+          }
+        ]
+      ],
+      "caption": {
+        "fr": "L’équipe d’organisation de la 5<sup>e</sup> édition",
+        "en": "The 5th edition organizing team"
+      }
+    },
+    {
+      "title": {
+        "fr": "AppsClub ENSA Agadir et Info Days",
+        "en": "AppsClub ENSA Agadir and Info Days"
+      },
+      "meta": {
+        "fr": "Trésorier (août 2025 – mai 2026) · équipe d’organisation des Info Days 2025",
+        "en": "Treasurer (Aug. 2025 – May 2026) · Info Days 2025 organizing team"
+      },
+      "text": {
+        "fr": "Première édition des journées de l’informatique de l’ENSA Agadir, avec la South Coding Cup, compétition de programmation organisée par l’AppsClub le 20 avril 2025. Trésorier du club l’année suivante.",
+        "en": "First edition of ENSA Agadir’s computer science days, including the South Coding Cup programming contest organized by AppsClub on 20 April 2025. Club treasurer the following year."
+      },
+      "gallery": "triple",
+      "imgs": [
+        [
+          "id-portrait.webp",
+          640,
+          960,
+          {
+            "fr": "Reda Erraoui en t-shirt Info Days avec un badge de l’organisation",
+            "en": "Reda Erraoui wearing an Info Days t-shirt and organizer badge"
+          }
+        ],
+        [
+          "id-cup1.webp",
+          1000,
+          667,
+          {
+            "fr": "Avec des participants de la South Coding Cup",
+            "en": "With South Coding Cup participants"
+          }
+        ],
+        [
+          "id-cup2.webp",
+          1000,
+          667,
+          {
+            "fr": "Avec d’autres participants de la South Coding Cup",
+            "en": "With other South Coding Cup participants"
+          }
+        ]
+      ],
+      "caption": {
+        "fr": "Avec des participants de la South Coding Cup",
+        "en": "With South Coding Cup participants"
+      }
+    }
   ]
 }

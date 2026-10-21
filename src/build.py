@@ -25,7 +25,7 @@ UI = {
         "projects": "Autres projets", "projects_side": "Chaque projet est publié avec son code, son rapport et un simulateur.",
         "education": "Formation", "certs": "Certifications", "certs_note": "Cliquez sur un certificat pour le vérifier sur le site de l’organisme.",
         "skills": "Compétences", "activities": "Activités", "contact": "Contact",
-        "contact_text": "Je recherche un stage de fin d’études de 6 mois à partir de février 2027, au Maroc ou à l’international, puis un M2 en finance quantitative.",
+        "contact_text": "Pour échanger sur l’un de ces projets, écrivez-moi.",
         "copy": "Copier l’adresse", "copied": "Adresse copiée",
         "case": "Lire l’étude de cas", "sim": "Simuler", "code": "Code", "code_report": "Code et rapport", "report": "Rapport (PDF)",
         "contact_btn": "Me contacter", "updated": "Mis à jour en octobre 2026",
@@ -42,7 +42,7 @@ UI = {
         "projects": "Other projects", "projects_side": "Each project is published with its code, report and a simulator.",
         "education": "Education", "certs": "Certifications", "certs_note": "Click a certificate to verify it on the issuer’s website.",
         "skills": "Skills", "activities": "Activities", "contact": "Contact",
-        "contact_text": "I am looking for a 6-month final-year internship starting February 2027, in Morocco or abroad, followed by a Master’s in quantitative finance.",
+        "contact_text": "To discuss any of these projects, get in touch.",
         "copy": "Copy address", "copied": "Address copied",
         "case": "Read the case study", "sim": "Simulator (French interface)", "code": "Code", "code_report": "Code and report", "report": "Report (PDF, French)",
         "contact_btn": "Get in touch", "updated": "Updated October 2026",
@@ -152,7 +152,7 @@ def index_page(lang):
       <h1>Reda Erraoui</h1>
       <p class="title">{t(H['positioning'], lang)}</p>
       <p class="summary">{t(H['summary'], lang)}</p>
-      <dl class="details">{details}</dl>
+      {f'<dl class="details">{details}</dl>' if details else ""}
       <div class="actions">
         <a class="btn solid" href="#contact">{u['contact_btn']}</a>
         <a class="btn line" href="{SITE['linkedin']}" target="_blank" rel="noopener">LinkedIn</a>
