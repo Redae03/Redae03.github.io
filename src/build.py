@@ -175,6 +175,7 @@ def index_page(lang):
       {f'<dl class="details">{details}</dl>' if details else ""}
       <div class="actions">
         <a class="btn solid" href="#contact">{u['contact_btn']}</a>
+        <a class="btn line" href="{rel}assets/cv/Reda-Erraoui-CV.pdf" target="_blank" rel="noopener">{'CV (PDF)' if lang == 'fr' else 'Résumé (PDF, in French)'}</a>
         <a class="btn line" href="{SITE['linkedin']}" target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn line" href="{SITE['github']}" target="_blank" rel="noopener">GitHub</a>
       </div>
@@ -257,7 +258,7 @@ def index_page(lang):
     p.append(f"""<section class="contact" id="contact"><div class="wrap sec"><div class="side"><h2>{u['contact']}</h2></div><div class="contact-body">
   <p>{u['contact_text']}</p>
   <div class="mailrow"><span class="mail" id="mail">{SITE['email']}</span><button type="button" class="copy" id="copy">{u['copy']}</button></div>
-  <p class="links"><a href="{SITE['linkedin']}" target="_blank" rel="noopener">LinkedIn</a> · <a href="{SITE['github']}" target="_blank" rel="noopener">GitHub</a></p>
+  <p class="links"><a href="{rel}assets/cv/Reda-Erraoui-CV.pdf" target="_blank" rel="noopener">{'CV (PDF)' if lang == 'fr' else 'Résumé (PDF)'}</a> · <a href="{SITE['linkedin']}" target="_blank" rel="noopener">LinkedIn</a> · <a href="{SITE['github']}" target="_blank" rel="noopener">GitHub</a></p>
 </div></div></section>
 </main>
 """)
