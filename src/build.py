@@ -19,8 +19,8 @@ SIM_SLUGS = json.loads((SRC / "sim" / "_slugs.json").read_text(encoding="utf-8")
 
 UI = {
     "fr": {
-        "nav": [("phares", "Projets phares"), ("experience", "Expérience"), ("projets", "Projets"), ("formation", "Formation"), ("activites", "Activités"), ("contact", "Contact")],
-        "flagships": "Projets phares", "flagships_side": "Trois études de cas complètes, avec données, méthode, résultats chiffrés et limites.",
+        "nav": [("phares", "Études de cas"), ("experience", "Expérience"), ("projets", "Projets"), ("formation", "Formation"), ("activites", "Activités"), ("contact", "Contact")],
+        "flagships": "Études de cas", "flagships_side": "Trois projets détaillés, avec données, méthode, résultats chiffrés et limites.",
         "experience": "Expérience", "experience_side": "Stages réalisés pendant le cycle ingénieur.",
         "projects": "Autres projets", "projects_side": "Chaque projet est publié avec son code, son rapport et un simulateur.",
         "education": "Formation", "certs": "Certifications", "certs_note": "Cliquez sur un certificat pour le vérifier sur le site de l’organisme.",
@@ -36,8 +36,8 @@ UI = {
         "months": ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
     },
     "en": {
-        "nav": [("phares", "Featured work"), ("experience", "Experience"), ("projets", "Projects"), ("formation", "Education"), ("activites", "Activities"), ("contact", "Contact")],
-        "flagships": "Featured work", "flagships_side": "Three complete case studies with data, method, quantified results and limitations.",
+        "nav": [("phares", "Case studies"), ("experience", "Experience"), ("projets", "Projects"), ("formation", "Education"), ("activites", "Activities"), ("contact", "Contact")],
+        "flagships": "Case studies", "flagships_side": "Three in-depth projects with data, method, quantified results and limitations.",
         "experience": "Experience", "experience_side": "Internships completed during the engineering program.",
         "projects": "Other projects", "projects_side": "Each project is published with its code, report and a simulator.",
         "education": "Education", "certs": "Certifications", "certs_note": "Click a certificate to verify it on the issuer’s website.",
